@@ -1,0 +1,16 @@
+{
+  "short_name": "BMS",
+  "name": "BMS | Buoys Monitoring System",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "512x512 128x128 64x64 32x32 24x24 16x16",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./login",
+  "display": "standalone",
+  "theme_color": "#2c7be5",
+  "background_color": "#edf2f9"
+}

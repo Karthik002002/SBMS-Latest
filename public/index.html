@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#2c7be5" />
+    <meta
+      name="description"
+      content="SBMS is a web-based service that uses the NavIC satellite navigation system to provide accurate and real-time information about the schoolbus location, speed, route, and estimated time of arrival. You can access our service from any device with an internet connection and a web browser. You can also receive alerts and notifications when the schoolbus is near your home or school."
+    />
+
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700|Poppins:100,200,300,400,500,600,700,800,900&display=swap"
+    />
+
+    <title>SBMS | School Bus Management System</title>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <main class="main" id="main"></main>
+
+    <!-- service worker -->
+    <script>
+      const check = () => {
+        if (!('serviceWorker' in navigator)) {
+          throw new Error('No Service Worker support!');
+        }
+        if (!('PushManager' in window)) {
+          throw new Error('No Push API Support!');
+        }
+      };
+      const registerServiceWorker = async () => {
+        const swRegistration = await navigator.serviceWorker.register('sw.js');
+        return swRegistration;
+      };
+      const requestNotificationPermission = async () => {
+        const permission = await window.Notification.requestPermission();
+        // value of permission can be 'granted', 'default', 'denied'
+        // granted: user has accepted the request
+        // default: user has dismissed the notification permission popup by clicking on x
+        // denied: user has denied the request.
+        if (permission !== 'granted') {
+          throw new Error('Permission not granted for Notification');
+        }
+      };
+
+      const main = async () => {
+        check();
+        const permission = await requestNotificationPermission();
+        const swRegistration = await registerServiceWorker();
+      };
+      main();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,73 @@
+POST https://sbms.elenageosys.com/dj-rest-auth/login/
+Content-Type: application/json
+
+{"username": "superuser",
+"password": "awesomeadmin"
+}
+
+###
+
+POST https://sbms.elenageosys.com/api/auth/login/
+Content-Type: application/json
+
+{
+    "username": "superuser",
+    "password": "awesomeadmin",
+    "client": "smbs-webapp"
+}
+
+
+###
+
+GET https://sbms.elenageosys.com/vehicle-management/vehicles/ 
+Authorization: token 49deb7cf59acb1ffe4b675584a1617ba9afeca68
+
+###
+
+GET https://sbms.elenageosys.com/user-management/parents/ 
+Authorization: token 49deb7cf59acb1ffe4b675584a1617ba9afeca68
+
+###
+
+GET https://sbms.elenageosys.com/user-management/students/ 
+Authorization: token 49deb7cf59acb1ffe4b675584a1617ba9afeca68
+
+###
+
+GET https://sbms.elenageosys.com/user-management/schools/ 
+Authorization: token 49deb7cf59acb1ffe4b675584a1617ba9afeca68
+
+###
+
+GET http://sbmslive.elenageosys.com/group_stats
+school: 1_School 1
+Accept: application/json
+
+###
+
+GET http://sbmslive.elenageosys.com/subscribers
+
+###
+
+GET https://sbms.elenageosys.com/vehicle-management/doughnutchart/
+Authorization: token 49deb7cf59acb1ffe4b675584a1617ba9afeca68
+
+###
+
+GET https://sbms.elenageosys.com/vehicle-management/newusers/count/
+Authorization: token 49deb7cf59acb1ffe4b675584a1617ba9afeca68
+
+###
+
+GET https://sbms.elenageosys.com/vehicle-management/companyvehicles/
+Authorization: token 49deb7cf59acb1ffe4b675584a1617ba9afeca68
+
+###
+
+GET http://127.0.0.1:8000/vehicle-management/table/
+Authorization: token 49deb7cf59acb1ffe4b675584a1617ba9afeca68
+
+###
+
+GET https://sbms.elenageosys.com/user-management/map-vehicles/
+Authorization: token 49deb7cf59acb1ffe4b675584a1617ba9afeca68

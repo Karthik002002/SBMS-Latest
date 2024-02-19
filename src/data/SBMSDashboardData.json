@@ -1,0 +1,627 @@
+[
+    {
+      "data": [
+        {
+          "Company_name": "Elena",
+          "company_id": 1,
+          "schools": [
+            {
+              "school_name": "Elena Geo Sytems",
+              "school_id": 1,
+              "school_code": "ELGS1",
+              "vehicles": [
+                {
+                  "vehicle_id": 1,
+                  "vehicle_name": "KIA00",
+                  "imei": "869523051935733",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": false,
+                  "status": 2,
+                  "lat": 13.022925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.6857877043398,
+                  "heading": 45,
+                  "lon_dir": "E",
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                },
+                {
+                  "vehicle_id": 2,
+                  "vehicle_name": "KIA02",
+                  "imei": "869523051935734",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": false,
+                  "status": 6,
+                  "lat": 13.112925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.5857877043398,
+                  "lon_dir": "E",
+                  "heading": 55,
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                },
+                {
+                  "vehicle_id": 3,
+                  "vehicle_name": "KIA03",
+                  "imei": "869523051935735",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": false,
+                  "status": 5,
+                  "lat": 13.022915089909123,
+                  "lat_dir": "N",
+                  "lon": 77.4857877043398,
+                  "lon_dir": "E",
+                  "heading": 35,
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "school_name": "Jia Geo Sytems",
+              "school_id": 2,
+              "school_code": "ELGS12",
+              "vehicles": [
+                {
+                  "vehicle_id": 1,
+                  "vehicle_name": "KIA11",
+                  "imei": "869523051935733",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": false,
+                  "status": 4,
+                  "lat": 13.827925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.5987877043398,
+                  "lon_dir": "E",
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                },
+                {
+                  "vehicle_id": 2,
+                  "vehicle_name": "KIA12",
+                  "imei": "869523051935734",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": true,
+                  "status": 4,
+                  "lat": 13.422925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.9857877043398,
+                  "lon_dir": "E",
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                },
+                {
+                  "vehicle_id": 3,
+                  "vehicle_name": "KIA13",
+                  "imei": "869523051935735",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": false,
+                  "status": 3,
+                  "lat": 13.342925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.5857877043398,
+                  "lon_dir": "E",
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Company_name": "Jia",
+          "company_id": 1,
+          "schools": [
+            {
+              "school_name": "Elena Geo",
+              "school_id": 1,
+              "school_code": "JIAS1",
+              "vehicles": [
+                {
+                  "vehicle_id": 1,
+                  "vehicle_name": "KIA31",
+                  "imei": "869523051935733",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": false,
+                  "status": 1,
+                  "lat": 13.2925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.5857877043398,
+                  "lon_dir": "E",
+                  "heading":13,
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                },
+                {
+                  "vehicle_id": 2,
+                  "vehicle_name": "KIA32",
+                  "imei": "869523051935734",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": false,
+                  "status": 0,
+                  "lat": 13.022925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.5857877043398,
+                  "lon_dir": "E",
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                },
+                {
+                  "vehicle_id": 3,
+                  "vehicle_name": "KIA34",
+                  "imei": "869523051935735",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": true,
+                  "status": 2,
+                  "lat": 13.022925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.5857877043398,
+                  "lon_dir": "E",
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "school_name": "Jia Geo ",
+              "school_id": 2,
+              "school_code": "JIAS12",
+              "vehicles": [
+                {
+                  "vehicle_id": 1,
+                  "vehicle_name": "KIA41",
+                  "imei": "869523051935733",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": false,
+                  "status": 2,
+                  "lat": 13.022925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.5857877043398,
+                  "lon_dir": "E",
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                },
+                {
+                  "vehicle_id": 2,
+                  "vehicle_name": "KIA42",
+                  "imei": "869523051935734",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": false,
+                  "status": 4,
+                  "lat": 13.022925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.5857877043398,
+                  "lon_dir": "E",
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                },
+                {
+                  "vehicle_id": 3,
+                  "vehicle_name": "KIA43",
+                  "imei": "869523051935735",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": false,
+                  "status": 1,
+                  "lat": 13.022925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.5857877043398,
+                  "lon_dir": "E",
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "school_name": "Jia Geo-2 ",
+              "school_id": 2,
+              "school_code": "JIAS12",
+              "vehicles": [
+                {
+                  "vehicle_id": 1,
+                  "vehicle_name": "KIA51",
+                  "imei": "869523051935733",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": false,
+                  "status": 3,
+                  "lat": 13.022925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.5857877043398,
+                  "lon_dir": "E",
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                },
+                {
+                  "vehicle_id": 2,
+                  "vehicle_name": "KIA52",
+                  "imei": "869523051935734",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": false,
+                  "status": 5,
+                  "lat": 13.022925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.5857877043398,
+                  "lon_dir": "E",
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                },
+                {
+                  "vehicle_id": 3,
+                  "vehicle_name": "KIA53",
+                  "imei": "869523051935735",
+                  "vehicle_reg": "KA02KD6238",
+                  "driver": "Thatchana Murthy",
+                  "phone": "+918073365101",
+                  "ignition": true,
+                  "speed": 20.0,
+                  "speed_status": false,
+                  "status": 6,
+                  "lat": 13.022925089909123,
+                  "lat_dir": "N",
+                  "lon": 77.5857877043398,
+                  "lon_dir": "E",
+                  "kilometers": [
+                    {
+                      "date": "2024-02-12",
+                      "km": 661.7996794240964
+                    },
+                    {
+                      "date": "2024-02-13",
+                      "km": 404.4505270914475
+                    },
+                    {
+                      "date": "2024-02-14",
+                      "km": 651.7541774675439
+                    },
+                    {
+                      "date": "2024-02-15",
+                      "km": 419.14211998106185
+                    },
+                    {
+                      "date": "2024-02-16",
+                      "km": 209.9903096880368
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
