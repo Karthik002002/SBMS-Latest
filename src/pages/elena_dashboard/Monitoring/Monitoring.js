@@ -8,15 +8,15 @@ import { usePingButton } from 'context/PingContext';
 import { useListFilterContext } from 'context/FilterContext';
 // import VerticalBar from './VerticalBar';
 import DemoData from 'data/SBMSDashboardData.json';
+import { DashboardURL } from '../../../URL/url';
 const Monitoring = () => {
   const { ActiveVehicle, setActiveVehicle } = useListFilterContext();
   const [center, setCenter] = useState([13.422925089909123, 77.9857877043398]);
   const [zoomLevel, setZoomLevel] = useState(window.innerWidth < 530 ? 6 : 8);
-  const [InitialData, setInitialData] = useState(DemoData);
+  const [InitialData, setInitialData] = useState([]);
   const [VehicleData, setVehicleData] = useState([]);
   const [MinCall, setMinCall] = useState(0);
   const { Ping } = usePingButton();
-  const mainURL = 'http://192.168.0.30:8000/record/list_records/';
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const Monitoring = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(mainURL, {
+        const response = await fetch(DashboardURL, {
           method: 'GET',
           headers: { Authorization: `token ${userToken.token}` }
         });

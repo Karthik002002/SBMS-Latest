@@ -1,4 +1,4 @@
-POST https://sbms.elenageosys.com/dj-rest-auth/login/
+POST https://.elenageosys.com/dj-rest-auth/login/
 Content-Type: application/json
 
 {"username": "superuser",
@@ -7,7 +7,7 @@ Content-Type: application/json
 
 ###
 
-POST https://sbms.elenageosys.com/api/auth/login/
+POST https://5.elenageosys.com/api/auth/login/
 Content-Type: application/json
 
 {

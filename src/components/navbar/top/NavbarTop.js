@@ -125,7 +125,7 @@ const NavbarTopElements = ({
           Tracking
         </NavLink>
         <NavLink
-          to="/report/month"
+          to="/report/KM-report"
           className={`text-white fw-light px-2 navbar-dashboard ${
             isActive ? 'active' : ''
           }`}
@@ -135,7 +135,7 @@ const NavbarTopElements = ({
           Report
         </NavLink>
         <a
-          href="https://bmsadmin.elenageosys.com/admin/"
+          href="https://sbmsadmin.elenageosys.com/admin/"
           target="_blank"
           className="text-white fw-light px-2 fs-0"
         >

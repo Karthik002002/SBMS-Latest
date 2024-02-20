@@ -12,9 +12,10 @@ import {
   faMinusCircle
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { MarkAllSeenURL } from '../../URL/url';
 
 const Notification = ({ notification, flush, MarkAsRead }) => {
-  const { id, seen, alert_message, alert_type, timeAgo } = notification;
+  const { id, is_seen, alert_msg, alert_type, timeAgo } = notification;
   // const [timeAgo, setTimeAgo] = useState('');
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
 
@@ -23,7 +24,7 @@ const Notification = ({ notification, flush, MarkAsRead }) => {
     const MarkAsreadCall = async () => {
       try {
         const notificationURL =
-          'https://bmsadmin.elenageosys.com/notification/mark_all_seen/';
+          MarkAllSeenURL;
         const notificationResponse = await axios.put(
           notificationURL,
           markAllreadForm,
@@ -44,7 +45,7 @@ const Notification = ({ notification, flush, MarkAsRead }) => {
   return (
     <div
       className={classNames('notification', {
-        'notification-unread': seen,
+        'notification-unread': is_seen,
         'notification-flush': flush
       })}
     >
@@ -66,7 +67,7 @@ const Notification = ({ notification, flush, MarkAsRead }) => {
           </div>
           <p
             className="mb-1  notification-message-content"
-            dangerouslySetInnerHTML={createMarkup(alert_message)}
+            dangerouslySetInnerHTML={createMarkup(alert_msg)}
           />
         </div>
         <div className="notification-container">
@@ -89,7 +90,7 @@ Notification.propTypes = {
   avatar: PropTypes.shape(Avatar.propTypes),
   time: PropTypes.string.isRequired,
   className: PropTypes.string,
-  seen: PropTypes.bool,
+  is_seen: PropTypes.bool,
   flush: PropTypes.bool,
   emoji: PropTypes.string,
   children: PropTypes.node

@@ -16,13 +16,13 @@ const urlB64ToUint8Array = base64String => {
 const saveSubscription = async subscription => {
   // const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
   console.log('sw called');
-  const SERVER_URL = 'http://192.168.0.30:8000/webpush/';
+  const SERVER_URL = 'https://sbmsadmin.elenageosys.com/webpush/';
   // const SERVER_URL = "https://elenageosys.com/webpush/";
   const response = await fetch(SERVER_URL, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Token 55a5252333fc2a404b7a34e7f763a46ad87ba9fa`
+      Authorization: `Token 18effb7e51a8e3cdfaa858c1acc236b5e44e5829`
     },
     body: JSON.stringify(subscription)
   });
@@ -49,7 +49,7 @@ const showLocalNotification = (title, body, swRegistration) => {
     body,
     icon: 'logo.png',
     data: {
-      url: 'http://192.168.0.30:8000/webpush/'
+      url: 'https://sbmsadmin.elenageosys.com/webpush/'
     }
     // here you can add more properties like icon, image, vibrate, etc.
   };
@@ -73,5 +73,7 @@ self.addEventListener('push', function (event) {
 
 self.addEventListener('notificationclick', function (event) {
   event.notification.close();
-  event.waitUntil(clients.openWindow('http://192.168.0.30:8000/webpush/'));
+  event.waitUntil(
+    clients.openWindow('https://sbmsadmin.elenageosys.com/webpush/')
+  );
 });

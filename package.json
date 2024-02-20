@@ -55,6 +55,7 @@
     "react-chartjs-2": "^5.0.1",
     "react-countup": "^6.0.0",
     "react-datepicker": "^4.25.0",
+    "react-datetime-picker": "^5.6.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^11.3.4",
     "react-error-overlay": "6.0.9",

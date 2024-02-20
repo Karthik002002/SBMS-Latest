@@ -409,6 +409,7 @@ button {
 }
 
 .report-input {
+  width: 200px;
   height: 25px !important;
 }
 .notification-header-text h6 {
@@ -513,7 +514,7 @@ button {
 .notification-indicator-count {
   z-index: 1;
   color: white;
-  right: 8px;
+  right: 7px;
   position: relative;
   font-size: 9px;
   top: 2px;
@@ -571,15 +572,47 @@ button {
   padding-right: 0px !important;
   padding-left: calc(6vw - 0px) !important;
 }
-.react-datepicker-wrapper .react-datepicker__input-container input {
+/* .react-datepicker-wrapper .react-datepicker__input-container input {
   border: 1px solid black !important;
   border-radius: 20px !important;
-}
+} */
 .report-week-input {
   width: 200px;
   height: 25px;
 }
+.from-date-tracking {
+  display: flex;
+  margin-top: 4px;
+  justify-content: space-evenly;
+  font-size: 12px;
+  align-items: center;
+}
+.date-selection-tracking {
+  height: 30px;
+  width: 23% !important;
+}
+.time-selection-tracking {
+  height: 30px;
+  width: 30% !important;
+}
+.to-date-tracking {
+  display: flex;
+  margin-top: 10px;
+  justify-content: space-evenly;
+  font-size: 12px;
+  align-items: center;
+}
+.selected-date-time {
+  font-size: smaller;
+  display: flex;
+  flex-direction: column;
+  margin-left: 7px;
+}
 
+.react-datepicker-popper[data-placement^='top'] {
+  z-index: 1000 !important;
+  width: max-content;
+}
 /* Custom Loading spinner */
 
 .loading-spinner {
@@ -615,6 +648,27 @@ button {
   padding: 2px;
   border-radius: 3px;
 }
+.tracking-filter {
+  height: 25vh;
+}
+.history-tracking-heading {
+  font-size: small;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 5px;
+  font-family: inherit;
+}
+.vehicle-selection {
+  margin-top: 3px;
+  font-size: small;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.tracking-vehicle-select {
+  height: 35px;
+  width: max-content !important;
+}
 /* TABS END */
 
 /* SIDE BAR START */
@@ -634,7 +688,7 @@ button {
 
 @media only screen and (min-width: 1800px) {
   .monitoring-list-table {
-    height: calc(89vh - 83px) !important;
+    height: calc(66vh - 86px) !important;
     max-height: 950px !important;
     width: calc(19vw - 0px) !important;
     overflow-x: scroll !important;
@@ -661,10 +715,16 @@ button {
     top: 50%;
     left: 50%;
   }
+  .date-selection-tracking {
+    width: 18% !important;
+  }
+  .time-selection-tracking {
+    width: 22% !important;
+  }
 }
 @media only screen and (max-width: 1800px) {
   .monitoring-list-table {
-    height: calc(89vh - 84px) !important;
+    height: calc(66vh - 86px) !important;
     max-height: 950px !important;
     width: calc(17vw - 0px) !important;
     overflow-x: scroll !important;
@@ -693,7 +753,7 @@ button {
 
 @media only screen and (max-width: 1650px) {
   .monitoring-list-table {
-    height: calc(89vh - 84px) !important;
+    height: calc(64vh - 87px)!important;
     max-height: 950px !important;
     width: calc(16vw - 0px) !important;
     overflow-x: scroll !important;
@@ -710,10 +770,25 @@ button {
   .no-data-div {
     left: 45%;
   }
+  .date-selection-tracking {
+    height: 25px;
+    width: 22% !important;
+  }
+  .time-selection-tracking {
+    width: 27% !important;
+  }
+  .selected-date-time {
+    font-size: x-small;
+  }
+  .notification-indicator-count-5-9 {
+    font-size: 9px;
+    right: 8px;
+    top: 2px;
+  }
 }
 @media only screen and (max-width: 1500px) {
   .monitoring-list-table {
-    height: calc(89vh - 86px) !important;
+    height: calc(63vh - 64px) !important;
     max-height: 950px !important;
     width: calc(16vw - 0px) !important;
     overflow-x: scroll !important;
@@ -731,6 +806,11 @@ button {
   .date-weather {
     font-size: 16px;
   }
+  .notification-indicator-count-5-9 {
+    right: 8px;
+    font-size: 9px;
+    top: 3px;
+  }
 }
 
 @media only screen and (max-width: 1400px) {
@@ -742,11 +822,15 @@ button {
     width: calc(16vw - 3px) !important;
   }
   .notification-indicator-count {
-    font-size: 11px !important;
-    top: 1px;
+    font-size: 8px !important;
+    top: -2px;
+    right: 8px;
   }
   .report-table-responsive {
     height: calc(65vh - 0px) !important;
+  }
+  .monitoring-list-table {
+    height: calc(60vh - 59px) !important;
   }
 }
 
@@ -758,7 +842,7 @@ button {
     padding: 0px 5px 0px 5px;
   }
   .monitoring-list-table {
-    height: calc(87vh - 87px) !important;
+    height: calc(63vh - 87px) !important;
     max-height: 950px !important;
     width: calc(16vw - 0px) !important;
   }
@@ -809,16 +893,22 @@ button {
   .status-weather-details {
     width: 200px !important;
   }
+  .date-selection-tracking {
+    width: 25% !important;
+  }
+  .time-selection-tracking {
+    width: 30% !important;
+  }
 }
 
 @media only screen and (max-width: 1210px) {
   .monitoring-list-table {
-    height: calc(86vh - 90px) !important;
+    height: calc(63vh - 87px) !important;
     max-height: 950px !important;
     width: calc(16vw - 10px) !important;
   }
   .monitoring-table {
-    width: calc(16vw - 8px) !important;
+    width: calc(16vw - 2px) !important;
   }
   .notification-indicator-count {
     font-size: 9px !important;
@@ -827,7 +917,7 @@ button {
 }
 @media only screen and (max-width: 1110px) {
   .monitoring-list-table {
-    height: calc(87vh - 93px) !important;
+    height: calc(60vh - 91px) !important;
     max-height: 950px !important;
     width: calc(16vw - 0px) !important;
   }
@@ -849,7 +939,7 @@ button {
 }
 @media only screen and (max-width: 1070px) {
   .monitoring-list-table {
-    height: calc(87vh - 95px) !important;
+    height: calc(60vh - 90px) !important;
     max-height: 950px !important;
     width: calc(16vw - 0px) !important;
   }
@@ -857,8 +947,9 @@ button {
     width: calc(16vw - 0px) !important;
   }
   .notification-indicator-count {
-    font-size: 9px !important;
-    top: -2px;
+    font-size: 8px !important;
+    top: -3px;
+    right: 7px;
   }
   .notification-indicator-count-10 {
     right: 6.5px;
@@ -887,7 +978,7 @@ button {
     width: 100% !important;
   }
   .monitoring-list-table {
-    height: calc(85vh - 95px) !important;
+    height: calc(65vh - 95px) !important;
     max-height: 964px !important;
     width: calc(15vw - 0px) !important;
     font-size: smaller !important;
@@ -993,7 +1084,7 @@ button {
     padding-left: 10px;
   }
   .monitoring-list-table {
-    height: calc(90vh - 117px) !important;
+    height: calc(62vh - 117px) !important;
     max-height: 950px !important;
     width: calc(14vw + 1px) !important;
     font-size: smaller !important;
@@ -1073,7 +1164,7 @@ button {
     margin-left: 10px;
   }
   .monitoring-list-table {
-    height: calc(60vh - 0px) !important;
+    height: calc(40vh - 0px) !important;
     max-height: 950px !important;
     width: calc(122vw - 0px) !important;
     font-size: smaller !important;
@@ -1094,6 +1185,11 @@ button {
   .table {
     width: 100% !important;
   }
+  .notification-indicator-count {
+    font-size: 8px !important;
+    top: -5px;
+    right: 7.5px;
+  }
 }
 
 @media only screen and (max-width: 530px) {
@@ -1111,7 +1207,7 @@ button {
     max-height: 904px !important;
   }
   .monitoring-list-table {
-    height: calc(60vh - 0px) !important;
+    height: calc(40vh - 0px) !important;
     max-height: 950px !important;
     width: calc(112vw - 0px) !important;
     font-size: smaller !important;
@@ -1140,7 +1236,7 @@ button {
   }
   .tracking-table-button {
     padding-left: calc(60vw - 0px) !important;
-}
+  }
 }
 
 @media only screen and (max-width: 450px) {
@@ -1169,8 +1265,8 @@ button {
   }
   .monitoring-list-table {
     height: fit-content !important;
-    max-height: calc(87vh - 117px) !important;
-    width: calc(95vw - 0px) !important;
+    max-height: calc(67vh - 117px) !important;
+    width: calc(80vw - 0px) !important;
     font-size: smaller !important;
   }
   .map-container {
@@ -1264,13 +1360,13 @@ button {
   }
   .tracking-table-button {
     padding-left: calc(60vw - 0px) !important;
-}
+  }
 }
 
 @media only screen and (max-width: 380px) {
   .monitoring-list-table {
     height: fit-content !important;
-    max-height: calc(40vh - 0px) !important;
+    max-height: calc(20vh - 0px) !important;
   }
   .dashboard-list-table {
     height: fit-content !important;
@@ -1296,7 +1392,7 @@ button {
   }
   .tracking-table-button {
     padding-left: calc(58vw - 0px) !important;
-}
+  }
 }
 @media only screen and (max-width: 430px) {
   .dashboard-graph-mobile {

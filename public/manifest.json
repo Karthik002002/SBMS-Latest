@@ -1,6 +1,6 @@
 {
-  "short_name": "BMS",
-  "name": "BMS | Buoys Monitoring System",
+  "short_name": "SBMS",
+  "name": "SBMS | School Bus Monitoring System",
   "icons": [
     {
       "src": "logo.png",

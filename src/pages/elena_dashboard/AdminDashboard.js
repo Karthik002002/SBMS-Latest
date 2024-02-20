@@ -11,6 +11,7 @@ import { activeUser } from './saas';
 import WeatherDetails from './WeatherDetails';
 import { usePingButton } from 'context/PingContext';
 import DashboardData from '../../data/SBMSDashboardData.json';
+import { DashboardURL } from '../../URL/url';
 // import { buoys } from '../../data/dashboard/buoy';
 
 const DoughnutRoundedChart = lazy(() => import('./DoughnutRoundedChart'));
@@ -20,16 +21,14 @@ const StackedHorizontalChart = lazy(() => import('./StackedHorizontalChart'));
 const Customers = lazy(() => import('pages/dashboard/table/Customers'));
 
 const AdminDashboard = () => {
-  const [center, setCenter] = useState([21.865413583095347, 71.49970380735064]);
-  const [zoomLevel, setZoomLevel] = useState(window.innerWidth < 530 ? 6 : 8);
+  // const [center, setCenter] = useState([21.865413583095347, 71.49970380735064]);
+  // const [zoomLevel, setZoomLevel] = useState(window.innerWidth < 530 ? 6 : 8);
   const [DashBoardData, setDashBoardData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [PieChartData, setPieChartData] = useState([]);
   const [StackHoriData, setStackHoriData] = useState([]);
 
   const { Ping } = usePingButton();
-  const mainURL = 'http://192.168.0.30:8000/record/list_records/';
-  const alertURL = 'https://bmsadmin.elenageosys.com/dashboard/get_alert';
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
 
   useEffect(() => {
@@ -171,7 +170,7 @@ const AdminDashboard = () => {
     const HorizontalFormattedData = DashBoardData.flatMap(company => {
       // Iterate through company data to collect school-wise data
       return company.data.map(dataObj => {
-        const { Company_name, company_id } = dataObj; 
+        const { Company_name, company_id } = dataObj;
         let companyData = {
           Company_name,
           company_id,
@@ -223,16 +222,14 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(mainURL, {
+        const response = await fetch(DashboardURL, {
           method: 'GET',
           headers: { Authorization: `token ${userToken.token}` }
         });
-        const data = await response.json();
-        // const orderedBuoysData = [...data].sort((a, b) =>
-        //   b.zone.localeCompare(a.zone)
-        // );
-
-        setDashBoardData(data);
+        if (response.status == 200) {
+          const data = await response.json();
+          setDashBoardData(data);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -244,7 +241,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = setInterval(async () => {
       try {
-        const response = await fetch(mainURL, {
+        const response = await fetch(DashboardURL, {
           method: 'GET',
           headers: { Authorization: `token ${userToken.token}` }
         });
@@ -253,8 +250,8 @@ const AdminDashboard = () => {
           b.zone.localeCompare(a.zone)
         );
         setBuoysData(orderedBuoysData);
-        setCenter([21.865413583095347, 71.49970380735064]);
-        setZoomLevel(window.innerWidth < 530 ? 6 : 8);
+        // setCenter([21.865413583095347, 71.49970380735064]);
+        // setZoomLevel(window.innerWidth < 530 ? 6 : 8);
       } catch (error) {
         console.error(error);
       }
@@ -268,16 +265,14 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(mainURL, {
+        const response = await fetch(DashboardURL, {
           method: 'GET',
           headers: { Authorization: `token ${userToken.token}` }
         });
-        const data = await response.json();
-        // const orderedBuoysData = [...data].sort((a, b) =>
-        //   b.zone.localeCompare(a.zone)
-        // );
-
-        setDashBoardData(data);
+        if (response.status == 200) {
+          const data = await response.json();
+          setDashBoardData(data);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -328,8 +323,8 @@ const AdminDashboard = () => {
         <Col lg={6} md={12} sm={12} className="">
           <Customers
             data={tableData}
-            setCenter={center => setCenter(center)}
-            setZoomLevel={zoomLevel => setZoomLevel(zoomLevel)}
+            // setCenter={center => setCenter(center)}
+            // setZoomLevel={zoomLevel => setZoomLevel(zoomLevel)}
           />
           {/* <Col lg={6} md={12} sm={12} className="mb-2"></Col> */}
         </Col>

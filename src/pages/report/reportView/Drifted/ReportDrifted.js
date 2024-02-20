@@ -4,7 +4,7 @@ import ReportBar from '../../report-right-bar';
 import ReportFooter from 'components/footer/ReportFooter';
 import ReportDriftedTable from './ReportDriftedTable';
 
-const ReportDrifted = () => {
+const ReportKMTracking = () => {
   return (
     <>
       <Row>
@@ -22,4 +22,4 @@ const ReportDrifted = () => {
   );
 };
 
-export default ReportDrifted;
+export default ReportKMTracking;

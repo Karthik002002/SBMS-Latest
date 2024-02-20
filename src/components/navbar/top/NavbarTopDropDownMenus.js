@@ -58,18 +58,18 @@ const NavbarTopDropDownMenus = ({ setOpen }) => {
 
           <li onClick={closeSidebar}>
             <NavLink
-              to="/monitoring"
+              to="/tracking"
               className="navbar-hamburger-dashboard"
               activeClassName="mobile-navbar-active"
               // style={{ fontSize: '16px', textDecoration: 'none' }}
             >
-              Monitoring
+              Tracking
             </NavLink>{' '}
           </li>
 
           <li onClick={closeSidebar}>
             <NavLink
-              to="/report/month"
+              to="/report/KM-report"
               className={`navbar-hamburger-dashboard mobile-navbar ${
                 isActive ? 'active' : ''
               }`}
@@ -80,7 +80,7 @@ const NavbarTopDropDownMenus = ({ setOpen }) => {
           </li>
           <li>
             <a
-              href="https://bmsadmin.elenageosys.com/admin/"
+              href="https://sbmsadmin.elenageosys.com/admin/"
               target="_blank"
               className="text-decoration-underline"
             >

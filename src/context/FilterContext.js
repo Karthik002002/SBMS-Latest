@@ -20,6 +20,7 @@ export const FilterData = ({ children }) => {
   const [ZoomLevel, setZoomLevel] = useState(6);
   const [PageCount, setPageCount] = useState(null);
   const [IMEI, setIMEI] = useState(null);
+
   useEffect(() => {
     const handleResize = () => {
       //setting the page count according to the screen height
@@ -38,7 +39,6 @@ export const FilterData = ({ children }) => {
     };
     handleResize();
     window.addEventListener('resize', handleResize);
-
     return () => {
       window.removeEventListener('resize', handleResize);
     };

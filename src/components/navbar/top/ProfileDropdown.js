@@ -9,7 +9,7 @@ import { CiLogout } from 'react-icons/ci';
 import { FaUser } from 'react-icons/fa';
 
 const ProfileDropdown = () => {
-  const mainURL = 'https://bmsadmin.elenageosys.com/user/logout/';
+  const mainURL = 'https://sbmsadmin.elenageosys.com/user/logout/';
   var loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
   const handleLogout = async () => {
     

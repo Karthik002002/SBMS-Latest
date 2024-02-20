@@ -118,7 +118,6 @@ const DoughnutRoundedChart = ({ data }) => {
       setTotalCount(count);
     }
   }, [companyFilter]);
- 
 
   const chartCode = `function ChartOptions() {
     const chartRef = useRef(null)
@@ -137,7 +136,7 @@ const DoughnutRoundedChart = ({ data }) => {
       series: [
         {
           type: 'pie',
-          radius: window.innerWidth < 530 ? ['30%', '55%'] : ['40%', '75%'],
+          radius: window.innerWidth < 530 ? ['30%', '55%'] : ['40%', '65%'],
           center: window.innerWidth < 580 ? ['50%', '58%'] : ['50%', '58%'],
           avoidLabelOverlap: false,
           itemStyle: {

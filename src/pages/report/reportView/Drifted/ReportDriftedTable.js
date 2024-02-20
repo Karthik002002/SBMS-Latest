@@ -8,16 +8,15 @@ import { startOfDay, endOfDay, format, isBefore } from 'date-fns';
 import ReportTablePagination from 'pages/report/report-tablepagination';
 import { FaCalendarDays } from 'react-icons/fa6';
 import useDatePicker from 'pages/report/DatePickerHandler';
+import { KMReportURL } from '../../../../URL/url';
 
 const ReportDriftedTable = () => {
   const [fromOpen, toggleFromOpen] = useDatePicker(false);
   const [toOpen, toggleToOpen] = useDatePicker(false);
-  const [fromDate, setFromDate] = useState(null);
-  const [fromTime, setFromTime] = useState(null);
-  const [toDate, setToDate] = useState(null);
-  const [toTime, setToTime] = useState(null);
-  const [DriftedQuery, setDriftedQuery] = useState(null);
-  const [DriftedData, setDriftedData] = useState([]);
+  const [DateTime, setDateTime] = useState({});
+  const [FieldDateTime, setFieldDateTime] = useState({});
+  const [KMTrackingQuery, setKMTrackingQuery] = useState(null);
+  const [KMReportData, setKMReportData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showTable, setShowTable] = useState(false);
   const [resetDate, setResetDate] = useState(false);
@@ -25,89 +24,65 @@ const ReportDriftedTable = () => {
   const [InvalidDate, setInvalidDate] = useState(false);
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
 
-  //handle Date changes
-  const handleFromDateChange = date => {
-    if (date instanceof Date && !isNaN(date.getTime())) {
-      setFromDate(date);
-      setDriftedQuery(null);
-    } else {
-      console.error('Invalid date object');
-      setFromDate(null);
-    }
-  };
-
-  const handleToDateChange = date => {
-    if (date instanceof Date && !isNaN(date.getTime())) {
-      setToDate(date);
-      setDriftedQuery(null);
-    } else {
-      console.error('Invalid date object');
-      setToDate(null);
-    }
-  };
-
   //handle reset
   const handleReset = () => {
     setNoData(false);
     setShowTable(false);
-    setFromDate(null);
-    setToDate(null);
+    setDateTime({});
+    setFieldDateTime({});
     setResetDate(false);
     setInvalidDate(false);
+  };
+  const handleDateChange = (date, fieldName) => {
+    setNoData(false);
+    setFieldDateTime({ ...FieldDateTime, [fieldName]: date });
+    const formattedDateTime = format(date, 'yyyy/MM/dd HH:mm:ss');
+    setDateTime({ ...DateTime, [fieldName]: formattedDateTime });
+  };
+  const isBeforeDateTime = (fromDate, toDate) => {
+    return fromDate.getTime() < toDate.getTime();
   };
 
   //set the query from the selected Date
   useEffect(() => {
-    if (fromDate && toDate && fromTime && toTime) {
-      const fromDateFormatted = startOfDay(fromDate);
-      const toDateFormatted = endOfDay(toDate);
-      const formattedFromTime = format(
-        new Date(`2000-01-01T${fromTime}`),
-        'HH:mm:ss'
-      );
-      const formattedToTime = format(
-        new Date(`2000-01-01T${toTime}`),
-        'HH:mm:ss'
-      );
-
+    if (DateTime.FromDateTime && DateTime.ToDateTime) {
+      const fromDateTime = new Date(DateTime.FromDateTime);
+      const toDateTime = new Date(DateTime.ToDateTime);
       // Check if fromDate is before toDate
-      if (isBefore(fromDateFormatted, toDateFormatted)) {
+      if (isBeforeDateTime(fromDateTime, toDateTime)) {
+        console.log('Date Updated');
         setShowTable(false);
         setIsLoading(true);
         setNoData(false);
         setInvalidDate(false);
-        const startOfDayDate = format(fromDateFormatted, 'yyyy-MM-dd');
-        const endOfDayDate = format(toDateFormatted, 'yyyy-MM-dd');
-        setDriftedQuery(
-          `http://192.168.0.121:8000/record/km_report/?from=${startOfDayDate} ${formattedFromTime}&to=${endOfDayDate} ${formattedToTime}`
+        setKMTrackingQuery(
+          `${KMReportURL}?from=${DateTime.FromDateTime}&to=${DateTime.ToDateTime}`
         );
       } else {
-        setDriftedQuery(null);
+        setKMTrackingQuery(null);
         setInvalidDate(true);
         setShowTable(false);
         setNoData(false);
         setIsLoading(false);
         setResetDate(true);
-        setDriftedData([]);
+        setKMReportData([]);
       }
     }
-  }, [fromDate, fromTime, toTime, toDate]);
+  }, [DateTime]);
 
   //Retrieve selected date data from the API.
   useEffect(() => {
     if (
-      fromDate &&
-      toDate &&
-      fromTime &&
-      toTime &&
-      DriftedQuery !== null &&
+      DateTime.FromDateTime &&
+      DateTime.ToDateTime &&
+      KMTrackingQuery !== null &&
       !InvalidDate
     ) {
       const fetchData = async () => {
-        if (DriftedQuery !== null) {
+        if (KMTrackingQuery !== null) {
           try {
             const [selectedDate] = await Promise.all([
-              fetch(DriftedQuery, {
+              fetch(KMTrackingQuery, {
                 method: 'GET',
                 headers: { Authorization: `token ${userToken.token}` }
               })
@@ -120,16 +95,16 @@ const ReportDriftedTable = () => {
             const [selectedDateResponse] = await Promise.all([
               selectedDate.json()
             ]);
-
+            setNoData(false);
             if (selectedDateResponse.length === 0) {
               setNoData(true);
-              setDriftedData([]);
+              setKMReportData([]);
               setIsLoading(false);
               setResetDate(true);
               setShowTable(false);
               return;
             }
-            setDriftedData(selectedDateResponse);
+            setKMReportData(selectedDateResponse);
             setNoData(false);
             setShowTable(true);
             setResetDate(true);
@@ -141,7 +116,7 @@ const ReportDriftedTable = () => {
       };
       fetchData();
     }
-  }, [fromDate, toDate, DriftedQuery]);
+  }, [KMTrackingQuery]);
 
   const columns = [
     {
@@ -178,6 +153,30 @@ const ReportDriftedTable = () => {
       Cell: ({ value }) => value || '-'
     },
     {
+      accessor: 'timestamp',
+      Header: 'Time',
+      headerProps: { className: 'business-card-company' },
+      cellProps: {
+        className: 'business-card-company-cell text-break text-center'
+      },
+      Cell: ({ value }) => {
+        if (!value) return '-'; // Render a dash if the value is falsy
+      
+        // Split the time string into hours, minutes, and seconds
+        const [hours, minutes, seconds] = value.split(':');
+      
+        // Create a new Date object with the parsed values
+        const time = new Date();
+        time.setHours(parseInt(hours, 10));
+        time.setMinutes(parseInt(minutes, 10));
+        time.setSeconds(parseInt(seconds, 10));
+      
+        // Format the time in HH:mm:ss format
+        const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        return formattedTime;
+      }
+    },
+    {
       accessor: 'lat',
       Header: 'Location',
       cellProps: { className: 'text-break text-center' },
@@ -203,36 +202,32 @@ const ReportDriftedTable = () => {
           <label className="me-2 m-auto">From Date:</label>
           <DatePicker
             open={fromOpen}
-            selected={fromDate}
-            onChange={handleFromDateChange}
-            dateFormat="dd/MM/yyyy"
+            selected={FieldDateTime?.FromDateTime}
+            onChange={date => handleDateChange(date, 'FromDateTime')}
+            showTimeSelect
+            dateFormat="MMMM d, yyyy h:mmaa"
             className="fs--1 report-input"
             maxDate={new Date()}
             onInputClick={toggleFromOpen}
-            onSelect={toggleFromOpen}
+            // onSelect={toggleFromOpen}
             onClickOutside={toggleFromOpen}
             readOnly
           />
           <span className="ms-1" onClick={toggleFromOpen}>
             <FaCalendarDays />
           </span>
-          <Form.Control
-            type="time"
-            name="FromTime"
-            onChange={e => setFromTime(e.target.value)}
-            className="form-control ms-2 testing-add-date-time report-input"
-          />
         </div>
         <div className="mb-3 ms-4 d-flex">
           <label className="me-2 m-auto">To Date:</label>
           <DatePicker
             open={toOpen}
-            selected={toDate}
-            onChange={handleToDateChange}
-            dateFormat="dd/MM/yyyy"
+            selected={FieldDateTime?.ToDateTime}
+            onChange={date => handleDateChange(date, 'ToDateTime')}
+            showTimeSelect
+            dateFormat="MMMM d, yyyy h:mmaa"
             className="fs--1 report-input"
             maxDate={new Date()}
-            onSelect={toggleToOpen}
+            // onSelect={toggleToOpen}
             onInputClick={toggleToOpen}
             onClickOutside={toggleToOpen}
             readOnly
@@ -240,12 +235,6 @@ const ReportDriftedTable = () => {
           <span className="ms-1" onClick={toggleToOpen}>
             <FaCalendarDays />
           </span>
-          <Form.Control
-            type="time"
-            name="ToTime"
-            onChange={e => setToTime(e.target.value)}
-            className="form-control ms-2 testing-add-date-time report-input"
-          />
         </div>
 
         <div>
@@ -261,18 +250,18 @@ const ReportDriftedTable = () => {
         </div>
       </div>
       {InvalidDate && (
-        <div className="text-danger">Please enter a valid date.</div>
+        <div className="text-danger">Please enter a valid Date and Time.</div>
       )}
       {noData && (
         <div className="no-data-div">
-          No Drifted Report is Found on the selected Date.
+          No KM Tracking Report is Found on the selected Date.
         </div>
       )}
       {isLoading && <div className="loading-spinner"></div>}
       {showTable && (
         <AdvanceTableWrapper
           columns={columns}
-          data={DriftedData}
+          data={KMReportData}
           selection
           sortable
           pagination
@@ -290,7 +279,7 @@ const ReportDriftedTable = () => {
                   className: 'fs--1 mb-0 overflow-hidden'
                 }}
               />
-              {DriftedData.length > 20 ? <ReportTablePagination table /> : ''}
+              {KMReportData.length > 20 ? <ReportTablePagination table /> : ''}
             </Card.Body>
           </Card>
         </AdvanceTableWrapper>

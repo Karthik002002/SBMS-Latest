@@ -12,7 +12,6 @@ const Customers = ({ data }) => {
   const { Filter, companyFilter } = useListFilterContext();
   const [InitialData, setInitialData] = useState(data);
   const [BackUpData, setBackupData] = useState(data);
-  const [recentBuoysTableData, setRecentBuoysTableData] = useState([]);
   const CompanyData = [];
   const SchoolData = [];
 

@@ -13,6 +13,7 @@ import FalconCardHeader from 'components/common/FalconCardHeader';
 import Notification from 'components/notification/Notification';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { MarkAllSeenURL, NotificationURL } from '../../../URL/url';
 
 const NotificationDropdown = () => {
   // State
@@ -27,8 +28,6 @@ const NotificationDropdown = () => {
   const [isAllRead, setIsAllRead] = useState(true);
   const [AllViewActive, setAllViewActive] = useState(false);
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
-  const NotificationURL =
-    'https://bmsadmin.elenageosys.com/notification/get_alerts/';
 
   const fetchData = async () => {
     try {
@@ -46,11 +45,12 @@ const NotificationDropdown = () => {
         return Math.abs(currentDate - messageDate);
       };
 
-      const sortedData = data.sort((a, b) => {
+      const sortedData = data.sort((b, a) => {
         const timeDifferenceA = getTimeDifference(a.timestamp);
         const timeDifferenceB = getTimeDifference(b.timestamp);
         return timeDifferenceA - timeDifferenceB;
       });
+      console.log(sortedData);
       if (sortedData.length === 0) {
         setIsAllRead(true);
         setNotificationCount('');
@@ -96,19 +96,28 @@ const NotificationDropdown = () => {
   };
 
   useEffect(() => {
-    // fetchData();
+    fetchData();
     // Call every 10 seconds for getting latest Notification from the server
-    // const intervalId = setInterval(fetchData, 10000);
-    // return () => clearInterval(intervalId);
+    const intervalId = setInterval(fetchData, 10000);
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
     // Update time ago for each notification every second
     const intervalId = setInterval(() => {
       const updatedNotificationList = NewNotification.map(notification => {
-        const timeAgo = getTimeAgo(notification.timestamp);
+        const timeAgo = getTimeAgo(notification.time_stamp);
         return { ...notification, timeAgo };
       });
+      updatedNotificationList.sort((b, a) => {
+        // Convert the timeAgo strings to Date objects for comparison
+        const dateA = new Date(a.timestamp);
+        const dateB = new Date(b.timestamp);
+        
+        // Sort in descending order (latest time first)
+        return dateB - dateA;
+      });
+      console.log(updatedNotificationList);
       setNewNotificationList(updatedNotificationList);
     }, 1000);
 
@@ -127,10 +136,8 @@ const NotificationDropdown = () => {
     const markAllreadForm = { notification_id: MarkAllreadID };
     const MarkAllread = async () => {
       try {
-        const notificationURL =
-          'https://bmsadmin.elenageosys.com/notification/mark_all_seen/';
         const notificationResponse = await axios.put(
-          notificationURL,
+          MarkAllSeenURL,
           markAllreadForm,
           {
             headers: { Authorization: `token ${userToken.token}` }

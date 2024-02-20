@@ -16,8 +16,6 @@ import {
   Circle
 } from 'react-leaflet';
 import AppContext from 'context/Context';
-// import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
-// import { markers } from 'data/dashboard/projectManagement';
 import 'leaflet-rotatedmarker';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -35,6 +33,7 @@ import ParkedPNG from 'assets/img/bus-icons/bus-parked-64.png';
 import { useListFilterContext } from 'context/FilterContext';
 import HistoryRouting from 'pages/elena_dashboard/Monitoring/HistoryRouting';
 import VehicleMarker from './MarkerComponent';
+import { TrackingURL } from '../../URL/url';
 
 const LeafletMapExample = ({ data }) => {
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
@@ -44,7 +43,7 @@ const LeafletMapExample = ({ data }) => {
   const { TrackingVehicleCenter, ZoomLevel, IMEI } = useListFilterContext();
   useEffect(() => {
     if (IMEI !== null) {
-      const LiveURL = `http://192.168.0.30:8000/dashboard/?imei=${IMEI}`;
+      const LiveURL = `${TrackingURL}?imei=${IMEI}`;
       const fetchData = async () => {
         try {
           const response = await fetch(LiveURL, {
@@ -66,10 +65,8 @@ const LeafletMapExample = ({ data }) => {
       return () => clearInterval(IntervalCall);
     }
   }, [IMEI]);
-  console.log(IMEI);
+
   useEffect(() => {
-    console.log(UpdatedDashboard);
-    
     setDashBoardData(UpdatedDashboard);
   }, [UpdatedDashboard]);
 
@@ -161,28 +158,19 @@ const LeafletMapExample = ({ data }) => {
     };
   }
   useEffect(() => {
+    // if (IMEI !== null) {
+    //   const filteredLiveVehicle = data.filter(vehicle => vehicle.imei !== IMEI);
+    //   setDashBoardData(filteredLiveVehicle);
+    // } else {
+    // }
     setDashBoardData(data);
   }, [data]);
-  useEffect(() => {
-    const filteredLivevehicle = data
-      .filter(
-        vehicle =>
-          !LiveVehicleData.find(
-            liveVehicle => liveVehicle.imei === vehicle.imei
-          )
-      )
-      .map(data => {
-        return data;
-      });
-    setUpdatedDashboard(filteredLivevehicle);
-  }, [IMEI]);
+
   function LeafletMap() {
     const markers = [];
 
     DashboardData.forEach(data => {
-      // console.log(data.lat, data.lon);
       const status = getStatusAndIcon(data.status, data.speed_status);
-      // console.log(status)
       markers.push({
         position: [data.lat, data.lon],
         companyName: data.Company_name,
@@ -228,9 +216,6 @@ const LeafletMapExample = ({ data }) => {
         })
       });
     });
-
-    console.log(markers);
-
     return (
       <div className="map-container">
         <MapContainer
@@ -271,27 +256,10 @@ const LeafletMapExample = ({ data }) => {
                         Vehicle Reg No: {item.VehicleReg}
                       </p>
                       <p className="m-0 text-500">Status: {item.status}</p>
-                      {/* <p className="m-0 text-500"> */}
-                      {/* Battery Voltage : {item.batteryVltInt} V */}
-                      {/* </p> */}
-                      {/* <p className="m-0 text-500"> */}
-                      {/* Light : {item.lightSensorData} */}
-                      {/* </p> */}
-                      {/* <p className="m-0 text-500">
-                      Light Sensor 2: {item.lightSensorData[1]}
-                    </p> */}
-                      {/* <p className="m-0 text-500"> */}
-                      {/* Updated as at: {item.updatedAt} */}
-                      {/* </p> */}
                     </div>
                   ))}
                 </Popup>
               </Marker>
-              <LayerGroup>
-                {LiveVehicleData.map((vehicle, index) => (
-                  <VehicleMarker key={index} vehicle={vehicle} />
-                ))}
-              </LayerGroup>
               <LayerGroup>
                 {/* <Circle
                   center={marker.geoFence}
@@ -302,6 +270,7 @@ const LeafletMapExample = ({ data }) => {
               </LayerGroup>
             </>
           ))}
+
           <LayerComponent />
         </MapContainer>
       </div>

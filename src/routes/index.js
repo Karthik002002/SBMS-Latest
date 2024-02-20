@@ -15,13 +15,7 @@ import AdminDashboard from 'pages/elena_dashboard/AdminDashboard';
 import LeafletMapExample from 'pages/tracking_page/LeafletMapExample';
 import Monitoring from 'pages/elena_dashboard/Monitoring/Monitoring';
 import { FilterData, FilterProvider } from 'context/FilterContext';
-import Report from 'pages/report/report';
-import ReportMonth from 'pages/report/reportView/Month/ReportMonth';
-import ReportWeek from 'pages/report/reportView/Week/ReportWeek';
-import ReportDaily from 'pages/report/reportView/Daily/ReportDaily';
-import ReportDrifted from 'pages/report/reportView/Drifted/ReportDrifted';
-import ReportUnlit from 'pages/report/reportView/unlit/ReportUnlit';
-import ReportLowBattery from 'pages/report/reportView/lowbattery/reportLowbattery';
+import ReportKMTracking from 'pages/report/reportView/Drifted/ReportDrifted';
 import { PingData } from 'context/PingContext';
 import ReportLayout from 'layouts/ReportLayout';
 
@@ -145,53 +139,29 @@ const FalconRoutes = () => {
           </Route>
           <Route element={<ReportLayout />}>
             <Route
-              path="/report/month"
+              path="/report/KM-report"
               element={
                 <Suspense>
-                  <ReportMonth />
+                  <ReportKMTracking />
                 </Suspense>
               }
             />
-            <Route
-              path="/report/week"
-              element={
-                <Suspense>
-                  <ReportWeek />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/report/daily"
-              element={
-                <Suspense>
-                  <ReportDaily />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/report/drifted"
-              element={
-                <Suspense>
-                  <ReportDrifted />
-                </Suspense>
-              }
-            />
-            <Route
+            {/* <Route
               path="/report/lowbattery"
               element={
                 <Suspense>
                   <ReportLowBattery />
                 </Suspense>
               }
-            />
-            <Route
+            /> */}
+            {/* <Route
               path="/report/unlit"
               element={
                 <Suspense>
                   <ReportUnlit />
                 </Suspense>
               }
-            />
+            /> */}
           </Route>
 
           {/*- ------------- Tracking ---------------------------  */}

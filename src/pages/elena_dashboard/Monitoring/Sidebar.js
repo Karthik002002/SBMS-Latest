@@ -10,22 +10,24 @@ import { format, parseISO } from 'date-fns';
 import { useListFilterContext } from 'context/FilterContext';
 
 const Sidebar = ({ data }) => {
-  const [zoneName, setZoneName] = useState('');
+  const [ActiveCompany, setCompany] = useState(null);
   const { setTrackingVehicleCenter, setZoomLevel, setIMEI } =
     useListFilterContext();
   const VehicleData = [];
   const companyData = [];
   const schoolData = [];
-  let vehicleName = new Set();
+  const vehicleName = [];
   data.forEach(data => {
     if (!companyData.includes(data.Company_name)) {
       companyData.push(data.Company_name);
     }
-    if(!schoolData.includes(data.school_name)){
+    if (!schoolData.includes(data.school_name)) {
       schoolData.push(data.school_name);
     }
-    
-    vehicleName.add(data.vehicle_name);
+    if (!vehicleName.includes(data.vehicle_name)) {
+      vehicleName.push(data.vehicle_name);
+    }
+
     VehicleData.push({
       companyName: data.Company_name,
       CompanyID: data.company_id,
@@ -44,7 +46,7 @@ const Sidebar = ({ data }) => {
       lonDir: data.lon_dir
     });
   });
-  // console.log(schoolData);
+  // console.log(VehicleData);
   // let zoneArray = ['All', ...zone];
   // const [zoneData, setZoneData] = useState();
   // console.log(zoneArray);
@@ -90,7 +92,6 @@ const Sidebar = ({ data }) => {
     // }
   ];
 
-  // console.log(recentBuoysTableData);
   return (
     <div className="h-100 ms-2 mobile-monitoring-table">
       <AdvanceTableWrapper
@@ -111,16 +112,15 @@ const Sidebar = ({ data }) => {
                   size="sm"
                   //   value={zoneData}
                   onChange={e => {
-                    setZoneName(e.target.value);
+                    setCompany(e.target.value);
                   }}
                   style={{ maxWidth: '320px' }}
                   className=""
                 >
-                  {/* {zone.forEach(zone => console.log(zone))} */}
+                  <option value="null" key="null">
+                    Select
+                  </option>
                   {companyData.map((data, index) => (
-                    // if(index == 0){
-
-                    // }
                     <option value={data} key={index}>
                       {data}
                     </option>
@@ -141,6 +141,8 @@ const Sidebar = ({ data }) => {
                 size: 'sm',
                 className: 'fs--1 mb-0 overflow-auto'
               }}
+              ActiveCompany={ActiveCompany}
+              vehicleData={VehicleData}
             />
           </Card.Body>
           {/* <Card.Footer>

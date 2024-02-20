@@ -1,3 +1,4 @@
+import { LoginURL } from '../../URL/url';
 import axios from 'axios';
 import Divider from 'components/common/Divider';
 import PropTypes from 'prop-types';
@@ -12,14 +13,11 @@ const LoginForm = ({ hasLabel }) => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        'http://192.168.0.30:8000/user/login/',
-        {
-          username: e.target[0].value,
-          password: e.target[1].value,
-          // client: 'smbs-webapp'
-        }
-      );
+      const response = await axios.post(LoginURL, {
+        username: e.target[0].value,
+        password: e.target[1].value
+        // client: 'smbs-webapp'
+      });
       window.sessionStorage.setItem(
         'loggedInUser',
         JSON.stringify(response.data)

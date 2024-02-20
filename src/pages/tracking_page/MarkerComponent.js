@@ -10,7 +10,7 @@ import { divIcon } from 'leaflet';
 import { Marker, Popup } from 'react-leaflet';
 const VehicleMarker = ({ vehicle }) => {
   const status = getStatusAndIcon(vehicle.status, vehicle.speed_status);
-
+  console.log('IN');
   const markerIcon = divIcon({
     className: 'custom-marker-icon',
     html: `<img src="${
@@ -29,7 +29,9 @@ const VehicleMarker = ({ vehicle }) => {
         : vehicle.status === 5
         ? InActivePNG
         : ParkedPNG
-    }" style="transform: rotate(${vehicle.heading}deg)" width="30" height="40" />`,
+    }" style="transform: rotate(${
+      vehicle.heading
+    }deg)" width="30" height="40" />`,
     iconSize: [25, 41],
     iconAnchor: [21, 36],
     popupAnchor: [1, -34]
@@ -39,7 +41,7 @@ const VehicleMarker = ({ vehicle }) => {
     <Marker position={[vehicle.lat, vehicle.lon]} icon={markerIcon}>
       <Popup>
         <p className="m-0 text-500">Vehicle Name: {vehicle.vehicle_name}</p>
-        <p className="m-0 text-500">Vehicle Reg No: {vehicle.vehicle_reg}</p>
+        <p className="m-0 text-500">Vehicle Reg No: {vehicle.reg_no}</p>
         <p className="m-0 text-500">Status: {status.statusText}</p>
       </Popup>
     </Marker>
