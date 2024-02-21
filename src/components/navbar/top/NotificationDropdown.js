@@ -50,7 +50,6 @@ const NotificationDropdown = () => {
         const timeDifferenceB = getTimeDifference(b.timestamp);
         return timeDifferenceA - timeDifferenceB;
       });
-      console.log(sortedData);
       if (sortedData.length === 0) {
         setIsAllRead(true);
         setNotificationCount('');
@@ -113,11 +112,10 @@ const NotificationDropdown = () => {
         // Convert the timeAgo strings to Date objects for comparison
         const dateA = new Date(a.timestamp);
         const dateB = new Date(b.timestamp);
-        
+
         // Sort in descending order (latest time first)
         return dateB - dateA;
       });
-      console.log(updatedNotificationList);
       setNewNotificationList(updatedNotificationList);
     }, 1000);
 

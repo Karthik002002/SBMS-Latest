@@ -12,6 +12,7 @@ import WeatherDetails from './WeatherDetails';
 import { usePingButton } from 'context/PingContext';
 import DashboardData from '../../data/SBMSDashboardData.json';
 import { DashboardURL } from '../../URL/url';
+import { useListFilterContext } from 'context/FilterContext';
 // import { buoys } from '../../data/dashboard/buoy';
 
 const DoughnutRoundedChart = lazy(() => import('./DoughnutRoundedChart'));
@@ -30,7 +31,10 @@ const AdminDashboard = () => {
 
   const { Ping } = usePingButton();
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
-
+  const { setHistoryTrackingActive } = useListFilterContext();
+  useEffect(() => {
+    setHistoryTrackingActive(false);
+  }, []);
   useEffect(() => {
     const newDataArray = DashBoardData.flatMap(company => {
       return company.data.map(dataObj => ({

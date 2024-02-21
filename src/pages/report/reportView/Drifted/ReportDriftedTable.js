@@ -191,7 +191,15 @@ const ReportDriftedTable = () => {
       accessor: 'total_distance',
       Header: 'Total KM',
       cellProps: { className: 'text-break text-center' },
-      Cell: ({ value }) => value.toFixed(0) || '-'
+      Cell: ({ value }) => {
+        if (value === 0) {
+          return '0 m';
+        } else if (value < 1) {
+          return `${(value * 1000).toFixed(1)} m`;
+        } else {
+          return `${value.toFixed(2)} km`;
+        }
+      }
     }
   ];
 

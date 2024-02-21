@@ -13,13 +13,19 @@ export const FilterData = ({ children }) => {
     width: window.innerWidth,
     height: window.innerHeight
   });
+  //for map and live tracking
   const [ActiveVehicle, setActiveVehicle] = useState(null);
   const [TrackingVehicleCenter, setTrackingVehicleCenter] = useState([
     13.422925089909123, 77.9857877043398
   ]);
   const [ZoomLevel, setZoomLevel] = useState(6);
+  //for table
   const [PageCount, setPageCount] = useState(null);
+  //Live Tracking IMEI for the tracking page
   const [IMEI, setIMEI] = useState(null);
+  //State for historyTracking is Active or not for the tracking page
+  const [HistoryTrackingActive, setHistoryTrackingActive] = useState(false);
+  const [HistoryTrackingURL, setHistoryTrackingURL] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -45,8 +51,8 @@ export const FilterData = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    console.log(ActiveVehicle);
-  }, [ActiveVehicle]);
+    console.log(HistoryTrackingURL, HistoryTrackingActive);
+  }, [HistoryTrackingURL, HistoryTrackingActive]);
 
   return (
     <ListDashboardData.Provider
@@ -64,7 +70,11 @@ export const FilterData = ({ children }) => {
         ZoomLevel,
         setZoomLevel,
         IMEI,
-        setIMEI
+        setIMEI,
+        HistoryTrackingActive,
+        setHistoryTrackingActive,
+        HistoryTrackingURL,
+        setHistoryTrackingURL
       }}
     >
       {children}

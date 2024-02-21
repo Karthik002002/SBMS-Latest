@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, memo } from 'react';
 import { recentPurchaseTableData } from 'data/dashboard/ecom';
 import { useParams } from 'react-router-dom';
 // import FalconComponentCard from 'components/common/FalconComponentCard';
@@ -40,9 +40,11 @@ const LeafletMapExample = ({ data }) => {
   const [LiveVehicleData, setLiveVehicleData] = useState([]);
   const [UpdatedDashboard, setUpdatedDashboard] = useState();
   const [DashboardData, setDashBoardData] = useState(data);
-  const { TrackingVehicleCenter, ZoomLevel, IMEI } = useListFilterContext();
+  const { TrackingVehicleCenter, ZoomLevel, IMEI, HistoryTrackingActive } =
+    useListFilterContext();
+
   useEffect(() => {
-    if (IMEI !== null) {
+    if (IMEI !== null && !HistoryTrackingActive) {
       const LiveURL = `${TrackingURL}?imei=${IMEI}`;
       const fetchData = async () => {
         try {
@@ -64,7 +66,7 @@ const LeafletMapExample = ({ data }) => {
       }, 5000);
       return () => clearInterval(IntervalCall);
     }
-  }, [IMEI]);
+  }, [IMEI, HistoryTrackingActive]);
 
   useEffect(() => {
     setDashBoardData(UpdatedDashboard);
@@ -116,7 +118,7 @@ const LeafletMapExample = ({ data }) => {
           attribution={null}
           url={'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'}
         />
-        {/* <HistoryRouting /> */}
+        {HistoryTrackingActive && <HistoryRouting />}
       </>
     );
   }
@@ -163,13 +165,16 @@ const LeafletMapExample = ({ data }) => {
     //   setDashBoardData(filteredLiveVehicle);
     // } else {
     // }
-    setDashBoardData(data);
+
+    if (!HistoryTrackingActive) {
+      setDashBoardData(data);
+    }
   }, [data]);
 
   function LeafletMap() {
     const markers = [];
 
-    DashboardData.forEach(data => {
+    DashboardData?.forEach(data => {
       const status = getStatusAndIcon(data.status, data.speed_status);
       markers.push({
         position: [data.lat, data.lon],
@@ -209,7 +214,7 @@ const LeafletMapExample = ({ data }) => {
               : ParkedPNG
           }" style="transform: rotate(${
             data.heading
-          }deg)" width="30" height="40" />`,
+          }deg)" width="20" height="30" />`,
           iconSize: [25, 41],
           iconAnchor: [21, 36],
           popupAnchor: [1, -34]
@@ -236,40 +241,41 @@ const LeafletMapExample = ({ data }) => {
           radius={200}
           style={{ height: '90vh', width: '100%' }}
         >
-          {markers.map((marker, index) => (
-            <>
-              <Marker
-                key={index}
-                position={marker.position}
-                icon={marker.markerIcons}
-              >
-                <Popup>
-                  <p className="m-0 text-500">
-                    {/* Location: {marker.position[0]}, {marker.position[1]} */}
-                  </p>
-                  {marker.popupText.map((item, innerIndex) => (
-                    <div key={innerIndex}>
-                      <p className="m-0 text-500">
-                        Vehicle Name: {item.vehicleName}
-                      </p>
-                      <p className="m-0 text-500">
-                        Vehicle Reg No: {item.VehicleReg}
-                      </p>
-                      <p className="m-0 text-500">Status: {item.status}</p>
-                    </div>
-                  ))}
-                </Popup>
-              </Marker>
-              <LayerGroup>
-                {/* <Circle
+          {!HistoryTrackingActive &&
+            markers.map((marker, index) => (
+              <>
+                <Marker
+                  key={index}
+                  position={marker.position}
+                  icon={marker.markerIcons}
+                >
+                  <Popup>
+                    <p className="m-0 text-500">
+                      {/* Location: {marker.position[0]}, {marker.position[1]} */}
+                    </p>
+                    {marker.popupText.map((item, innerIndex) => (
+                      <div key={innerIndex}>
+                        <p className="m-0 text-500">
+                          Vehicle Name: {item.vehicleName}
+                        </p>
+                        <p className="m-0 text-500">
+                          Vehicle Reg No: {item.VehicleReg}
+                        </p>
+                        <p className="m-0 text-500">Status: {item.status}</p>
+                      </div>
+                    ))}
+                  </Popup>
+                </Marker>
+                <LayerGroup>
+                  {/* <Circle
                   center={marker.geoFence}
                   center={[data.geofence_lat, data.geofence_lat ]}
                   pathOptions={marker.options}
                   radius={100}
                 /> */}
-              </LayerGroup>
-            </>
-          ))}
+                </LayerGroup>
+              </>
+            ))}
 
           <LayerComponent />
         </MapContainer>
@@ -280,4 +286,4 @@ const LeafletMapExample = ({ data }) => {
   return <LeafletMap />;
 };
 
-export default LeafletMapExample;
+export default memo(LeafletMapExample);

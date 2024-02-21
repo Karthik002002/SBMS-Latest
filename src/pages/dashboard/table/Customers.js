@@ -82,140 +82,40 @@ const Customers = ({ data }) => {
 
     return `${degrees}° ${minutes}' ${seconds}" ${direction}`;
   }
+  function getStatusAndIcon(status, speed_status) {
+    let statusText;
+    switch (status) {
+      case 0:
+        statusText = 'Running';
+        break;
+      case 1:
+        statusText = 'Idle';
+        break;
+      case 2:
+        statusText = 'Stopped';
+        break;
+      case 3:
+        statusText = 'Towed';
+        break;
+      case 4:
+        statusText = 'No Data';
+        break;
+      case 5:
+        statusText = 'Out of Network';
+        break;
+      case 6:
+        statusText = 'Parked';
+        break;
+      default:
+        statusText = '-';
+    }
+    if (speed_status) {
+      statusText = 'RashDriving';
+    }
+    return statusText;
+  }
 
-  // useEffect(() => {
-  //   if (InitialData && InitialData.length > 0) {
-  //     const updatedTableData = InitialData.map(buoy => ({
-  //       buoyId: buoy.imei,
-  //       buoyName: <>{buoy.buoy_name}</>,
-  //       batteryVltInt: (
-  //         <div
-  //           className={`bg-${
-  //             buoy.bt_volt > 12 ? 'success' : 'danger'
-  //           } text-white rounded-5 text-center px-2`}
-  //         >
-  //           {buoy.bt_volt}
-  //         </div>
-  //       ),
-  //       lightSensorData: (
-  //         <div
-  //           className={`bg-${
-  //             buoy.light_status === 0
-  //               ? 'danger'
-  //               : buoy.light_status === 1
-  //               ? 'success'
-  //               : 'warning'
-  //           } text-white rounded-5 text-center px-2`}
-  //         >
-  //           {`A : ${buoy.lux1}, S : ${buoy.lux2}`}
-  //         </div>
-  //       ),
-  //       geoFence: 'Inside',
-  //       location: (
-  //         <div
-  //           className={`bg-${
-  //             buoy.geofence_status ? 'success' : 'danger'
-  //           } text-white rounded-5 text-center px-2`}
-  //         >
-  //           {ddToDMS(buoy.lat, 'latitude')}, {ddToDMS(buoy.lon, 'longitude')}
-  //         </div>
-  //       ),
-  //       createdAt: format(parseISO(buoy.timestamp), 'dd/MM/yyyy HH:mm:ss'),
-  //       track: (
-  //         <Link
-  //           to="/monitoring"
-  //           onClick={() => {
-  //             // Passing the value to the context for using on monitoring page
-  //             setActiveBuoy({ center: [buoy.lat, buoy.lon], zoomLevel: 17 });
-  //             window.scroll({
-  //               top: document.body.offsetHeight,
-  //               left: 0,
-  //               behavior: 'smooth'
-  //             });
-  //           }}
-  //         >
-  //           <IconButton
-  //             variant="falcon-default"
-  //             size="sm"
-  //             icon="external-link-alt"
-  //             transform="shrink-3"
-  //           ></IconButton>
-  //         </Link>
-  //       )
-  //     }));
-  //     setRecentBuoysTableData(updatedTableData);
-  //   }
-  // }, [InitialData]);
-
-  
   const columns = [
-    // {
-    //   accessor: 'status',
-    //   Header: 'Status',
-    //   headerProps: { className: 'text-center' },
-    //   Cell: ({ value, row }) => {
-    //     if (!value) return '-'; // Render a dash if the value is falsy
-    //     let statusClassName = ''; // Initialize the class name variable
-    //     let statusText = ''; // Initialize the text to be displayed in the cell
-
-    //     // Logic to determine the class name and status text based on the value
-    //     if (value) {
-    //       if (row.original.speed_status) {
-    //         statusCounts.rash_driving++;
-    //         return;
-    //       }
-    //       switch (value) {
-    //         case 0:
-    //           statusClassName = 'status-running';
-    //           statusText = 'Running';
-    //           break;
-    //         case 1:
-    //           statusClassName = 'status-idle';
-    //           statusText = 'Idle';
-    //           break;
-    //         case 2:
-    //           statusClassName = 'status-stop';
-    //           statusText = 'Stop';
-    //           break;
-    //         case 3:
-    //           statusClassName = 'status-towed';
-    //           statusText = 'Towed';
-    //           break;
-    //         case 4:
-    //           statusClassName = 'status-nodata';
-    //           statusText = 'No Data';
-    //           break;
-    //         case 5:
-    //           statusClassName = 'status-out-of-network';
-    //           statusText = 'Out of Network';
-    //           break;
-    //         case 6:
-    //           statusClassName = 'status-parked';
-    //           statusText = 'Parked';
-    //           break;
-    //         default:
-    //           break;
-    //       }
-    //     }
-
-    //     // Render the status with a small box and the status text
-    //     return (
-    //       <>
-    //         <div></div>
-    //         <div className={`status-box ${statusClassName}`}>
-    //           <div className="status-indicator" />
-    //           <span
-    //             onClick={() => {
-    //               console.log(row.original.speed_status);
-    //             }}
-    //           >
-    //             {statusText}
-    //           </span>
-    //         </div>
-    //       </>
-    //     );
-    //   }
-    // },
     {
       accessor: 'vehicle_name',
       Header: 'Name',
@@ -234,9 +134,8 @@ const Customers = ({ data }) => {
       Header: 'Speed',
       headerProps: { className: 'text-center' },
       cellProps: { className: 'text-break text-center' },
-      Cell: ({ value }) => value || '-'
+      Cell: ({ value }) => (value !== undefined ? value : '-')
     },
-
     {
       accessor: 'ignition',
       Header: 'Ignition',
@@ -257,6 +156,14 @@ const Customers = ({ data }) => {
       headerProps: { className: 'text-center' },
       cellProps: { className: 'text-break text-center' },
       Cell: ({ value }) => value || '-'
+    },
+    {
+      accessor: 'status',
+      Header: 'Status',
+      headerProps: { className: 'text-center' },
+      cellProps: { className: 'text-break text-center' },
+      Cell: ({ value, row }) =>
+        getStatusAndIcon(value, row.original.speed_status) || '-'
     },
     {
       accessor: 'track',

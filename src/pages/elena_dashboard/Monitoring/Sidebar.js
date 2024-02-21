@@ -11,8 +11,12 @@ import { useListFilterContext } from 'context/FilterContext';
 
 const Sidebar = ({ data }) => {
   const [ActiveCompany, setCompany] = useState(null);
-  const { setTrackingVehicleCenter, setZoomLevel, setIMEI } =
-    useListFilterContext();
+  const {
+    setTrackingVehicleCenter,
+    setZoomLevel,
+    setIMEI,
+    setHistoryTrackingActive
+  } = useListFilterContext();
   const VehicleData = [];
   const companyData = [];
   const schoolData = [];
@@ -70,9 +74,8 @@ const Sidebar = ({ data }) => {
           onClick={() => {
             setTrackingVehicleCenter([row.original.lat, row.original.lon]);
             setZoomLevel(17);
-            console.log(row.original.imei);
             setIMEI(row.original.imei);
-            // console.log(row.original.imei, row.original.lat, row.original.lon);
+            setHistoryTrackingActive(false);
           }}
           className="tracking-table-button"
         >

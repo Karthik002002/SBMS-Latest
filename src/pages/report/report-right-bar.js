@@ -17,9 +17,9 @@ const ReportBar = () => {
         <NavLink to="/report/KM-report" className="custom-dropdown-toggle mt-3" activeClassName="active-link">
           KM Tracking Report
         </NavLink>
-        <NavLink to="/report/lowbattery" className="custom-dropdown-toggle" activeClassName="active-link">
+        {/* <NavLink to="/report/lowbattery" className="custom-dropdown-toggle" activeClassName="active-link">
           Low Battery Report
-        </NavLink>
+        </NavLink> */}
         {/* <NavLink to="/report/unlit" className="custom-dropdown-toggle" activeClassName="active-link">
           UnLit Report
         </NavLink> */}

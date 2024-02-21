@@ -582,8 +582,9 @@ button {
 }
 .from-date-tracking {
   display: flex;
+  flex-wrap: wrap;
   margin-top: 4px;
-  justify-content: space-evenly;
+  justify-content: space-around;
   font-size: 12px;
   align-items: center;
 }
@@ -597,8 +598,9 @@ button {
 }
 .to-date-tracking {
   display: flex;
+  flex-wrap: wrap;
   margin-top: 10px;
-  justify-content: space-evenly;
+  justify-content: space-around;
   font-size: 12px;
   align-items: center;
 }
@@ -612,6 +614,13 @@ button {
 .react-datepicker-popper[data-placement^='top'] {
   z-index: 1000 !important;
   width: max-content;
+}
+.react-datepicker-popper {
+  z-index: 1000 !important;
+  width: max-content !important;
+}
+.react-datepicker {
+  width: max-content !important;
 }
 /* Custom Loading spinner */
 
@@ -649,7 +658,9 @@ button {
   border-radius: 3px;
 }
 .tracking-filter {
+  border: 1px solid #646464;
   height: 25vh;
+  border-radius: 7px;
 }
 .history-tracking-heading {
   font-size: small;
@@ -666,8 +677,17 @@ button {
   align-items: center;
 }
 .tracking-vehicle-select {
-  height: 35px;
+  height: 30px;
   width: max-content !important;
+}
+.tracking-history-clr-btn{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+.leaflet-right .leaflet-routing-container.leaflet-routing-container-hide{
+  display: none;
 }
 /* TABS END */
 
@@ -721,6 +741,11 @@ button {
   .time-selection-tracking {
     width: 22% !important;
   }
+  .notification-indicator-count-5-9 {
+    right: 6px;
+    font-size: 10px;
+    top: 2px;
+  }
 }
 @media only screen and (max-width: 1800px) {
   .monitoring-list-table {
@@ -738,6 +763,11 @@ button {
   .report-table-responsive {
     height: calc(73vh - 0px) !important;
   }
+  .notification-indicator-count-5-9 {
+    right: 6px;
+    font-size: 10px;
+    top: 2px;
+  }
 }
 @media only screen and (max-width: 1700px) {
   .custom-dropdown-toggle {
@@ -753,7 +783,7 @@ button {
 
 @media only screen and (max-width: 1650px) {
   .monitoring-list-table {
-    height: calc(64vh - 87px)!important;
+    height: calc(64vh - 87px) !important;
     max-height: 950px !important;
     width: calc(16vw - 0px) !important;
     overflow-x: scroll !important;
@@ -788,7 +818,7 @@ button {
 }
 @media only screen and (max-width: 1500px) {
   .monitoring-list-table {
-    height: calc(63vh - 64px) !important;
+    height: calc(60vh - 48px) !important;
     max-height: 950px !important;
     width: calc(16vw - 0px) !important;
     overflow-x: scroll !important;
@@ -809,7 +839,7 @@ button {
   .notification-indicator-count-5-9 {
     right: 8px;
     font-size: 9px;
-    top: 3px;
+    top: 2px;
   }
 }
 
@@ -883,6 +913,11 @@ button {
     font-size: 7px !important;
     top: -0.5px;
   }
+  .notification-indicator-count-5-9 {
+    right: 7.5px;
+    font-size: 8px !important;
+    top: -2px;
+  }
   .weather-wind {
     min-width: 143px;
     max-width: 145px;
@@ -903,7 +938,7 @@ button {
 
 @media only screen and (max-width: 1210px) {
   .monitoring-list-table {
-    height: calc(63vh - 87px) !important;
+    height: calc(60vh - 90px) !important;
     max-height: 950px !important;
     width: calc(16vw - 10px) !important;
   }
@@ -913,6 +948,24 @@ button {
   .notification-indicator-count {
     font-size: 9px !important;
     top: -2px;
+  }
+  .notification-indicator-count-5-9 {
+    right: 7.5px;
+    font-size: 8px !important;
+    top: -1px;
+  }
+  .from-date-tracking {
+    font-size: smaller !important;
+  }
+  .to-date-tracking p {
+    font-size: smaller !important;
+  }
+  .react-datepicker__input-container input[type='text'] {
+    font-size: 10px !important;
+  }
+  .vehicle-selection-text {
+    font-size: 9px !important;
+    padding-left: 3px;
   }
 }
 @media only screen and (max-width: 1110px) {
@@ -978,9 +1031,9 @@ button {
     width: 100% !important;
   }
   .monitoring-list-table {
-    height: calc(65vh - 95px) !important;
+    height: calc(60vh - 80px) !important;
     max-height: 964px !important;
-    width: calc(15vw - 0px) !important;
+    width: calc(16vw - 0px) !important;
     font-size: smaller !important;
   }
   .monitoring-table {
@@ -994,6 +1047,9 @@ button {
     font-size: 5px !important;
     top: 0px;
     right: 5px;
+  }
+  .notification-indicator-count-5-9 {
+    top: -3px;
   }
   .notification-indicator:before {
     right: 4px !important;
@@ -1063,6 +1119,12 @@ button {
     font-size: 8px !important;
     top: -3px;
   }
+  .monitoring-list-table {
+    height: calc(57vh - 80px) !important;
+    max-height: 964px !important;
+    width: calc(16vw - 0px) !important;
+    font-size: smaller !important;
+  }
 }
 
 /* 770 px */
@@ -1080,13 +1142,13 @@ button {
     font-size: 9px !important;
   }
   .monitoring-table {
-    width: calc(20vw - 37px) !important;
-    padding-left: 10px;
+    width: calc(20vw - 32px) !important;
+    padding-left: 0px;
   }
   .monitoring-list-table {
-    height: calc(62vh - 117px) !important;
+    height: calc(57vh - 74px) !important;
     max-height: 950px !important;
-    width: calc(14vw + 1px) !important;
+    width: calc(19vw + 1px) !important;
     font-size: smaller !important;
   }
   .dashboard-filter {
@@ -1116,6 +1178,22 @@ button {
   .custom-dropdown-toggle {
     width: calc(19vw - 39px);
     padding: 5px;
+  }
+  .tracking-table-button {
+    padding-left: calc(3vw - 0px) !important;
+  }
+  .vehicle-selection-text {
+    font-size: 9px !important;
+    padding-left: 0px;
+    padding-right: 5px;
+    text-align: center;
+  }
+  .tracking-vehicle-select {
+    height: 27px;
+    margin-right: 5px;
+  }
+  .react-datepicker-wrapper .react-datepicker__input-container input {
+    width: 110px;
   }
 }
 
@@ -1212,6 +1290,9 @@ button {
     width: calc(112vw - 0px) !important;
     font-size: smaller !important;
   }
+  .notification-indicator-count-5-9 {
+    top: -5px;
+  }
   .card-body {
     font-size: 12px !important;
   }
@@ -1236,6 +1317,17 @@ button {
   }
   .tracking-table-button {
     padding-left: calc(60vw - 0px) !important;
+  }
+  .react-datepicker-wrapper .react-datepicker__input-container input {
+    width: 150px;
+  }
+  .react-datepicker-popper {
+    /* transform: translate3d(90px, -74px, 0px) !important; */
+  }
+  .react-datepicker-ignore-onclickoutside {
+  }
+  .tracking-filter {
+    height: 19vh;
   }
 }
 
@@ -1266,7 +1358,7 @@ button {
   .monitoring-list-table {
     height: fit-content !important;
     max-height: calc(67vh - 117px) !important;
-    width: calc(80vw - 0px) !important;
+    width: calc(84vw - 0px) !important;
     font-size: smaller !important;
   }
   .map-container {
@@ -1366,7 +1458,7 @@ button {
 @media only screen and (max-width: 380px) {
   .monitoring-list-table {
     height: fit-content !important;
-    max-height: calc(20vh - 0px) !important;
+    max-height: calc(27vh - 0px) !important;
   }
   .dashboard-list-table {
     height: fit-content !important;
@@ -1391,7 +1483,7 @@ button {
     top: 1px;
   }
   .tracking-table-button {
-    padding-left: calc(58vw - 0px) !important;
+    padding-left: calc(50vw - 0px) !important;
   }
 }
 @media only screen and (max-width: 430px) {

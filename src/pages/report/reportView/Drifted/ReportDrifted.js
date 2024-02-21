@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import ReportBar from '../../report-right-bar';
 import ReportFooter from 'components/footer/ReportFooter';
 import ReportDriftedTable from './ReportDriftedTable';
+import { useListFilterContext } from 'context/FilterContext';
 
 const ReportKMTracking = () => {
+  const { setHistoryTrackingActive } = useListFilterContext();
+  useEffect(() => {
+    setHistoryTrackingActive(false);
+  }, []);
   return (
     <>
       <Row>

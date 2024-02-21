@@ -187,11 +187,10 @@ const StackedHorizontalChart = ({ data }) => {
     }
   }, [companyFilter]);
 
-
   useEffect(() => {
     GetData();
   }, [statusCount]);
-  
+
   const GetData = () => {
     const chartIndex = statusCount?.map(
       company =>
@@ -278,6 +277,9 @@ const StackedHorizontalChart = ({ data }) => {
         axisTick: { show: false },
         axisLabel: {
           color: getColor('gray-500'),
+          fontSize: ${window.innerWidth < 530 ? 6 : 10},
+          textOverflow: 'ellipsis' 
+          // width: '10px'
           // formatter: value => value.substring(0, 3)
         }
       },
@@ -392,7 +394,7 @@ const StackedHorizontalChart = ({ data }) => {
         right: 15,
         left: 5,
         bottom: 5,
-        top: '15%',
+        top: '10%',
         containLabel: true
       }
       });
@@ -411,7 +413,13 @@ const StackedHorizontalChart = ({ data }) => {
     <div className="p-0">
       <FalconComponentCard className="h-10">
         <FalconComponentCard.Header
-          title={Filter !== null?`${Filter} School Status - ${totalCount}`:companyFilter !== null?`${companyFilter} Company Status - ${totalCount}`:`Companywise Status - ${totalCount}`}
+          title={
+            Filter !== null
+              ? `${Filter} School Status - ${totalCount}`
+              : companyFilter !== null
+              ? `${companyFilter} Company Status - ${totalCount}`
+              : `Companywise Status - ${totalCount}`
+          }
           light={false}
           className="ms-1"
           // className="pt-4"

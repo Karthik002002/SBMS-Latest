@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Table } from 'react-bootstrap';
+import { Button, Form, Table } from 'react-bootstrap';
 import { format, isBefore, parseISO } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import { HistoryTrackingURL } from '../../../URL/url';
+import { useListFilterContext } from 'context/FilterContext';
 const MonitoringTable = ({
   getTableProps,
   headers,
@@ -16,10 +17,15 @@ const MonitoringTable = ({
   ActiveCompany,
   vehicleData
 }) => {
+  const {
+    HistoryTrackingActive,
+    setHistoryTrackingActive,
+    setHistoryTrackingURL,
+    setIMEI
+  } = useListFilterContext();
   const [FilteredVehicleData, setFilteredVehicleData] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
-  const [HistoryQuery, setHistoryQuery] = useState(null);
-  const [IMEI, setIMEI] = useState(null);
+  const [IMEIURL, setIMEIURL] = useState(null);
   const [FieldDateTime, setFieldDateTime] = useState({});
   const [invalidDate, setInvalidDate] = useState(false);
   const [DateTime, setDateTime] = useState({});
@@ -34,9 +40,17 @@ const MonitoringTable = ({
       setFilteredVehicleData(vehicleData);
     }
   }, [ActiveCompany]);
+
   useEffect(() => {
     setFilteredVehicleData(vehicleData);
   }, [vehicleData]);
+
+  useEffect(() => {
+    const selectedVehicleIMEI = vehicleData.find(
+      data => data.vehicleName === selectedVehicle
+    );
+    setIMEIURL(selectedVehicleIMEI?.imei || null);
+  }, [selectedVehicle]);
 
   const handleDateChange = (date, fieldName) => {
     setFieldDateTime({ ...FieldDateTime, [fieldName]: date });
@@ -48,7 +62,7 @@ const MonitoringTable = ({
   };
 
   useEffect(() => {
-    if (FieldDateTime.FromDateTime && FieldDateTime.ToDateTime) {
+    if (DateTime.FromDateTime && DateTime.ToDateTime && IMEIURL) {
       const fromDateTime = new Date(DateTime.FromDateTime);
       const toDateTime = new Date(DateTime.ToDateTime);
       if (isBeforeDateTime(toDateTime, fromDateTime)) {
@@ -56,43 +70,17 @@ const MonitoringTable = ({
         return;
       } else {
         setInvalidDate(false);
-        console.log(
-          `${HistoryTrackingURL}/?from_datetime=${DateTime.FromDateTime}&to_datetime=${DateTime.ToDateTime}&imei=${IMEI}`
+        setHistoryTrackingURL(
+          `${HistoryTrackingURL}?from=${DateTime.FromDateTime}&to=${DateTime.ToDateTime}&imei=${IMEIURL}`
         );
+        setHistoryTrackingActive(true);
       }
     }
-  }, [FieldDateTime]);
+  }, [FieldDateTime, DateTime, IMEIURL]);
   return (
     <div>
       <div className="table-responsive scrollbar monitoring-list-table">
         <Table {...getTableProps(tableProps)}>
-          {/* <thead className={headerClassName}>
-          <tr>
-            {headers.map((column, index) => (
-              <th
-                key={index}
-                {...column.getHeaderProps(
-                  column.getSortByToggleProps(column.headerProps)
-                )}
-              >
-                {column.render('Header')}
-                {column.canSort ? (
-                  column.isSorted ? (
-                    column.isSortedDesc ? (
-                      <span className="sort desc" />
-                    ) : (
-                      <span className="sort asc" />
-                    )
-                  ) : (
-                    <span className="sort" />
-                  )
-                ) : (
-                  ''
-                )}
-              </th>
-            ))}
-          </tr>
-        </thead> */}
           <tbody className={bodyClassName}>
             {page.map((row, i) => {
               prepareRow(row);
@@ -117,11 +105,13 @@ const MonitoringTable = ({
       <div className="tracking-filter">
         <div className="history-tracking-heading">History Tracking</div>
         <div className="vehicle-selection">
-          Select Vehicle :{' '}
+          <span className="vehicle-selection-text">Select Vehicle</span>
           <Form.Select
+            value={selectedVehicle}
             onChange={e => setSelectedVehicle(e.target.value)}
             className="tracking-vehicle-select"
           >
+            <option>Select</option>
             {FilteredVehicleData.map(data => (
               <option value={data.vehicleName}>{data.vehicleName}</option>
             ))}
@@ -129,7 +119,7 @@ const MonitoringTable = ({
         </div>
         <div>
           <div className="from-date-tracking">
-            From Date :
+            From :
             <DatePicker
               showTimeSelect
               dateFormat="MMMM d, yyyy h:mmaa"
@@ -141,7 +131,7 @@ const MonitoringTable = ({
           </div>
           <div className="to-date-tracking">
             <p className="ms-2  " style={{ display: 'contents' }}>
-              To Date :
+              To :
             </p>
 
             <DatePicker
@@ -151,6 +141,7 @@ const MonitoringTable = ({
               selectsStart
               maxDate={new Date()}
               onChange={date => handleDateChange(date, 'ToDateTime')}
+              className="ms-3"
             />
           </div>
           <div>
@@ -167,6 +158,22 @@ const MonitoringTable = ({
                 Enter Valid Date & Time.
               </span>
             )}
+            <div className="tracking-history-clr-btn">
+              {HistoryTrackingActive && (
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    setHistoryTrackingActive(false);
+                    setHistoryTrackingURL(null);
+                    setDateTime({});
+                    setFieldDateTime({});
+                    setIMEI(null);
+                  }}
+                >
+                  Clear
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>
