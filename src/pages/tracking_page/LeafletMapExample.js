@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, memo } from 'react';
+import React, { useState, useContext, useEffect, memo, useRef } from 'react';
 import { recentPurchaseTableData } from 'data/dashboard/ecom';
 import { useParams } from 'react-router-dom';
 // import FalconComponentCard from 'components/common/FalconComponentCard';
@@ -13,7 +13,8 @@ import {
   Tooltip,
   Popup,
   LayerGroup,
-  Circle
+  Circle,
+  useMapEvents
 } from 'react-leaflet';
 import AppContext from 'context/Context';
 import 'leaflet-rotatedmarker';
@@ -31,17 +32,30 @@ import NoNetworkPNG from 'assets/img/bus-icons/bus-nonetwork-64.png';
 import InActivePNG from 'assets/img/bus-icons/bus-inactive-64.png';
 import ParkedPNG from 'assets/img/bus-icons/bus-parked-64.png';
 import { useListFilterContext } from 'context/FilterContext';
-import HistoryRouting from 'pages/elena_dashboard/Monitoring/HistoryRouting';
+import HistoryRouting from 'pages/elena_dashboard/Tracking/HistoryRouting';
 import VehicleMarker from './MarkerComponent';
 import { TrackingURL } from '../../URL/url';
 
 const LeafletMapExample = ({ data }) => {
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
   const [LiveVehicleData, setLiveVehicleData] = useState([]);
+  const centerRef = useRef({ lat: null, lng: null, zoom: null });
   const [UpdatedDashboard, setUpdatedDashboard] = useState();
   const [DashboardData, setDashBoardData] = useState(data);
-  const { TrackingVehicleCenter, ZoomLevel, IMEI, HistoryTrackingActive } =
-    useListFilterContext();
+  const mapRef = useRef(null);
+  const {
+    TrackingVehicleCenter,
+    ZoomLevel,
+    setZoomLevel,
+    IMEI,
+    HistoryTrackingActive
+  } = useListFilterContext();
+  useEffect(() => {
+    if (TrackingVehicleCenter) {
+      centerRef.current = { lat: null, lng: null, zoom: null };
+    } else if (TrackingVehicleCenter) {
+    }
+  }, [TrackingVehicleCenter, HistoryTrackingActive]);
 
   useEffect(() => {
     if (IMEI !== null && !HistoryTrackingActive) {
@@ -81,7 +95,17 @@ const LeafletMapExample = ({ data }) => {
       config: { currentVehicle }
     } = useContext(AppContext);
 
-    var myPositionMarker = null;
+    map.on('drag', () => {
+      const center = map.getCenter();
+      const zoom = map.getZoom();
+      centerRef.current = { lat: center.lat, lng: center.lng, zoom: zoom };
+    });
+    map.on('zoomend', () => {
+      const center = map.getCenter();
+      const zoom = map.getZoom();
+      centerRef.current = { lat: center.lat, lng: center.lng, zoom };
+    });
+
     const filter = isDark
       ? [
           'invert:98%',
@@ -221,25 +245,31 @@ const LeafletMapExample = ({ data }) => {
         })
       });
     });
+
     return (
       <div className="map-container">
         <MapContainer
-          zoom={ZoomLevel}
+          zoom={
+            centerRef.current && centerRef.current.zoom !== null
+              ? centerRef.current.zoom
+              : ZoomLevel
+          }
           // minZoom={isRTL ? 1.8 : 1.1}
-          // zoomSnap={}
-
           scrollWheelZoom={data ? true : false}
           zoomControl={data ? true : false}
           dragging={data ? true : false}
           doubleClickZoom={data ? true : false}
           center={
-            TrackingVehicleCenter
+            centerRef.current && centerRef.current.lat !== null
+              ? [centerRef.current.lat, centerRef.current.lng]
+              : TrackingVehicleCenter
               ? TrackingVehicleCenter
               : [13.422925089909123, 77.9857877043398]
           }
-          // center={position}
+          ref={mapRef}
           radius={200}
           style={{ height: '90vh', width: '100%' }}
+          // whenReady={handleMapDrag}
         >
           {!HistoryTrackingActive &&
             markers.map((marker, index) => (
@@ -266,14 +296,14 @@ const LeafletMapExample = ({ data }) => {
                     ))}
                   </Popup>
                 </Marker>
-                <LayerGroup>
-                  {/* <Circle
+                {/* <LayerGroup> */}
+                {/* <Circle
                   center={marker.geoFence}
                   center={[data.geofence_lat, data.geofence_lat ]}
                   pathOptions={marker.options}
                   radius={100}
                 /> */}
-                </LayerGroup>
+                {/* </LayerGroup> */}
               </>
             ))}
 

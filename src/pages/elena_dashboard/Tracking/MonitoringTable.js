@@ -5,7 +5,7 @@ import { format, isBefore, parseISO } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import { HistoryTrackingURL } from '../../../URL/url';
 import { useListFilterContext } from 'context/FilterContext';
-const MonitoringTable = ({
+const TrackingTable = ({
   getTableProps,
   headers,
   page,
@@ -79,7 +79,7 @@ const MonitoringTable = ({
   }, [FieldDateTime, DateTime, IMEIURL]);
   return (
     <div>
-      <div className="table-responsive scrollbar monitoring-list-table">
+      <div className="table-responsive scrollbar Tracking-list-table">
         <Table {...getTableProps(tableProps)}>
           <tbody className={bodyClassName}>
             {page.map((row, i) => {
@@ -127,6 +127,7 @@ const MonitoringTable = ({
               selectsStart
               maxDate={new Date()}
               onChange={date => handleDateChange(date, 'FromDateTime')}
+              timeIntervals={15}
             />
           </div>
           <div className="to-date-tracking">
@@ -142,6 +143,8 @@ const MonitoringTable = ({
               maxDate={new Date()}
               onChange={date => handleDateChange(date, 'ToDateTime')}
               className="ms-3"
+              timeIntervals={15}
+              onSelect={() => console.log('Closed')}
             />
           </div>
           <div>
@@ -180,7 +183,7 @@ const MonitoringTable = ({
     </div>
   );
 };
-MonitoringTable.propTypes = {
+TrackingTable.propTypes = {
   getTableProps: PropTypes.func,
   headers: PropTypes.array,
   page: PropTypes.array,
@@ -191,4 +194,4 @@ MonitoringTable.propTypes = {
   tableProps: PropTypes.object
 };
 
-export default MonitoringTable;
+export default TrackingTable;

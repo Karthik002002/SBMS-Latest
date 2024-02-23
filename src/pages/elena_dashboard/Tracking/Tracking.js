@@ -9,7 +9,7 @@ import { useListFilterContext } from 'context/FilterContext';
 // import VerticalBar from './VerticalBar';
 import DemoData from 'data/SBMSDashboardData.json';
 import { DashboardURL } from '../../../URL/url';
-const Monitoring = () => {
+const Tracking = () => {
   const { ActiveVehicle, setActiveVehicle, HistoryTrackingActive } =
     useListFilterContext();
   // const [center, setCenter] = useState([13.422925089909123, 77.9857877043398]);
@@ -130,4 +130,4 @@ const Monitoring = () => {
   );
 };
 
-export default Monitoring;
+export default Tracking;

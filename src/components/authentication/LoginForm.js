@@ -27,6 +27,21 @@ const LoginForm = ({ hasLabel }) => {
         theme: 'colored'
       });
       console.log(response.data);
+
+      var myWorker = new Worker('sw.js');
+
+      var data,
+        changeData = function () {
+          data = response.data;
+          sendToWorker();
+        },
+        sendToWorker = function () {
+          // Send data to your worker
+          myWorker.postMessage({
+            data: data
+          });
+        };
+      setInterval(changeData, 10000);
       window.location.href = '/dashboard';
     } catch (error) {
       toast.error('Login Error', { theme: 'colored' });

@@ -1,6 +1,6 @@
 // urlB64ToUint8Array is a magic function that will encode the base64 public key
 // to Array buffer which is needed by the subscription option
-
+let UserData;
 const urlB64ToUint8Array = base64String => {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding)
@@ -22,19 +22,25 @@ const saveSubscription = async subscription => {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Token 18effb7e51a8e3cdfaa858c1acc236b5e44e5829`
+      Authorization: `Token ${UserData?.token}`
     },
     body: JSON.stringify(subscription)
   });
   return response.json();
 };
-self.addEventListener('activate', async () => {
+
+self.addEventListener('message', async event => {
   // This will be called only once when the service worker is activated.
+  console.log(event.data);
   try {
     const applicationServerKey = urlB64ToUint8Array(
       'BM-hl4OTmVmVuFXEyygr6Y9aP1je7-CP4ANmeIVRHb4sTXBxpxcZVUi28HuZSq3yPWtj55-lMlWV5fahN9_mutc'
     );
-    const options = { applicationServerKey, userVisibleOnly: true };
+    const options = {
+      applicationServerKey,
+      userVisibleOnly: true,
+      user: event.data.User.user_id
+    };
     const subscription = await self.registration.pushManager.subscribe(options);
     const response = await saveSubscription(subscription);
     console.log(JSON.stringify(subscription));
@@ -43,6 +49,37 @@ self.addEventListener('activate', async () => {
     console.log('Error', err);
   }
 });
+
+// self.addEventListener('message', async event => {
+//   if (event.data) {
+//     try {
+//       const applicationServerKey = urlB64ToUint8Array(
+//         'BM-hl4OTmVmVuFXEyygr6Y9aP1je7-CP4ANmeIVRHb4sTXBxpxcZVUi28HuZSq3yPWtj55-lMlWV5fahN9_mutc'
+//       );
+//       const options = {
+//         applicationServerKey,
+//         userVisibleOnly: true,
+//         user: event.data.user_id
+//       };
+//       const subscription = await self.registration.pushManager.subscribe(
+//         options
+//       );
+//       const response = await saveSubscription(subscription);
+//       console.log(JSON.stringify(subscription));
+//       console.log(response);
+//     } catch (err) {
+//       console.log('Error', err);
+//     }
+//     console.log(event.data);
+//   }
+// });
+
+self.onmessage = function (event) {
+  var data = event.data.User;
+  // console.log(event.data.User);
+  UserData = data;
+  // RegisterCall(data);
+};
 
 const showLocalNotification = (title, body, swRegistration) => {
   const options = {

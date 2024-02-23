@@ -8,9 +8,10 @@ import { startOfDay, endOfDay, format, isBefore } from 'date-fns';
 import ReportTablePagination from 'pages/report/report-tablepagination';
 import { FaCalendarDays } from 'react-icons/fa6';
 import useDatePicker from 'pages/report/DatePickerHandler';
-import { KMReportURL } from '../../../../URL/url';
+import { KMReportURL, VehicleDataURL } from '../../../../URL/url';
 
-const ReportDriftedTable = () => {
+const ReportKMTable = () => {
+  const [vehicleData, setVehicleData] = useState([]);
   const [fromOpen, toggleFromOpen] = useDatePicker(false);
   const [toOpen, toggleToOpen] = useDatePicker(false);
   const [DateTime, setDateTime] = useState({});
@@ -23,6 +24,23 @@ const ReportDriftedTable = () => {
   const [noData, setNoData] = useState(false);
   const [InvalidDate, setInvalidDate] = useState(false);
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(VehicleDataURL, {
+          method: 'GET',
+          headers: { Authorization: `token ${userToken.token}` }
+        });
+        if (response.status == 200) {
+          const data = await response.json();
+          setVehicleData(data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   //handle reset
   const handleReset = () => {
@@ -36,7 +54,7 @@ const ReportDriftedTable = () => {
   const handleDateChange = (date, fieldName) => {
     setNoData(false);
     setFieldDateTime({ ...FieldDateTime, [fieldName]: date });
-    const formattedDateTime = format(date, 'yyyy/MM/dd HH:mm:ss');
+    const formattedDateTime = format(date, 'yyyy-MM-dd HH:mm:ss');
     setDateTime({ ...DateTime, [fieldName]: formattedDateTime });
   };
   const isBeforeDateTime = (fromDate, toDate) => {
@@ -45,18 +63,35 @@ const ReportDriftedTable = () => {
 
   //set the query from the selected Date
   useEffect(() => {
-    if (DateTime.FromDateTime && DateTime.ToDateTime) {
+    if (DateTime.FromDateTime && DateTime.ToDateTime && DateTime.vehicleNo) {
       const fromDateTime = new Date(DateTime.FromDateTime);
       const toDateTime = new Date(DateTime.ToDateTime);
       // Check if fromDate is before toDate
-      if (isBeforeDateTime(fromDateTime, toDateTime)) {
-        console.log('Date Updated');
+      if (
+        isBeforeDateTime(fromDateTime, toDateTime) &&
+        DateTime.vehicleNo !== null
+      ) {
         setShowTable(false);
         setIsLoading(true);
         setNoData(false);
         setInvalidDate(false);
+        console.log(
+          `${KMReportURL}?from_date=${
+            DateTime.FromDateTime.split(' ')[0]
+          }&to_date=${DateTime.ToDateTime.split(' ')[0]}&from_time=${
+            DateTime.FromDateTime.split(' ')[1]
+          }&to_time=${DateTime.ToDateTime.split(' ')[1]}&vehicle_id=${
+            DateTime.vehicleNo
+          }`
+        );
         setKMTrackingQuery(
-          `${KMReportURL}?from=${DateTime.FromDateTime}&to=${DateTime.ToDateTime}`
+          `${KMReportURL}?from_date=${
+            DateTime.FromDateTime.split(' ')[0]
+          }&to_date=${DateTime.ToDateTime.split(' ')[0]}&from_time=${
+            DateTime.FromDateTime.split(' ')[1]
+          }&to_time=${DateTime.ToDateTime.split(' ')[1]}&vehicle_id=${
+            DateTime.vehicleNo
+          }`
         );
       } else {
         setKMTrackingQuery(null);
@@ -117,7 +152,17 @@ const ReportDriftedTable = () => {
       fetchData();
     }
   }, [KMTrackingQuery]);
-
+  const handleVehicleNameChange = e => {
+    console.log(e.target.value);
+    if (e.target.value !== 'Select') {
+      const VehicleID = vehicleData.find(
+        data => data.vehicle_name === e.target.value
+      );
+      setDateTime({ ...DateTime, vehicleNo: VehicleID.id });
+    } else {
+      setDateTime({ ...DateTime, vehicleNo: null });
+    }
+  };
   const columns = [
     {
       accessor: 'vehicle_name',
@@ -153,7 +198,7 @@ const ReportDriftedTable = () => {
       Cell: ({ value }) => value || '-'
     },
     {
-      accessor: 'timestamp',
+      accessor: 'time',
       Header: 'Time',
       headerProps: { className: 'business-card-company' },
       cellProps: {
@@ -161,35 +206,41 @@ const ReportDriftedTable = () => {
       },
       Cell: ({ value }) => {
         if (!value) return '-'; // Render a dash if the value is falsy
-      
+
         // Split the time string into hours, minutes, and seconds
         const [hours, minutes, seconds] = value.split(':');
-      
+
         // Create a new Date object with the parsed values
         const time = new Date();
         time.setHours(parseInt(hours, 10));
         time.setMinutes(parseInt(minutes, 10));
         time.setSeconds(parseInt(seconds, 10));
-      
+
         // Format the time in HH:mm:ss format
-        const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const formattedTime = time.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
         return formattedTime;
       }
     },
     {
-      accessor: 'lat',
-      Header: 'Location',
+      accessor: 'last_coords',
+      Header: 'Coords',
       cellProps: { className: 'text-break text-center' },
-      Cell: ({ row }) => {
-        const { latitude, longitude } = row.original;
-        return latitude && longitude
-          ? `Lat : ${latitude.toFixed(7)}, Lon : ${longitude.toFixed(7)}`
-          : '-';
+      Cell: ({ value }) => {
+        if (!value || !Array.isArray(value) || value.length !== 2) {
+          return '-';
+        }
+
+        const [latitude, longitude] = value;
+        return `Lat : ${latitude.toFixed(7)}, Lon : ${longitude.toFixed(7)}`;
       }
     },
     {
       accessor: 'total_distance',
-      Header: 'Total KM',
+      Header: 'Total Distance',
       cellProps: { className: 'text-break text-center' },
       Cell: ({ value }) => {
         if (value === 0) {
@@ -205,7 +256,9 @@ const ReportDriftedTable = () => {
 
   return (
     <div className={`${window.innerWidth < 530 ? 'mt-0 ms-1' : 'mt-4'}`}>
-      <div className="d-flex flex-row pt-3 flex-wrap">
+      <div
+        className="d-flex flex-row pt-3 flex-wrap align-items-center"
+      >
         <div className="mb-3 d-flex">
           <label className="me-2 m-auto">From Date:</label>
           <DatePicker
@@ -220,37 +273,52 @@ const ReportDriftedTable = () => {
             // onSelect={toggleFromOpen}
             onClickOutside={toggleFromOpen}
             readOnly
+            timeIntervals={15}
           />
           <span className="ms-1" onClick={toggleFromOpen}>
             <FaCalendarDays />
           </span>
         </div>
-        <div className="mb-3 ms-4 d-flex">
-          <label className="me-2 m-auto">To Date:</label>
+        <div className="mb-3 ms-2 d-flex">
+          <label className=" me-2 m-auto">To Date:</label>
           <DatePicker
             open={toOpen}
             selected={FieldDateTime?.ToDateTime}
             onChange={date => handleDateChange(date, 'ToDateTime')}
             showTimeSelect
             dateFormat="MMMM d, yyyy h:mmaa"
-            className="fs--1 report-input"
+            className="fs--1 report-input ms-3"
             maxDate={new Date()}
             // onSelect={toggleToOpen}
             onInputClick={toggleToOpen}
             onClickOutside={toggleToOpen}
             readOnly
+            timeIntervals={15}
           />
           <span className="ms-1" onClick={toggleToOpen}>
             <FaCalendarDays />
           </span>
         </div>
-
+        <div className="mb-3 ms-2  d-flex">
+          <label className="km-report-label">Select Vehicle</label>
+          <Form.Select
+            className="km-report-select-vehicle"
+            onChange={e => {
+              handleVehicleNameChange(e);
+            }}
+          >
+            <option value={null}>Select</option>
+            {vehicleData.map(data => (
+              <option value={data.vehicle_name}>{data.vehicle_name}</option>
+            ))}
+          </Form.Select>
+        </div>
         <div>
           {resetDate && (
             <Button
               variant="danger"
               onClick={handleReset}
-              className="ms-2 fs--1 p-1 ps-2 pe-2"
+              className="ms-2 fs--1 p-1 ps-2 pe-2 km-report-clr-btn"
             >
               Clear
             </Button>
@@ -296,4 +364,4 @@ const ReportDriftedTable = () => {
   );
 };
 
-export default ReportDriftedTable;
+export default ReportKMTable;

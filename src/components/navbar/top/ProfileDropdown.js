@@ -12,7 +12,6 @@ const ProfileDropdown = () => {
   const mainURL = 'https://sbmsadmin.elenageosys.com/user/logout/';
   var loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
   const handleLogout = async () => {
-    
     try {
       const response = await fetch(mainURL, {
         method: 'POST',
@@ -52,7 +51,7 @@ const ProfileDropdown = () => {
             <FaUser className="fs-0 me-1" />
             {/* {loggedInUser.user.username} */}
           </h4>
-          <Dropdown.Item as={Link} onClick={handleLogout} >
+          <Dropdown.Item as={Link} onClick={handleLogout}>
             <CiLogout className="me-1" />
             Logout
           </Dropdown.Item>

@@ -9,7 +9,8 @@ import { useListFilterContext } from 'context/FilterContext';
 import { format, parseISO } from 'date-fns';
 
 const Customers = ({ data }) => {
-  const { Filter, companyFilter } = useListFilterContext();
+  const { Filter, companyFilter, setTrackingVehicleCenter, setZoomLevel } =
+    useListFilterContext();
   const [InitialData, setInitialData] = useState(data);
   const [BackUpData, setBackupData] = useState(data);
   const CompanyData = [];
@@ -170,14 +171,21 @@ const Customers = ({ data }) => {
       Header: 'Track',
       headerProps: { className: 'text-center' },
       Cell: ({ row }) => (
-        <div onClick={() => console.log(row.original.imei)}>
-          <IconButton
-            variant="falcon-default"
-            size="sm"
-            icon="external-link-alt"
-            transform="shrink-3"
-          ></IconButton>
-        </div>
+        <Link to="/tracking">
+          <div
+            onClick={() => {
+              setTrackingVehicleCenter([row.original.lat, row.original.lon]);
+              setZoomLevel(17);
+            }}
+          >
+            <IconButton
+              variant="falcon-default"
+              size="sm"
+              icon="external-link-alt"
+              transform="shrink-3"
+            ></IconButton>
+          </div>
+        </Link>
       )
     }
   ];

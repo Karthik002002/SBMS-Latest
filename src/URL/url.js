@@ -12,4 +12,6 @@ export const NotificationURL =
 
 export const KMReportURL =
   'https://sbmsadmin.elenageosys.com/record/km_report/';
+
+export const VehicleDataURL = 'https://sbmsadmin.elenageosys.com/vehicle/';
 // https://sbmsadmin.elenageosys.com/

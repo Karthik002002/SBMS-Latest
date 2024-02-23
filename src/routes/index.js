@@ -13,9 +13,9 @@ import ErrorLayout from '../layouts/ErrorLayout';
 // import VehicleDashboard from 'pages/dashboard/VehicleDashboard';
 import AdminDashboard from 'pages/elena_dashboard/AdminDashboard';
 import LeafletMapExample from 'pages/tracking_page/LeafletMapExample';
-import Monitoring from 'pages/elena_dashboard/Monitoring/Monitoring';
+import Monitoring from 'pages/elena_dashboard/Tracking/Tracking';
 import { FilterData, FilterProvider } from 'context/FilterContext';
-import ReportKMTracking from 'pages/report/reportView/Drifted/ReportDrifted';
+import ReportKMTracking from 'pages/report/reportView/Drifted/ReportKM';
 import { PingData } from 'context/PingContext';
 import ReportLayout from 'layouts/ReportLayout';
 

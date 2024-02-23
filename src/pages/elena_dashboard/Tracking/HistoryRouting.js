@@ -55,11 +55,8 @@ const HistoryRouting = React.memo(function HistoryRouting() {
     });
   }, [HistoryMarkerRawData]);
   useEffect(() => {
-    console.log(HistoryMarkerData);
     if (!map) return;
-    // HistoryMarkerData.map(data=>{
-    //   console.log(data);
-    // })
+    
     routingControl = L.Routing.control({
       waypoints: HistoryMarkerRawData.map(data => {
         return L.latLng([data.lat, data.lon, data]);
@@ -90,14 +87,14 @@ const HistoryRouting = React.memo(function HistoryRouting() {
           marker = L.marker(waypoint.latLng);
           markerLayer.addLayer(marker);
         }
-        marker
-          .bindPopup
-        // `Vehicle Name : ${
-        //   waypoint.latLng.data.vehicle_name
-        // }<br>Lat: ${waypoint.latLng.lat.toFixed(
-        //   7
-        // )}<br>Lon: ${waypoint.latLng.lng.toFixed(7)}`
-        (`${i}`);
+        marker.bindPopup(
+          // `Vehicle Name : ${
+          //   waypoint.latLng.data.vehicle_name
+          // }<br>Lat: ${waypoint.latLng.lat.toFixed(
+          //   7
+          // )}<br>Lon: ${waypoint.latLng.lng.toFixed(7)}`
+          `${i}`
+        );
 
         return marker;
       }

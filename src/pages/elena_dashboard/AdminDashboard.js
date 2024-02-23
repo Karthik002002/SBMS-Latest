@@ -1,16 +1,6 @@
 import { React, lazy, useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import axios from 'axios';
-import LeafletMapExample from 'pages/tracking_page/LeafletMapExample';
-import DateTime from './DateTime';
-import CrmStats from 'components/dashboards/crm/CrmStats';
-import SaasActiveUser from './SaasActiveUser';
-import SaasRevenue from './SaasRevenue';
-import SaasConversion from './SaasConversion';
-import { activeUser } from './saas';
-import WeatherDetails from './WeatherDetails';
 import { usePingButton } from 'context/PingContext';
-import DashboardData from '../../data/SBMSDashboardData.json';
 import { DashboardURL } from '../../URL/url';
 import { useListFilterContext } from 'context/FilterContext';
 // import { buoys } from '../../data/dashboard/buoy';
@@ -28,7 +18,6 @@ const AdminDashboard = () => {
   const [tableData, setTableData] = useState([]);
   const [PieChartData, setPieChartData] = useState([]);
   const [StackHoriData, setStackHoriData] = useState([]);
-
   const { Ping } = usePingButton();
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
   const { setHistoryTrackingActive } = useListFilterContext();
@@ -239,6 +228,22 @@ const AdminDashboard = () => {
       }
     };
     fetchData();
+
+    var myWorker = new Worker('sw.js');
+    var ParsedData
+    var data,
+      changeData = function () {
+        data = sessionStorage.getItem('loggedInUser');
+        ParsedData = JSON.parse(data);
+        sendToWorker();
+      },
+      sendToWorker = function () {
+        // Send data to your worker
+        myWorker.postMessage({
+          User: ParsedData
+        });
+      };
+    changeData();
   }, []);
 
   //
@@ -253,9 +258,7 @@ const AdminDashboard = () => {
         const orderedBuoysData = [...data].sort((a, b) =>
           b.zone.localeCompare(a.zone)
         );
-        setBuoysData(orderedBuoysData);
-        // setCenter([21.865413583095347, 71.49970380735064]);
-        // setZoomLevel(window.innerWidth < 530 ? 6 : 8);
+        setDashBoardData(orderedBuoysData);
       } catch (error) {
         console.error(error);
       }

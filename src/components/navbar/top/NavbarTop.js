@@ -1,4 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  memo
+} from 'react';
 import PropTypes from 'prop-types';
 import { Navbar, Nav } from 'react-bootstrap';
 import classNames from 'classnames';
@@ -24,12 +31,9 @@ const NavbarTop = () => {
 
   const [showDropShadow, setShowDropShadow] = useState(false);
 
-  const handleBurgerMenu = () => {
-    // (navbarPosition === 'top' || navbarPosition === 'double-top') &&
+  const handleBurgerMenu = useCallback(() => {
     setConfig('navbarCollapsed', !navbarCollapsed);
-    // (navbarPosition === 'vertical' || navbarPosition === 'combo') &&
-    //   setConfig('showBurgerMenu', !showBurgerMenu);
-  };
+  }, [navbarCollapsed, setConfig]);
 
   const setDropShadow = () => {
     const el = document.documentElement;
@@ -91,7 +95,7 @@ const NavbarTopElements = ({
       {navbarPosition === 'top' || navbarPosition === 'combo' ? (
         <Navbar.Collapse in={navbarCollapsed} className="scrollbar pb-lg-0">
           <Nav navbar>
-            <NavbarTopDropDownMenus setOpen={handleBurgerMenu} />
+            <NavbarTopDropDownMenus handleMenu={handleBurgerMenu} />
           </Nav>
         </Navbar.Collapse>
       ) : (
@@ -173,4 +177,4 @@ NavbarTopElements.propTypes = {
   handleBurgerMenu: PropTypes.func,
   navbarCollapsed: PropTypes.bool
 };
-export default NavbarTop;
+export default memo(NavbarTop);
