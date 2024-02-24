@@ -279,7 +279,7 @@ const ReportKMTable = () => {
             <FaCalendarDays />
           </span>
         </div>
-        <div className="mb-3 ms-2 d-flex">
+        <div className={`${window.innerWidth < 530 ? 'mb-3 ms-2 d-flex': 'mb-3 ms-3 d-flex' }`}>
           <label className=" me-2 m-auto">To Date:</label>
           <DatePicker
             open={toOpen}
@@ -299,7 +299,7 @@ const ReportKMTable = () => {
             <FaCalendarDays />
           </span>
         </div>
-        <div className="mb-3 ms-2  d-flex">
+        <div className="mb-3 ms-2 d-flex">
           <label className="km-report-label">Select Vehicle</label>
           <Form.Select
             className="km-report-select-vehicle"
@@ -313,12 +313,12 @@ const ReportKMTable = () => {
             ))}
           </Form.Select>
         </div>
-        <div>
+        <div className="mb-3">
           {resetDate && (
             <Button
               variant="danger"
               onClick={handleReset}
-              className="ms-2 fs--1 p-1 ps-2 pe-2 km-report-clr-btn"
+              className="ms-2 fs--1 p-1 ps-2 pe-2 km-report-clr-btn "
             >
               Clear
             </Button>

@@ -18,7 +18,8 @@ export const FilterData = ({ children }) => {
   const [TrackingVehicleCenter, setTrackingVehicleCenter] = useState([
     13.422925089909123, 77.9857877043398
   ]);
-  const [ZoomLevel, setZoomLevel] = useState(6);
+  const [ZoomLevel, setZoomLevel] = useState(4);
+  const [TrackingFilterCompany, setTrackingFilterCompany] = useState(null);
   //for table
   const [PageCount, setPageCount] = useState(null);
   //Live Tracking IMEI for the tracking page
@@ -50,10 +51,6 @@ export const FilterData = ({ children }) => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log(HistoryTrackingURL, HistoryTrackingActive);
-  }, [HistoryTrackingURL, HistoryTrackingActive]);
-
   return (
     <ListDashboardData.Provider
       value={{
@@ -74,7 +71,9 @@ export const FilterData = ({ children }) => {
         HistoryTrackingActive,
         setHistoryTrackingActive,
         HistoryTrackingURL,
-        setHistoryTrackingURL
+        setHistoryTrackingURL,
+        TrackingFilterCompany,
+        setTrackingFilterCompany
       }}
     >
       {children}

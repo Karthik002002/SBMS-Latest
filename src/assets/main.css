@@ -622,6 +622,9 @@ button {
 .react-datepicker {
   width: max-content !important;
 }
+.track-burgermenu {
+  display: none;
+}
 /* Custom Loading spinner */
 
 .loading-spinner {
@@ -673,12 +676,13 @@ button {
   margin-top: 3px;
   font-size: small;
   display: flex;
+  /* flex-wrap: wrap; */
   justify-content: space-around;
   align-items: center;
 }
 .tracking-vehicle-select {
   height: 30px;
-  width: max-content !important;
+  width: 150px !important;
 }
 .tracking-history-clr-btn {
   width: 100%;
@@ -696,6 +700,27 @@ button {
 
 .km-report-label {
   font-size: x-small;
+}
+.tracking-to-date-selection {
+  margin-left: 10px;
+}
+.mob-inactive-navbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mob-inactive-navbar.active {
+  display: flex !important;
+  width: 60px;
+  position: absolute;
+  transition: 0.3s ease-in-out;
+  z-index: 1;
+}
+.track-burgermenu-active {
+  display: block;
+  margin-top: 30px;
+  margin-left: 10px !important;
 }
 
 /* TABS END */
@@ -998,6 +1023,10 @@ button {
   .other-width {
     width: 130px;
   }
+  .tracking-vehicle-select {
+    height: 24px;
+    font-size: 10px !important;
+  }
 }
 @media only screen and (max-width: 1070px) {
   .Tracking-list-table {
@@ -1070,6 +1099,14 @@ button {
     left: 2px !important;
     position: relative;
     bottom: 1px;
+  }
+  .tracking-to-date-selection {
+    margin-left: 1px;
+  }
+  .tracking-vehicle-select {
+    height: 24px;
+    width: 90px !important;
+    margin-left: 10px;
   }
 }
 
@@ -1449,9 +1486,10 @@ button {
     text-align-last: center;
     font-size: 15px !important;
   }
-  .report-bar {
-    width: calc(15vw - 0px);
-    height: calc(89vh - 15px) !important;
+
+  .report-bar.active {
+    /* width: calc(15vw - 0px); */
+    height: calc(88vh - 11px) !important;
     position: absolute;
     z-index: 1;
   }
@@ -1459,6 +1497,7 @@ button {
     width: calc(12vw - 0px);
     margin-left: 6px;
     font-size: 6px !important;
+    transition: 0.3s ease-in-out;
   }
   .report-week-input {
     width: 130px;
@@ -1488,16 +1527,36 @@ button {
   .tracking-history-clr-btn button {
     padding: 3px 6px 3px 6px;
   }
+  .track-burgermenu {
+    display: block;
+    margin-top: 30px;
+    margin-left: 10px !important;
+  }
+  .mob-inactive-navbar {
+    display: none !important;
+  }
 }
 
 @media (max-width: 500px) {
+  .report-bar.active {
+    width: 70px;
+    z-index: 1;
+  }
   .report-bar {
     width: 0;
+    height: calc(85vh - 15px) !important;
+    transition: 0.4s ease-in-out;
+    margin-top: -15px;
+    position: absolute;
+    z-index: 1;
   }
 
   .burger-menu {
     display: block; /* Show the burger menu for smaller screens */
   }
+  .no-data-div {
+    left: 10%;
+}
 }
 @media only screen and (max-width: 380px) {
   .Tracking-list-table {

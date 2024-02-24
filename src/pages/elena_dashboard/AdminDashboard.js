@@ -1,4 +1,4 @@
-import { React, lazy, useEffect, useState } from 'react';
+import { React, lazy, memo, useEffect, useMemo, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { usePingButton } from 'context/PingContext';
 import { DashboardURL } from '../../URL/url';
@@ -12,31 +12,21 @@ const StackedHorizontalChart = lazy(() => import('./StackedHorizontalChart'));
 const Customers = lazy(() => import('pages/dashboard/table/Customers'));
 
 const AdminDashboard = () => {
-  // const [center, setCenter] = useState([21.865413583095347, 71.49970380735064]);
-  // const [zoomLevel, setZoomLevel] = useState(window.innerWidth < 530 ? 6 : 8);
   const [DashBoardData, setDashBoardData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [PieChartData, setPieChartData] = useState([]);
+  const memoPieChartData = useMemo(() => PieChartData, [PieChartData]);
+  const memoTableData = useMemo(() => tableData, [tableData]);
   const [StackHoriData, setStackHoriData] = useState([]);
   const { Ping } = usePingButton();
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
   const { setHistoryTrackingActive } = useListFilterContext();
-  useEffect(() => {
+  console.log('Render');
+  const dataFormatting = data => {
+    console.log("In");
     setHistoryTrackingActive(false);
-  }, []);
-  useEffect(() => {
-    const newDataArray = DashBoardData.flatMap(company => {
-      return company.data.map(dataObj => ({
-        Company_name: dataObj.Company_name,
-        company_id: dataObj.company_id,
-        schools: dataObj.schools.flatMap(school => ({
-          ...school,
-          vehicles: school.vehicles.map(vehicle => ({ ...vehicle }))
-        }))
-      }));
-    });
 
-    const tableFormattedData = DashBoardData.flatMap(company => {
+    const tableFormattedData = data.flatMap(company => {
       return company.data.flatMap(dataObj => {
         const { Company_name, company_id } = dataObj;
         return dataObj.schools.flatMap(school => {
@@ -101,7 +91,7 @@ const AdminDashboard = () => {
     };
 
     // Create formatted data with status counts for each school
-    const GraphFormattedData = DashBoardData.flatMap(company => {
+    const GraphFormattedData = data.flatMap(company => {
       return company.data.flatMap(dataObj => {
         const { Company_name, company_id } = dataObj;
         return dataObj.schools.flatMap(school => {
@@ -160,7 +150,7 @@ const AdminDashboard = () => {
       return companyStatusCounts;
     };
 
-    const HorizontalFormattedData = DashBoardData.flatMap(company => {
+    const HorizontalFormattedData = data.flatMap(company => {
       // Iterate through company data to collect school-wise data
       return company.data.map(dataObj => {
         const { Company_name, company_id } = dataObj;
@@ -209,28 +199,26 @@ const AdminDashboard = () => {
     setStackHoriData(HorizontalFormattedData);
     setPieChartData(GraphFormattedData);
     setTableData(tableFormattedData);
-    // setDachBoardData(newDataArray);
-  }, [DashBoardData]);
+  };
 
   useEffect(() => {
+    console.log('use -2');
     const fetchData = async () => {
       try {
         const response = await fetch(DashboardURL, {
           method: 'GET',
           headers: { Authorization: `token ${userToken.token}` }
         });
-        if (response.status == 200) {
-          const data = await response.json();
-          setDashBoardData(data);
-        }
+        const data = await response.json();
+        setDashBoardData(data);
+        dataFormatting(data);
       } catch (error) {
         console.error(error);
       }
     };
-    fetchData();
-
+    const interval = setInterval(fetchData, 60 * 1000);
     var myWorker = new Worker('sw.js');
-    var ParsedData
+    var ParsedData;
     var data,
       changeData = function () {
         data = sessionStorage.getItem('loggedInUser');
@@ -244,75 +232,14 @@ const AdminDashboard = () => {
         });
       };
     changeData();
-  }, []);
-
-  //
-  useEffect(() => {
-    const fetchData = setInterval(async () => {
-      try {
-        const response = await fetch(DashboardURL, {
-          method: 'GET',
-          headers: { Authorization: `token ${userToken.token}` }
-        });
-        const data = await response.json();
-        const orderedBuoysData = [...data].sort((a, b) =>
-          b.zone.localeCompare(a.zone)
-        );
-        setDashBoardData(orderedBuoysData);
-      } catch (error) {
-        console.error(error);
-      }
-    }, 15 * 60000);
-
-    return () => {
-      clearInterval(fetchData);
-    };
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(DashboardURL, {
-          method: 'GET',
-          headers: { Authorization: `token ${userToken.token}` }
-        });
-        if (response.status == 200) {
-          const data = await response.json();
-          setDashBoardData(data);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchData();
+    return () => {
+      clearInterval(interval);
+    };
   }, [Ping]);
-
-  const date = new Date();
-  // alert(date.getHours());
-
-  // const firstElement = [...zone][0];
-
-  // console.log(firstElement);
-  // zone.forEach(zoneData => {
-  //   console.log(zoneData);
-  // });
 
   return (
     <div className="mx-1">
-      {/* <div className="my-2">
-        <WeatherDetails data={buoysData} />
-      </div> */}
-      {/* <Row className="g-3 my-3">
-        <Col md={4} xxl={12}>
-          <SaasActiveUser data={activeUser} />
-        </Col>
-        <Col md={4} xxl={12}>
-          <SaasRevenue />
-        </Col>
-        <Col md={4} xxl={12}>
-          <SaasConversion />
-        </Col>
-      </Row> */}
       <Row className=" mt-2">
         <Col
           lg={6}
@@ -321,7 +248,7 @@ const AdminDashboard = () => {
           className="mb-2 ps-1 dashboard-graph-mobile"
         >
           <Row className="ms-2 ps-1">
-            <DoughnutRoundedChart data={PieChartData} />
+            <DoughnutRoundedChart data={memoPieChartData} />
           </Row>
           <Row className="mt-2 ms-2 ps-1">
             <StackedHorizontalChart data={StackHoriData} />
@@ -329,24 +256,12 @@ const AdminDashboard = () => {
         </Col>
         <Col lg={6} md={12} sm={12} className="">
           <Customers
-            data={tableData}
-            // setCenter={center => setCenter(center)}
-            // setZoomLevel={zoomLevel => setZoomLevel(zoomLevel)}
+            data={memoTableData}
           />
-          {/* <Col lg={6} md={12} sm={12} className="mb-2"></Col> */}
         </Col>
       </Row>
-      {/* <Row>
-        <Col lg={12} md={12} sm={12}>
-          <LeafletMapExample
-            data={buoysData}
-            center={center}
-            zoomLevel={zoomLevel}
-          />
-        </Col>
-      </Row> */}
     </div>
   );
 };
 
-export default AdminDashboard;
+export default memo(AdminDashboard);

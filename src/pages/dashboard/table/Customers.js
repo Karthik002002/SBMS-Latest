@@ -45,7 +45,7 @@ const Customers = ({ data }) => {
       const companyFilteredData = BackUpData.filter(
         data => data.Company_name === companyFilter
       );
-      setInitialData(companyFilteredData);
+      // setInitialData(companyFilteredData);
     } else if (companyFilter === null) {
       setInitialData(BackUpData);
     }
@@ -55,7 +55,7 @@ const Customers = ({ data }) => {
       const SchoolFilteredData = BackUpData.filter(
         data => data.school_name === Filter
       );
-      setInitialData(SchoolFilteredData);
+      // setInitialData(SchoolFilteredData);
     } else if (Filter === null) {
       setInitialData(BackUpData);
     }

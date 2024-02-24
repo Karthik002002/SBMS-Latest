@@ -11,7 +11,7 @@ import {
 import * as echarts from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { getColor } from 'helpers/utils';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 echarts.use([
   TitleComponent,
   TooltipComponent,
@@ -22,9 +22,13 @@ echarts.use([
 ]);
 
 const DoughnutRoundedChart = ({ data }) => {
+  console.log("render");
   const [totalCount, setTotalCount] = useState(0);
   const { Filter, companyFilter } = useListFilterContext();
   const [statusCount, setStatusCount] = useState({});
+  useEffect(()=>{
+    console.log("Changed");
+  },[data])
   useEffect(() => {
     let count = 0;
     const statusCounts = {
@@ -318,4 +322,4 @@ const DoughnutRoundedChart = ({ data }) => {
   );
 };
 
-export default DoughnutRoundedChart;
+export default memo(DoughnutRoundedChart);

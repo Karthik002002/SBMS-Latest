@@ -5,13 +5,16 @@ import AdvanceTableWrapper from 'components/common/advance-table/AdvanceTableWra
 import { Form } from 'react-bootstrap';
 import IconButton from 'components/common/IconButton';
 import SidebarTableHeader from './SidebarTableHeader';
-import MonitoringTable from './MonitoringTable';
 import { format, parseISO } from 'date-fns';
 import { useListFilterContext } from 'context/FilterContext';
+import TrackingTable from './TrackingTable';
 
 const Sidebar = ({ data }) => {
   const [ActiveCompany, setCompany] = useState(null);
+  const [RecievedData, setRecievedData] = useState([]);
+  const [TableData, setTableData] = useState();
   const {
+    TrackingFilterCompany,
     setTrackingVehicleCenter,
     setZoomLevel,
     setIMEI,
@@ -50,18 +53,21 @@ const Sidebar = ({ data }) => {
       lonDir: data.lon_dir
     });
   });
-  // console.log(VehicleData);
-  // let zoneArray = ['All', ...zone];
-  // const [zoneData, setZoneData] = useState();
-  // console.log(zoneArray);
-
-  //   console.log(zoneArray);
-  // console.log(recentBuoysTableData);
+  useEffect(() => {
+    if (ActiveCompany !== null && ActiveCompany !== 'null') {
+      const filteredCompanyData = VehicleData.filter(
+        data => data.companyName === ActiveCompany
+      );
+      setRecievedData(filteredCompanyData);
+    } else {
+      setRecievedData(VehicleData);
+    }
+  }, [ActiveCompany, data]);
 
   const columns = [
     {
-      accessor: 'vehicle_name',
-      Header: 'Buoy List'
+      accessor: 'vehicleName',
+      Header: 'Vehicle Name'
       // headerProps: { className: 'pe-7' }
     },
     // {
@@ -99,7 +105,7 @@ const Sidebar = ({ data }) => {
     <div className="h-100 ms-2 mobile-monitoring-table">
       <AdvanceTableWrapper
         columns={columns}
-        data={data}
+        data={RecievedData}
         // selection
         // sortable
         // pagination
@@ -136,7 +142,7 @@ const Sidebar = ({ data }) => {
           </Card.Header>
           <Card.Body className="p-0">
             {/* <StatusTabs /> */}
-            <MonitoringTable
+            <TrackingTable
               table
               headerClassName="bg-200 text-900 text-nowrap align-middle d-none"
               rowClassName="btn-reveal-trigger text-nowrap align-middle"
@@ -145,7 +151,7 @@ const Sidebar = ({ data }) => {
                 className: 'fs--1 mb-0 overflow-auto'
               }}
               ActiveCompany={ActiveCompany}
-              vehicleData={VehicleData}
+              vehicleData={RecievedData}
             />
           </Card.Body>
           {/* <Card.Footer>

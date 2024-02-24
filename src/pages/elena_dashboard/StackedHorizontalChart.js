@@ -12,7 +12,7 @@ import * as echarts from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { tooltipFormatter } from 'helpers/echart-utils';
 import { getColor } from 'helpers/utils';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 echarts.use([
   TitleComponent,
   TooltipComponent,
@@ -278,8 +278,9 @@ const StackedHorizontalChart = ({ data }) => {
         axisLabel: {
           color: getColor('gray-500'),
           fontSize: ${window.innerWidth < 530 ? 6 : 10},
-          textOverflow: 'ellipsis' 
-          // width: '10px'
+          textOverflow: 'ellipsis',
+          width: '5px',
+          maxWidth: '2px'
           // formatter: value => value.substring(0, 3)
         }
       },
@@ -439,4 +440,4 @@ const StackedHorizontalChart = ({ data }) => {
   );
 };
 
-export default StackedHorizontalChart;
+export default memo(StackedHorizontalChart);

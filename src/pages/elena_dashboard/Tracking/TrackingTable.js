@@ -21,7 +21,8 @@ const TrackingTable = ({
     HistoryTrackingActive,
     setHistoryTrackingActive,
     setHistoryTrackingURL,
-    setIMEI
+    setIMEI,
+    setTrackingFilterCompany
   } = useListFilterContext();
   const [FilteredVehicleData, setFilteredVehicleData] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
@@ -29,17 +30,6 @@ const TrackingTable = ({
   const [FieldDateTime, setFieldDateTime] = useState({});
   const [invalidDate, setInvalidDate] = useState(false);
   const [DateTime, setDateTime] = useState({});
-
-  useEffect(() => {
-    if (ActiveCompany !== null && ActiveCompany !== 'null') {
-      const filteredCompanyData = vehicleData.filter(
-        data => data.companyName === ActiveCompany
-      );
-      setFilteredVehicleData(filteredCompanyData);
-    } else {
-      setFilteredVehicleData(vehicleData);
-    }
-  }, [ActiveCompany]);
 
   useEffect(() => {
     setFilteredVehicleData(vehicleData);
@@ -105,10 +95,13 @@ const TrackingTable = ({
       <div className="tracking-filter">
         <div className="history-tracking-heading">History Tracking</div>
         <div className="vehicle-selection">
-          <span className="vehicle-selection-text">Select Vehicle</span>
+          <span className="vehicle-selection-text">Select</span>
           <Form.Select
             value={selectedVehicle}
-            onChange={e => setSelectedVehicle(e.target.value)}
+            onChange={e => {
+              setTrackingFilterCompany(e.target.value);
+              setSelectedVehicle(e.target.value);
+            }}
             className="tracking-vehicle-select"
           >
             <option>Select</option>
@@ -142,7 +135,7 @@ const TrackingTable = ({
               selectsStart
               maxDate={new Date()}
               onChange={date => handleDateChange(date, 'ToDateTime')}
-              className="ms-3"
+              className="tracking-to-date-selection"
               timeIntervals={15}
               onSelect={() => console.log('Closed')}
             />
