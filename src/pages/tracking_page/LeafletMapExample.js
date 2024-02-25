@@ -39,7 +39,6 @@ import { TrackingURL } from '../../URL/url';
 const LeafletMapExample = ({ data }) => {
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
   const [LiveVehicleData, setLiveVehicleData] = useState([]);
-  const [totalVehicleCenter, setTotalVehicleCenter] = useState(null);
   const centerRef = useRef({ lat: null, lng: null, zoom: null });
   const [UpdatedDashboard, setUpdatedDashboard] = useState();
   const [DashboardData, setDashBoardData] = useState(data);
@@ -49,23 +48,9 @@ const LeafletMapExample = ({ data }) => {
     ZoomLevel,
     setZoomLevel,
     IMEI,
-    HistoryTrackingActive
+    HistoryTrackingActive,
+    setMarkerData
   } = useListFilterContext();
-  useEffect(() => {
-    const latlng = data.map(({ lat, lon }) => ({ lat, lon }));
-
-    // Calculate the sum of latitudes and longitudes
-    const sumLat = latlng.reduce((acc, { lat }) => acc + lat, 0);
-    const sumLon = latlng.reduce((acc, { lon }) => acc + lon, 0);
-
-    // Calculate the average latitude and longitude
-    const avgLat = sumLat / latlng.length;
-    const avgLon = sumLon / latlng.length;
-    if (avgLat !== NaN && avgLon !== NaN) {
-      setTotalVehicleCenter([avgLat, avgLon]);
-      setZoomLevel(5);
-    }
-  }, [data]);
 
   useEffect(() => {
     if (TrackingVehicleCenter) {
@@ -114,13 +99,10 @@ const LeafletMapExample = ({ data }) => {
     map.on('drag', () => {
       const center = map.getCenter();
       const zoom = map.getZoom();
-      setTotalVehicleCenter(null);
-      setZoomLevel();
+
       centerRef.current = { lat: center.lat, lng: center.lng, zoom: zoom };
     });
     map.on('zoomend', () => {
-      setTotalVehicleCenter(null);
-      setZoomLevel();
       const center = map.getCenter();
       const zoom = map.getZoom();
       centerRef.current = { lat: center.lat, lng: center.lng, zoom };
@@ -206,12 +188,6 @@ const LeafletMapExample = ({ data }) => {
     };
   }
   useEffect(() => {
-    // if (IMEI !== null) {
-    //   const filteredLiveVehicle = data.filter(vehicle => vehicle.imei !== IMEI);
-    //   setDashBoardData(filteredLiveVehicle);
-    // } else {
-    // }
-
     if (!HistoryTrackingActive) {
       setDashBoardData(data);
     }

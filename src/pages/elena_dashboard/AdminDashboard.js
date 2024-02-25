@@ -3,6 +3,7 @@ import { Col, Row } from 'react-bootstrap';
 import { usePingButton } from 'context/PingContext';
 import { DashboardURL } from '../../URL/url';
 import { useListFilterContext } from 'context/FilterContext';
+import { useWebSocket } from 'context/SocketContext';
 // import { buoys } from '../../data/dashboard/buoy';
 
 const DoughnutRoundedChart = lazy(() => import('./DoughnutRoundedChart'));
@@ -12,18 +13,18 @@ const StackedHorizontalChart = lazy(() => import('./StackedHorizontalChart'));
 const Customers = lazy(() => import('pages/dashboard/table/Customers'));
 
 const AdminDashboard = () => {
-  const [DashBoardData, setDashBoardData] = useState([]);
-  const [tableData, setTableData] = useState([]);
-  const [PieChartData, setPieChartData] = useState([]);
-  const memoPieChartData = useMemo(() => PieChartData, [PieChartData]);
-  const memoTableData = useMemo(() => tableData, [tableData]);
-  const [StackHoriData, setStackHoriData] = useState([]);
+  const [ChartData, setChartData] = useState({
+    tableDataDashBoard: [],
+    PieChartData: [],
+    HorizontalFormattedData: []
+  });
+  const MemoChartData = useMemo(() => ChartData, [ChartData]);
+  const socket = useWebSocket();
   const { Ping } = usePingButton();
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
-  const { setHistoryTrackingActive } = useListFilterContext();
-  console.log('Render');
+  const { setHistoryTrackingActive, IMEI } = useListFilterContext();
+
   const dataFormatting = data => {
-    console.log("In");
     setHistoryTrackingActive(false);
 
     const tableFormattedData = data.flatMap(company => {
@@ -195,14 +196,18 @@ const AdminDashboard = () => {
         return companyData;
       });
     });
-
-    setStackHoriData(HorizontalFormattedData);
-    setPieChartData(GraphFormattedData);
-    setTableData(tableFormattedData);
+    setChartData({
+      HorizontalFormattedData: HorizontalFormattedData,
+      tableDataDashBoard: tableFormattedData,
+      PieChartData: GraphFormattedData
+    });
   };
-
+  
+  
+  
+    // return () => clearInterval(socketKeepAliveCall);
+  
   useEffect(() => {
-    console.log('use -2');
     const fetchData = async () => {
       try {
         const response = await fetch(DashboardURL, {
@@ -210,13 +215,22 @@ const AdminDashboard = () => {
           headers: { Authorization: `token ${userToken.token}` }
         });
         const data = await response.json();
-        setDashBoardData(data);
         dataFormatting(data);
       } catch (error) {
         console.error(error);
       }
     };
+
+    if (IMEI !== null) {
+      socket.send(`stop:${IMEI}`);
+    }
+    if (socket) {
+      socket.onmessage = event => {
+        console.log('Message received from server:', event.data);
+      };
+    }
     const interval = setInterval(fetchData, 60 * 1000);
+
     var myWorker = new Worker('sw.js');
     var ParsedData;
     var data,
@@ -248,16 +262,16 @@ const AdminDashboard = () => {
           className="mb-2 ps-1 dashboard-graph-mobile"
         >
           <Row className="ms-2 ps-1">
-            <DoughnutRoundedChart data={memoPieChartData} />
+            <DoughnutRoundedChart data={MemoChartData.PieChartData} />
           </Row>
           <Row className="mt-2 ms-2 ps-1">
-            <StackedHorizontalChart data={StackHoriData} />
+            <StackedHorizontalChart
+              data={MemoChartData.HorizontalFormattedData}
+            />
           </Row>
         </Col>
         <Col lg={6} md={12} sm={12} className="">
-          <Customers
-            data={memoTableData}
-          />
+          <Customers data={MemoChartData.tableDataDashBoard} />
         </Col>
       </Row>
     </div>

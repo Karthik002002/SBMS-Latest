@@ -18,10 +18,17 @@ const ReportBar = () => {
       <div className={`${mobNavBar ? 'mob-inactive-navbar-active' : 'mob-inactive-navbar'}`}>
         <NavLink
           to="/report/KM-report"
-          className={`custom-dropdown-toggle mt-3   `}
+          className={`custom-dropdown-toggle mt-3`}
           activeClassName="active-link"
         >
           KM Tracking Report
+        </NavLink>
+        <NavLink
+          to="/report/KM-repor"
+          className={`custom-dropdown-toggle mt-3`}
+          activeClassName="active-link"
+        >
+          Idle Report
         </NavLink>
       </div>
     </div>

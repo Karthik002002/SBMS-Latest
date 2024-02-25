@@ -8,11 +8,13 @@ import SidebarTableHeader from './SidebarTableHeader';
 import { format, parseISO } from 'date-fns';
 import { useListFilterContext } from 'context/FilterContext';
 import TrackingTable from './TrackingTable';
+import { useWebSocket } from 'context/SocketContext';
 
 const Sidebar = ({ data }) => {
   const [ActiveCompany, setCompany] = useState(null);
   const [RecievedData, setRecievedData] = useState([]);
   const [TableData, setTableData] = useState();
+  const [socketIMEI, setSocketImei] = useState(null);
   const {
     TrackingFilterCompany,
     setTrackingVehicleCenter,
@@ -20,6 +22,7 @@ const Sidebar = ({ data }) => {
     setIMEI,
     setHistoryTrackingActive
   } = useListFilterContext();
+  const socket = useWebSocket();
   const VehicleData = [];
   const companyData = [];
   const schoolData = [];
@@ -39,6 +42,7 @@ const Sidebar = ({ data }) => {
       companyName: data.Company_name,
       CompanyID: data.company_id,
       SchoolID: data.school_id,
+      vehicle_id: data.vehicle_id,
       schoolName: data.school_name,
       vehicleName: data.vehicle_name,
       VehicleReg: data.vehicle_reg,
@@ -53,6 +57,24 @@ const Sidebar = ({ data }) => {
       lonDir: data.lon_dir
     });
   });
+
+  const handleSocketIMEI = data => {
+    if (socketIMEI === null) {
+      setSocketImei(data);
+    } else if (socketIMEI !== null) {
+      socket.send(`stop:${socketIMEI}`);
+      setSocketImei(data);
+    }
+    setIMEI(data);
+    socket.send(`imei:${data}`);
+  };
+  useEffect(() => {
+    return () => {
+      if (socketIMEI !== null) {
+        socket.send(`stop:${socketIMEI}`);
+      }
+    };
+  }, []);
   useEffect(() => {
     if (ActiveCompany !== null && ActiveCompany !== 'null') {
       const filteredCompanyData = VehicleData.filter(
@@ -62,6 +84,12 @@ const Sidebar = ({ data }) => {
     } else {
       setRecievedData(VehicleData);
     }
+
+    () => {
+      if (socketIMEI !== null) {
+        socket.send(`stop:${socketIMEI}`);
+      }
+    };
   }, [ActiveCompany, data]);
 
   const columns = [
@@ -82,6 +110,7 @@ const Sidebar = ({ data }) => {
             setZoomLevel(17);
             setIMEI(row.original.imei);
             setHistoryTrackingActive(false);
+            handleSocketIMEI(row.original.imei);
           }}
           className="tracking-table-button"
         >

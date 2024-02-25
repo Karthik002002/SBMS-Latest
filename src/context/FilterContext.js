@@ -18,16 +18,23 @@ export const FilterData = ({ children }) => {
   const [TrackingVehicleCenter, setTrackingVehicleCenter] = useState([
     13.422925089909123, 77.9857877043398
   ]);
-  const [ZoomLevel, setZoomLevel] = useState(4);
+  const [ZoomLevel, setZoomLevel] = useState(null);
   const [TrackingFilterCompany, setTrackingFilterCompany] = useState(null);
+
   //for table
   const [PageCount, setPageCount] = useState(null);
+
   //Live Tracking IMEI for the tracking page
   const [IMEI, setIMEI] = useState(null);
+
   //State for historyTracking is Active or not for the tracking page
   const [HistoryTrackingActive, setHistoryTrackingActive] = useState(false);
   const [HistoryTrackingURL, setHistoryTrackingURL] = useState(null);
 
+  //Socket connection for the live tracking
+  const [liveSocketData, setLiveSocketData] = useState();
+  const [markerData, setMarkerData] = useState();
+  const [SocketLiveMarker, setSocketLiveMarker] = useState();
   useEffect(() => {
     const handleResize = () => {
       //setting the page count according to the screen height
@@ -73,7 +80,13 @@ export const FilterData = ({ children }) => {
         HistoryTrackingURL,
         setHistoryTrackingURL,
         TrackingFilterCompany,
-        setTrackingFilterCompany
+        setTrackingFilterCompany,
+        markerData,
+        setMarkerData,
+        liveSocketData,
+        setLiveSocketData,
+        SocketLiveMarker,
+        setSocketLiveMarker
       }}
     >
       {children}

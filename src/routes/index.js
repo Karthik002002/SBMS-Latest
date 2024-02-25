@@ -18,6 +18,7 @@ import { FilterData, FilterProvider } from 'context/FilterContext';
 import ReportKMTracking from 'pages/report/reportView/Drifted/ReportKM';
 import { PingData } from 'context/PingContext';
 import ReportLayout from 'layouts/ReportLayout';
+import { WebSocketProvider } from 'context/SocketContext';
 
 // const Landing = lazy(() => import('components/pages/landing/Landing'));
 const Error404 = lazy(() => import('components/errors/Error404'));
@@ -35,15 +36,16 @@ const TrackingPage = lazy(() => import('pages/tracking_page/TrackingPage'));
 
 const FalconRoutes = () => {
   var loggedInUser = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
-  // document.location.pathname !== '/login' && 
+  // document.location.pathname !== '/login' &&
   // if (loggedInUser === null)
   //   window.location.href = '/dashboard';
 
   return (
     <FilterData>
-      <PingData>
-        <Routes>
-          {/* <Route
+      <WebSocketProvider>
+        <PingData>
+          <Routes>
+            {/* <Route
         path="/landing"
         element={
           <Suspense fallback={''}>
@@ -52,83 +54,83 @@ const FalconRoutes = () => {
         }
       /> */}
 
-          {/*- ------------- Error ---------------------------  */}
-          <Route element={<ErrorLayout />}>
+            {/*- ------------- Error ---------------------------  */}
+            <Route element={<ErrorLayout />}>
+              <Route
+                path="/errors/404"
+                element={
+                  <Suspense fallback={''}>
+                    <Error404 />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/errors/500"
+                element={
+                  <Suspense fallback={''}>
+                    <Error500 />
+                  </Suspense>
+                }
+              />
+            </Route>
+
+            {/*- ------------- Authentication ---------------------------  */}
             <Route
-              path="/errors/404"
+              path="/login"
               element={
                 <Suspense fallback={''}>
-                  <Error404 />
+                  <Login />
                 </Suspense>
               }
             />
             <Route
-              path="/errors/500"
+              path=""
               element={
                 <Suspense fallback={''}>
-                  <Error500 />
+                  <Login />
                 </Suspense>
               }
             />
-          </Route>
-
-          {/*- ------------- Authentication ---------------------------  */}
-          <Route
-            path="/login"
-            element={
-              <Suspense fallback={''}>
-                <Login />
-              </Suspense>
-            }
-          />
-          <Route
-            path=""
-            element={
-              <Suspense fallback={''}>
-                <Login />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/logout"
-            element={
-              <Suspense fallback={''}>
-                <Logout />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/forgot-password"
-            element={
-              <Suspense fallback={''}>
-                <ForgetPassword />
-              </Suspense>
-            }
-          />
-
-          {/*- ------------- Dashboard ---------------------------  */}
-
-          <Route element={<MainLayout />}>
             <Route
-              path="/dashboard"
+              path="/logout"
               element={
-                // loggedInUser &&
-                // (loggedInUser?.user?.companies ? (
-                //   // <Suspense fallback={''}>
-                //   <AdminDashboard />
-                // ) : // </Suspense>
-                // loggedInUser?.user?.voc || loggedInUser?.user?.school ? (
-                //   // <Suspense fallback={''}>
-                //   <VehicleDashboard />
-                // ) : // </Suspense>
-                // null)
                 <Suspense fallback={''}>
-                  <AdminDashboard />
+                  <Logout />
                 </Suspense>
               }
             />
-            <Route path="/tracking" element={<Monitoring />} />
-            {/* <Route
+            <Route
+              path="/forgot-password"
+              element={
+                <Suspense fallback={''}>
+                  <ForgetPassword />
+                </Suspense>
+              }
+            />
+
+            {/*- ------------- Dashboard ---------------------------  */}
+
+            <Route element={<MainLayout />}>
+              <Route
+                path="/dashboard"
+                element={
+                  // loggedInUser &&
+                  // (loggedInUser?.user?.companies ? (
+                  //   // <Suspense fallback={''}>
+                  //   <AdminDashboard />
+                  // ) : // </Suspense>
+                  // loggedInUser?.user?.voc || loggedInUser?.user?.school ? (
+                  //   // <Suspense fallback={''}>
+                  //   <VehicleDashboard />
+                  // ) : // </Suspense>
+                  // null)
+                  <Suspense fallback={''}>
+                    <AdminDashboard />
+                  </Suspense>
+                }
+              />
+              <Route path="/tracking" element={<Monitoring />} />
+              {/* <Route
             path="/report"
             element={
               <Suspense fallback={''}>
@@ -136,17 +138,17 @@ const FalconRoutes = () => {
               </Suspense>
             }
           /> */}
-          </Route>
-          <Route element={<ReportLayout />}>
-            <Route
-              path="/report/KM-report"
-              element={
-                <Suspense>
-                  <ReportKMTracking />
-                </Suspense>
-              }
-            />
-            {/* <Route
+            </Route>
+            <Route element={<ReportLayout />}>
+              <Route
+                path="/report/KM-report"
+                element={
+                  <Suspense>
+                    <ReportKMTracking />
+                  </Suspense>
+                }
+              />
+              {/* <Route
               path="/report/lowbattery"
               element={
                 <Suspense>
@@ -154,7 +156,7 @@ const FalconRoutes = () => {
                 </Suspense>
               }
             /> */}
-            {/* <Route
+              {/* <Route
               path="/report/unlit"
               element={
                 <Suspense>
@@ -162,24 +164,25 @@ const FalconRoutes = () => {
                 </Suspense>
               }
             /> */}
-          </Route>
+            </Route>
 
-          {/*- ------------- Tracking ---------------------------  */}
+            {/*- ------------- Tracking ---------------------------  */}
 
-          {/* <Navigate to="/errors/404" /> */}
-          <Route
-            path="*"
-            element={
-              <Suspense fallback={''}>
-                <Navigate to="/errors/404" replace />
-              </Suspense>
-            }
-          />
+            {/* <Navigate to="/errors/404" /> */}
+            <Route
+              path="*"
+              element={
+                <Suspense fallback={''}>
+                  <Navigate to="/errors/404" replace />
+                </Suspense>
+              }
+            />
 
-          {/* MONITORING PAGE */}
-          {/* <Route path="/map/:buoyName" component={LeafletMapExample} /> */}
-        </Routes>
-      </PingData>
+            {/* MONITORING PAGE */}
+            {/* <Route path="/map/:buoyName" component={LeafletMapExample} /> */}
+          </Routes>
+        </PingData>
+      </WebSocketProvider>
     </FilterData>
   );
 };

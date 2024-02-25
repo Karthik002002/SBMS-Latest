@@ -9,18 +9,21 @@ import { useListFilterContext } from 'context/FilterContext';
 // import VerticalBar from './VerticalBar';
 import DemoData from 'data/SBMSDashboardData.json';
 import { DashboardURL } from '../../../URL/url';
+import MapComp from 'pages/tracking_page/TrackingMap/MapComp';
 const Tracking = () => {
-  const { ActiveVehicle, setActiveVehicle, HistoryTrackingActive } =
-    useListFilterContext();
-  // const [center, setCenter] = useState([13.422925089909123, 77.9857877043398]);
-  // const [zoomLevel, setZoomLevel] = useState(window.innerWidth < 530 ? 6 : 8);
+  const {
+    ActiveVehicle,
+    setActiveVehicle,
+    HistoryTrackingActive,
+    setMarkerData
+  } = useListFilterContext();
   const [InitialData, setInitialData] = useState([]);
   const [VehicleData, setVehicleData] = useState([]);
   const memoizedVehicleData = useMemo(() => VehicleData, [VehicleData]);
   const [MinCall, setMinCall] = useState(0);
   const { Ping } = usePingButton();
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
-  
+
   useEffect(() => {
     if (InitialData) {
       const tableFormattedData = InitialData.flatMap(company => {
@@ -38,6 +41,7 @@ const Tracking = () => {
           });
         });
       });
+      setMarkerData(tableFormattedData);
       setVehicleData(tableFormattedData);
     }
   }, [InitialData]);
@@ -78,24 +82,7 @@ const Tracking = () => {
     return () => clearInterval(IntervalCall);
   }, [MinCall, Ping]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch(mainURL, {
-  //         method: 'GET',
-  //         headers: { Authorization: `token ${userToken.token}` }
-  //       });
-  //       const data = await response.json();
-  //       const orderedBuoysData = [...data].sort((a, b) =>
-  //         b.zone.localeCompare(a.zone)
-  //       );
-  //       setBuoysData(orderedBuoysData);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [Ping]);
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -118,11 +105,12 @@ const Tracking = () => {
             {/* <VerticalBar /> */}
           </Col>
           <Col sm={10} md={10} className=" ps-1">
-            <LeafletMapExample
+            {/* <LeafletMapExample
               data={memoizedVehicleData}
               // center={center}
               // zoomLevel={zoomLevel}
-            />
+            /> */}
+            <MapComp />
           </Col>
         </Row>
       </div>

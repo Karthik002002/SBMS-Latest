@@ -5,6 +5,7 @@ import { format, isBefore, parseISO } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import { HistoryTrackingURL } from '../../../URL/url';
 import { useListFilterContext } from 'context/FilterContext';
+import { useWebSocket } from 'context/SocketContext';
 const TrackingTable = ({
   getTableProps,
   headers,
@@ -24,6 +25,7 @@ const TrackingTable = ({
     setIMEI,
     setTrackingFilterCompany
   } = useListFilterContext();
+  
   const [FilteredVehicleData, setFilteredVehicleData] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [IMEIURL, setIMEIURL] = useState(null);
@@ -39,7 +41,8 @@ const TrackingTable = ({
     const selectedVehicleIMEI = vehicleData.find(
       data => data.vehicleName === selectedVehicle
     );
-    setIMEIURL(selectedVehicleIMEI?.imei || null);
+    console.log(selectedVehicleIMEI);
+    setIMEIURL(selectedVehicleIMEI?.vehicle_id || null);
   }, [selectedVehicle]);
 
   const handleDateChange = (date, fieldName) => {
@@ -61,7 +64,7 @@ const TrackingTable = ({
       } else {
         setInvalidDate(false);
         setHistoryTrackingURL(
-          `${HistoryTrackingURL}?from=${DateTime.FromDateTime}&to=${DateTime.ToDateTime}&imei=${IMEIURL}`
+          `${HistoryTrackingURL}?from=${DateTime.FromDateTime}&to=${DateTime.ToDateTime}&vehicl\e_id=${IMEIURL}`
         );
         setHistoryTrackingActive(true);
       }
@@ -137,10 +140,14 @@ const TrackingTable = ({
               onChange={date => handleDateChange(date, 'ToDateTime')}
               className="tracking-to-date-selection"
               timeIntervals={15}
-              onSelect={() => console.log('Closed')}
             />
           </div>
           <div>
+            <div>
+              <Button variant="" className="fs--1 lead-btn">
+                Enter
+              </Button>
+            </div>
             {invalidDate && (
               <span
                 style={{
@@ -162,7 +169,7 @@ const TrackingTable = ({
                     setHistoryTrackingActive(false);
                     setHistoryTrackingURL(null);
                     setDateTime({});
-                    setFieldDateTime({});
+                    setFieldDateTime({ FromDateTime: '', ToDateTime: '' });
                     setIMEI(null);
                   }}
                 >
