@@ -9,6 +9,7 @@ import { CloseButton } from 'components/common/Toast';
 // import SettingsPanel from 'components/settings-panel/SettingsPanel';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-toastify/dist/ReactToastify.min.css';
+import PushNotificationHandling from 'PushNotification/PushNotificationHandling';
 
 const App = () => {
   const HTMLClassList = document.getElementsByTagName('html')[0].classList;
@@ -48,6 +49,7 @@ const App = () => {
         icon={false}
         position={toast.POSITION.TOP_RIGHT}
       />
+      <PushNotificationHandling />
     </Router>
   );
 };

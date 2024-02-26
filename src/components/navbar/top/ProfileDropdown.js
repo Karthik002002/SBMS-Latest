@@ -23,6 +23,7 @@ const ProfileDropdown = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
+      sessionStorage.removeItem('loggedInUser');
       window.location.href = '/logout';
     } catch (error) {
       console.error('Error fetching data:', error.message);

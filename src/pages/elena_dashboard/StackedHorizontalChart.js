@@ -239,13 +239,13 @@ const StackedHorizontalChart = ({ data }) => {
         },
         right: 0
       },
-      legend: {
-        data: ['Direct', 'Mail Ad', 'Affiliate Ad', 'Video Ad', 'Search Engine'],
-        textStyle: {
-          color: getColor('gray-600')
-        },
-        left: 0
-      },
+      // legend: {
+      //   data: ['Direct', 'Mail Ad', 'Affiliate Ad', 'Video Ad', 'Search Engine'],
+      //   textStyle: {
+      //     color: getColor('gray-600')
+      //   },
+      //   left: 0
+      // },
       xAxis: {
         type: 'value',
         axisLine: {

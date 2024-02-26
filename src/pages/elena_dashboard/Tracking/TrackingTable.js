@@ -25,10 +25,11 @@ const TrackingTable = ({
     setIMEI,
     setTrackingFilterCompany
   } = useListFilterContext();
-  
+
   const [FilteredVehicleData, setFilteredVehicleData] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [IMEIURL, setIMEIURL] = useState(null);
+  const [Search, setSearch] = useState(false);
   const [FieldDateTime, setFieldDateTime] = useState({});
   const [invalidDate, setInvalidDate] = useState(false);
   const [DateTime, setDateTime] = useState({});
@@ -55,13 +56,14 @@ const TrackingTable = ({
   };
 
   useEffect(() => {
-    if (DateTime.FromDateTime && DateTime.ToDateTime && IMEIURL) {
+    if (DateTime.FromDateTime && DateTime.ToDateTime && IMEIURL && Search) {
       const fromDateTime = new Date(DateTime.FromDateTime);
       const toDateTime = new Date(DateTime.ToDateTime);
       if (isBeforeDateTime(toDateTime, fromDateTime)) {
         setInvalidDate(true);
         return;
       } else {
+        setSearch(false);
         setInvalidDate(false);
         setHistoryTrackingURL(
           `${HistoryTrackingURL}?from=${DateTime.FromDateTime}&to=${DateTime.ToDateTime}&vehicl\e_id=${IMEIURL}`
@@ -69,7 +71,8 @@ const TrackingTable = ({
         setHistoryTrackingActive(true);
       }
     }
-  }, [FieldDateTime, DateTime, IMEIURL]);
+    setSearch(false);
+  }, [DateTime, IMEIURL, Search]);
   return (
     <div>
       <div className="table-responsive scrollbar Tracking-list-table">
@@ -113,7 +116,7 @@ const TrackingTable = ({
             ))}
           </Form.Select>
         </div>
-        <div>
+        <div className="history-tracking-input-container">
           <div className="from-date-tracking">
             From :
             <DatePicker
@@ -142,12 +145,7 @@ const TrackingTable = ({
               timeIntervals={15}
             />
           </div>
-          <div>
-            <div>
-              <Button variant="" className="fs--1 lead-btn">
-                Enter
-              </Button>
-            </div>
+         
             {invalidDate && (
               <span
                 style={{
@@ -161,23 +159,40 @@ const TrackingTable = ({
                 Enter Valid Date & Time.
               </span>
             )}
-            <div className="tracking-history-clr-btn">
-              {HistoryTrackingActive && (
-                <Button
-                  variant="danger"
-                  onClick={() => {
-                    setHistoryTrackingActive(false);
-                    setHistoryTrackingURL(null);
-                    setDateTime({});
-                    setFieldDateTime({ FromDateTime: '', ToDateTime: '' });
-                    setIMEI(null);
-                  }}
-                >
-                  Clear
-                </Button>
-              )}
-            </div>
           </div>
+          <div>
+            <div className="tracking-enter-button-container">
+              <Button
+                variant=""
+                className="fs--1 history-tracking-button"
+                onClick={() => {
+                  setSearch(true);
+                }}
+              >
+                Search
+              </Button>
+              <div
+                className={`tracking-history-clr-btn${
+                  HistoryTrackingActive ? '-active' : ''
+                }`}
+              >
+                {HistoryTrackingActive && (
+                  <Button
+                    variant="danger"
+                    className="fs--1"
+                    onClick={() => {
+                      setHistoryTrackingActive(false);
+                      setHistoryTrackingURL(null);
+                      setDateTime({});
+                      setFieldDateTime({ FromDateTime: '', ToDateTime: '' });
+                      setIMEI(null);
+                    }}
+                  >
+                    Clear
+                  </Button>
+                )}
+              </div>
+            </div>
         </div>
       </div>
     </div>

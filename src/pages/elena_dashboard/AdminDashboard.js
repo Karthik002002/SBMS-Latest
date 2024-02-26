@@ -3,7 +3,6 @@ import { Col, Row } from 'react-bootstrap';
 import { usePingButton } from 'context/PingContext';
 import { DashboardURL } from '../../URL/url';
 import { useListFilterContext } from 'context/FilterContext';
-import { useWebSocket } from 'context/SocketContext';
 // import { buoys } from '../../data/dashboard/buoy';
 
 const DoughnutRoundedChart = lazy(() => import('./DoughnutRoundedChart'));
@@ -19,7 +18,6 @@ const AdminDashboard = () => {
     HorizontalFormattedData: []
   });
   const MemoChartData = useMemo(() => ChartData, [ChartData]);
-  const socket = useWebSocket();
   const { Ping } = usePingButton();
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
   const { setHistoryTrackingActive, IMEI } = useListFilterContext();
@@ -202,11 +200,9 @@ const AdminDashboard = () => {
       PieChartData: GraphFormattedData
     });
   };
-  
-  
-  
-    // return () => clearInterval(socketKeepAliveCall);
-  
+
+  // return () => clearInterval(socketKeepAliveCall);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -221,15 +217,17 @@ const AdminDashboard = () => {
       }
     };
 
-    if (IMEI !== null) {
-      socket.send(`stop:${IMEI}`);
-    }
-    if (socket) {
-      socket.onmessage = event => {
-        console.log('Message received from server:', event.data);
-      };
-    }
+    // if (IMEI !== null) {
+    //   socket.send(`stop:${IMEI}`);
+    // }
+    // if (socket) {
+    //   socket.onmessage = event => {
+    //     console.log('Message received from server:', event.data);
+    //   };
+    // }
     const interval = setInterval(fetchData, 60 * 1000);
+
+    // Clean up the event listener when component unmounts
 
     var myWorker = new Worker('sw.js');
     var ParsedData;

@@ -38,15 +38,13 @@ export const WebSocketProvider = ({ children }) => {
     // Listen for messages from the server
     socketConnection.addEventListener('message', event => {
       const recievedData = JSON.parse(event.data);
-      const splittedData = recievedData.content.split(',');
-      let requiredData = {
-        imei: splittedData[6],
-        vehicleNo: splittedData[7],
-        lat: splittedData[11],
-        lon: splittedData[13]
-      };
-      console.log(requiredData);
-      setSocketLiveMarker(requiredData);
+
+      console.log(recievedData);
+      if (recievedData.content.hasOwnProperty('imei')) {
+        setSocketLiveMarker(recievedData.content);
+      }
+      console.log(typeof event.data);
+      // setSocketLiveMarker(requiredData);
     });
 
     // Listen for errors

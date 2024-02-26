@@ -34,7 +34,7 @@ export const FilterData = ({ children }) => {
   //Socket connection for the live tracking
   const [liveSocketData, setLiveSocketData] = useState();
   const [markerData, setMarkerData] = useState();
-  const [SocketLiveMarker, setSocketLiveMarker] = useState();
+  const [SocketLiveMarker, setSocketLiveMarker] = useState(null);
   useEffect(() => {
     const handleResize = () => {
       //setting the page count according to the screen height

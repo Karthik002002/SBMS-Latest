@@ -57,9 +57,9 @@ const CustomersTableHeader = ({ selectedRowIds, Schooldata, CompanyData }) => {
             {IsActiveFilter && (
               <button
                 onClick={clearFilters}
-                className="btn me-2 filter-clear-btn fs--1 pb-1"
+                className="btn me-2 filter-clear-btn pb-1"
               >
-                Clear Filters
+                Clear
               </button>
             )}
             <Dropdown>

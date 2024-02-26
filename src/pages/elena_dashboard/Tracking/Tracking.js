@@ -1,5 +1,5 @@
 import MainLayout from 'layouts/CustomMainLayout';
-import LeafletMapExample from 'pages/tracking_page/LeafletMapExample';
+// import LeafletMapExample from 'pages/tracking_page/LeafletMapExample';
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { Col, Row } from 'react-bootstrap';

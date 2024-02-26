@@ -1,21 +1,41 @@
+import { faArrowAltCircleRight } from '@fortawesome/free-regular-svg-icons';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  IoArrowBackCircleOutline,
+  IoArrowForwardCircleOutline
+} from 'react-icons/io5';
+
 import { NavLink } from 'react-router-dom';
 
 const ReportBar = () => {
   const [mobNavBar, setMobNavBar] = useState(false);
+
   return (
     <div className={` ${mobNavBar ? 'report-bar active' : 'report-bar'}`}>
-      <div >
-        <FontAwesomeIcon
-          icon={faBars}
-          onClick={() => setMobNavBar(!mobNavBar)}
-          className={`${mobNavBar ? 'track-burgermenu-active': 'track-burgermenu'}`}
-        />
+      <div>
+        {mobNavBar ? (
+          <IoArrowBackCircleOutline
+            size={18}
+            onClick={() => setMobNavBar(false)}
+            className="track-burgermenu-active"
+          />
+        ) : (
+          <IoArrowForwardCircleOutline
+            size={18}
+            onClick={() => setMobNavBar(true)}
+            className="track-burgermenu"
+          />
+        )}
+
         {}
       </div>
-      <div className={`${mobNavBar ? 'mob-inactive-navbar-active' : 'mob-inactive-navbar'}`}>
+      <div
+        className={`${
+          mobNavBar ? 'mob-inactive-navbar-active' : 'mob-inactive-navbar'
+        }`}
+      >
         <NavLink
           to="/report/KM-report"
           className={`custom-dropdown-toggle mt-3`}
@@ -24,8 +44,8 @@ const ReportBar = () => {
           KM Tracking Report
         </NavLink>
         <NavLink
-          to="/report/KM-repor"
-          className={`custom-dropdown-toggle mt-3`}
+          to="/report/Idle"
+          className={`custom-dropdown-toggle`}
           activeClassName="active-link"
         >
           Idle Report

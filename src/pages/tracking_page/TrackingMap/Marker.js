@@ -25,7 +25,9 @@ const MarkerComp = () => {
   } = useListFilterContext();
   useEffect(() => {
     if (SocketLiveMarker !== null) {
-    //   setPosition([SocketLiveMarker[2], SocketLiveMarker[3]]);
+      setPosition([SocketLiveMarker.lat, SocketLiveMarker.lon]);
+      console.log(SocketLiveMarker);
+      //   setPosition([SocketLiveMarker[2], SocketLiveMarker[3]]);
     }
   }, [SocketLiveMarker]);
   useEffect(() => {
@@ -34,8 +36,14 @@ const MarkerComp = () => {
       map.panTo(TrackingVehicleCenter);
     }
   }, [map, TrackingVehicleCenter]);
+  useEffect(() => {
+    if (SocketLiveMarker !== null) {
+      map.panTo([SocketLiveMarker.lat, SocketLiveMarker.lon]);
+    }
+  }, [SocketLiveMarker]);
   let markers = [];
   useEffect(() => {
+    console.log(marker);
     markers = [];
     function getStatusAndIcon(status, speed_status) {
       // console.log(speed_status);

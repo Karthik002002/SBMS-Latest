@@ -46,7 +46,28 @@ const HistoryRouting = React.memo(function HistoryRouting() {
           });
           if (response.status == 200) {
             const data = await response.json();
-            setHistoryMarkerRawData(data);
+            let formattedData = [];
+            data.map(data => {
+              const splittedDateTime = data.datetime
+                .split(',')
+                .map(item => item.trim());
+              const splitLocation = data.location
+                .split(',')
+                .map(item => item.trim());
+              const lat = splitLocation[0];
+              const lon = splitLocation[1];
+              const date = splittedDateTime[0];
+              const time = splittedDateTime[1];
+              const { location, datetime, ...remainingData } = data;
+              formattedData.push({
+                ...remainingData,
+                lat: lat,
+                lon: lon,
+                date: date,
+                time: time
+              });
+            });
+            setHistoryMarkerRawData(formattedData);
           }
         } catch (error) {
           console.error(error);
@@ -84,31 +105,32 @@ const HistoryRouting = React.memo(function HistoryRouting() {
             }).bindPopup('Ending Point');
             markerLayer.addLayer(marker);
           } else {
-            const iconHtml = `<img src="${
-              data.spd_status
-                ? RashDrivingPNG
-                : data.status === 0
-                ? RunningPNG
-                : data.status === 1
-                ? IdlePNG
-                : data.status === 2
-                ? StoppedPNG
-                : data.status === 3
-                ? TowedPNG
-                : data.status === 4
-                ? NoNetworkPNG
-                : data.status === 5
-                ? InActivePNG
-                : ParkedPNG
-            }" style="transform: rotate(${
-              data.heading
-            }deg)" width="20" height="30" />`;
+            const iconUrl = data.spd_status
+              ? RashDrivingPNG
+              : data.status === 0
+              ? RunningPNG
+              : data.status === 1
+              ? IdlePNG
+              : data.status === 2
+              ? StoppedPNG
+              : data.status === 3
+              ? TowedPNG
+              : data.status === 4
+              ? NoNetworkPNG
+              : data.status === 5
+              ? InActivePNG
+              : ParkedPNG;
+            const customIcon = L.icon({
+              iconUrl: iconUrl,
+              iconSize: [35, 35], // Adjust size as needed
+              iconAnchor: [10, 15] // Adjust anchor point as needed
+            });
             marker = L.marker(waypoint.latLng, {
-              icon: L.divIcon({ html: iconHtml })
+              icon: customIcon
             });
             markerLayer.addLayer(marker);
           }
-          marker.bindPopup(`${i}`);
+          marker.bindPopup(`${data.vehicle_regno}`);
 
           return marker;
         }
@@ -117,12 +139,14 @@ const HistoryRouting = React.memo(function HistoryRouting() {
       circleLayer.addTo(map);
 
       return () => {
-        map.removeLayer(circleLayer);
-        map.removeLayer(markerLayer);
-        map.removeControl(routingControl);
+        if (map) {
+          map.removeLayer(circleLayer);
+          map.removeLayer(markerLayer);
+          map.removeControl(routingControl);
+        }
       };
     }
-  }, [HistoryMarkerRawData]);
+  }, [HistoryMarkerRawData, HistoryTrackingActive]);
 
   return null;
 });

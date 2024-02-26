@@ -22,13 +22,10 @@ echarts.use([
 ]);
 
 const DoughnutRoundedChart = ({ data }) => {
-  console.log("render");
   const [totalCount, setTotalCount] = useState(0);
   const { Filter, companyFilter } = useListFilterContext();
   const [statusCount, setStatusCount] = useState({});
-  useEffect(()=>{
-    console.log("Changed");
-  },[data])
+
   useEffect(() => {
     let count = 0;
     const statusCounts = {
