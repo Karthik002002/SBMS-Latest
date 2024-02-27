@@ -1,3 +1,4 @@
+import { PushNotificationURL } from '../URL/url';
 import React, { useEffect } from 'react';
 
 function PushNotificationHandling() {
@@ -23,20 +24,18 @@ function PushNotificationHandling() {
   const saveSubscription = async subscription => {
     console.log('Push API called');
     const sessionData = await getSessionData('loggedInUser');
-    const SERVER_URL = 'https://sbmsadmin.elenageosys.com/webpush/';
     const { user_id } = sessionData;
     const parsedSubscription = JSON.parse(subscription);
     const FinalData = { ...parsedSubscription, user_id: user_id };
-    // const SERVER_URL = "https://elenageosys.com/webpush/";
-    // const response = await fetch(SERVER_URL, {
-    //   method: 'post',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Authorization: `Token 18effb7e51a8e3cdfaa858c1acc236b5e44e5829`
-    //   },
-    //   body: JSON.stringify(FinalData5)
-    // });
-    // return response.json();
+    const response = await fetch(PushNotificationURL, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token b50f27758bb2e6e4e6f399c327183fb182586454`
+      },
+      body: JSON.stringify(FinalData)
+    });
+    return response.json();
   };
 
   useEffect(() => {
@@ -47,7 +46,7 @@ function PushNotificationHandling() {
     };
 
     // Add event listener to listen for messages from the service worker
-    navigator.serviceWorker.addEventListener('message', event => {
+    navigator.serviceWorker?.addEventListener('message', event => {
       if (event.data && event.data.subscriptionMessage) {
         event.source.postMessage({ confirmation: true });
         saveSubscription(event.data.subscriptionMessage);
@@ -55,7 +54,7 @@ function PushNotificationHandling() {
     });
     // Clean up the event listener when the component unmounts
     return () => {
-      navigator.serviceWorker.removeEventListener(
+      navigator.serviceWorker?.removeEventListener(
         'message',
         handleMessageFromServiceWorker
       );

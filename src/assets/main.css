@@ -334,8 +334,7 @@ button {
   justify-content: space-between;
   width: calc(17vw - 35px);
   margin-bottom: 3px;
-  margin-left: 5px;
-  padding-left: 22px;
+  padding-left: 19px;
   transition: background-color 0.3s ease;
 }
 
@@ -351,7 +350,7 @@ button {
 .report-bar {
   background-color: #6da9e4;
   width: calc(16vw - 6px);
-  height: calc(95vh - 1px) !important;
+  height: calc(95vh - 14px) !important;
 }
 .report-table {
   width: 100% !important;
@@ -748,23 +747,63 @@ button {
 .react-datepicker__tab-loop__end {
   display: none;
 }
-.react-datepicker__tab-loop {
+/* .react-datepicker__tab-loop {
   width: -webkit-fill-available;
+} */
+
+.to-date-tracking .react-datepicker__tab-loop {
+  width: -webkit-fill-available;
+}
+.from-date-tracking .react-datepicker__tab-loop {
+  width: -webkit-fill-available;
+}
+.report-search-button {
+  background: #32cd32 !important;
+  color: white !important;
+  height: 30px;
+  margin-left: 10px;
+}
+.report-search-button:hover {
+  background-color: #00b10c !important;
+}
+
+.report-required-warning-text {
+  animation: fadeIn 1000ms ease 0s 1 normal forwards;
+}
+@keyframes fadeIn {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+.report-header {
+  padding-top: 14px;
+  padding-left: 2px;
+  width: 100% !important;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 15px !important;
+}
+.report-table-view {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 15px;
+}
+.track-burgermenu-arrow {
+  display: none;
 }
 /* TABS END */
 
-/* SIDE BAR START */
-/* .navbar-vertical {
-    margin-top: 60px !important;
-    margin-left: 50px !important;
-    background-color: #fff !important;
-}
-
-.navbar-vertical .navbar-nav .nav-item .nav-link.active {
-    color: #6a6e72 !important;
-} */
-
-/* SIDE BAR END */
+/* ****************************************************************************************************************************************************** */
+/* ****************************************************************************************************************************************************** */
+/* ****************************************************************************************************************************************************** */
+/* ****************************************************************************************************************************************************** */
+/* ****************************************************************************************************************************************************** */
+/* ****************************************************************************************************************************************************** */
+/* ****************************************************************************************************************************************************** */
 
 /* MEDIA QUERY */
 
@@ -833,7 +872,7 @@ button {
 }
 @media only screen and (max-width: 1700px) {
   .custom-dropdown-toggle {
-    width: calc(17vw - 39px);
+    width: calc(17vw - 46px);
   }
   .table {
     width: 100% !important;
@@ -857,7 +896,8 @@ button {
     width: 100% !important;
   }
   .report-table-responsive {
-    height: calc(62vh - 0px) !important;
+    height: fit-content !important;
+    max-height: calc(65vh - 0px) !important;
   }
   .no-data-div {
     left: 45%;
@@ -877,6 +917,10 @@ button {
     right: 8px;
     top: 2px;
   }
+  .report-bar {
+    width: calc(16vw - 6px);
+    height: calc(95vh - 3px) !important;
+}
 }
 @media only screen and (max-width: 1500px) {
   .Tracking-list-table {
@@ -1067,8 +1111,8 @@ button {
   }
   .notification-indicator-count {
     font-size: 8px !important;
-    top: -3px;
-    right: 7px;
+    top: -2px;
+    right: 8px;
   }
   .notification-indicator-count-10 {
     right: 6.5px;
@@ -1279,7 +1323,8 @@ button {
     height: 20px;
   }
   .vehicle-selection {
-    justify-content: space-evenly;
+    justify-content: center;
+    margin-bottom: 3px;
   }
 }
 
@@ -1319,7 +1364,7 @@ button {
   }
   .track-burgermenu-active {
     display: block;
-    margin-top: 40px;
+    margin-top: 30px;
     margin-left: 7px !important;
   }
   .track-burgermenu {
@@ -1394,9 +1439,7 @@ button {
   * {
     font-size: 14px !important;
   }
-  /* .mobile-monitoring-table {
-    padding-right: 10px;
-  } */
+
   .dashboard-graph-mobile {
     padding-right: 25px !important;
   }
@@ -1432,7 +1475,7 @@ button {
     font-size: 7px !important;
   }
   .report-bar {
-    width: calc(18vw - 7px);
+    /* width: calc(18vw - 7px); */
   }
   .date-time {
     color: #fff;
@@ -1456,6 +1499,17 @@ button {
   .filter-clear-btn {
     font-size: 10px !important;
     padding: 3px !important;
+  }
+  .report-search-button {
+    height: 25px;
+  }
+
+  .mobile-view-report-table {
+    flex-direction: column;
+    align-content: flex-start;
+  }
+  .footer-report {
+    width: 85% !important;
   }
 }
 
@@ -1577,7 +1631,7 @@ button {
     z-index: 1;
   }
   .custom-dropdown-toggle {
-    width: calc(12vw - 0px);
+    width: calc(12vw - -13px);
     margin-left: 6px;
     font-size: 6px !important;
     transition: 0.3s ease-in-out;
@@ -1590,8 +1644,8 @@ button {
   }
   .km-report-select-vehicle {
     height: 25px;
-    margin-left: 5px;
-    width: 150px !important;
+    margin-left: 0px;
+    width: 160px !important;
     font-size: 11px !important;
   }
   .km-report-label {
@@ -1599,7 +1653,7 @@ button {
     max-width: 60px;
   }
   .report-table-responsive {
-    height: calc(50vh - 0px) !important;
+    height: calc(45vh - 0px) !important;
   }
   .km-report-clr-btn {
     margin-top: 3px;
@@ -1615,24 +1669,40 @@ button {
     margin-top: 30px;
     margin-left: 7px !important;
   }
+  .track-burgermenu-arrow {
+    display: block;
+    margin-top: 34px;
+    margin-left: 0px !important;
+  }
   .mob-inactive-navbar {
     display: none !important;
   }
   .history-tracking-input-container {
     display: flex;
     justify-content: space-evenly;
+    margin-bottom: 4px;
   }
+  .tracking-table-button {
+    padding-left: calc(53vw - 0px) !important;  
+  }
+  .clear-tracking-btn {
+    height: 20px;
+    padding-top: 2px;
+}
+.history-tracking-button{
+  padding-top: 2px;
+}
 }
 
 @media (max-width: 500px) {
   .report-bar.active {
     width: 70px;
     z-index: 1;
-    height: calc(89vh - 15px) !important;
+    height: calc(89vh - 13px) !important;
   }
   .report-bar {
     width: 0;
-    height: calc(85vh - 15px) !important;
+    height: calc(89vh - 15px) !important;
     transition: 0.4s ease-in-out;
     margin-top: -15px;
     position: absolute;

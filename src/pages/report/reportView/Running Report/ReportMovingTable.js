@@ -10,7 +10,7 @@ import { FaCalendarDays } from 'react-icons/fa6';
 import useDatePicker from 'pages/report/DatePickerHandler';
 import { KMReportURL, VehicleDataURL } from '../../../../URL/url';
 
-const ReportKMTable = () => {
+const ReportRunningTable = () => {
   const [vehicleData, setVehicleData] = useState([]);
   const [fromOpen, toggleFromOpen] = useDatePicker(false);
   const [toOpen, toggleToOpen] = useDatePicker(false);
@@ -22,6 +22,7 @@ const ReportKMTable = () => {
   const [showTable, setShowTable] = useState(false);
   const [resetDate, setResetDate] = useState(false);
   const [noData, setNoData] = useState(false);
+  const [AllInput, setAllInput] = useState(false);
   const [InvalidDate, setInvalidDate] = useState(false);
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
   useEffect(() => {
@@ -50,6 +51,7 @@ const ReportKMTable = () => {
     setFieldDateTime({});
     setResetDate(false);
     setInvalidDate(false);
+    setAllInput(false);
   };
   const handleDateChange = (date, fieldName) => {
     setNoData(false);
@@ -62,7 +64,8 @@ const ReportKMTable = () => {
   };
 
   //set the query from the selected Date
-  useEffect(() => {
+  const handleSearch = () => {
+    console.log('In');
     if (DateTime.FromDateTime && DateTime.ToDateTime && DateTime.vehicleNo) {
       const fromDateTime = new Date(DateTime.FromDateTime);
       const toDateTime = new Date(DateTime.ToDateTime);
@@ -93,6 +96,7 @@ const ReportKMTable = () => {
             DateTime.vehicleNo
           }`
         );
+        setAllInput(false);
       } else {
         setKMTrackingQuery(null);
         setInvalidDate(true);
@@ -102,8 +106,10 @@ const ReportKMTable = () => {
         setResetDate(true);
         setKMReportData([]);
       }
+    } else {
+      setAllInput(true);
     }
-  }, [DateTime]);
+  };
 
   //Retrieve selected date data from the API.
   useEffect(() => {
@@ -153,7 +159,6 @@ const ReportKMTable = () => {
     }
   }, [KMTrackingQuery]);
   const handleVehicleNameChange = e => {
-    console.log(e.target.value);
     if (e.target.value !== 'Select') {
       const VehicleID = vehicleData.find(
         data => data.vehicle_name === e.target.value
@@ -256,9 +261,7 @@ const ReportKMTable = () => {
 
   return (
     <div className={`${window.innerWidth < 530 ? 'mt-0 ms-1' : 'mt-4'}`}>
-      <div
-        className="d-flex flex-row pt-3 flex-wrap align-items-center"
-      >
+      <div className="d-flex flex-row pt-3 flex-wrap align-items-center">
         <div className="mb-3 d-flex">
           <label className="me-2 m-auto">From Date:</label>
           <DatePicker
@@ -270,7 +273,6 @@ const ReportKMTable = () => {
             className="fs--1 report-input"
             maxDate={new Date()}
             onInputClick={toggleFromOpen}
-            // onSelect={toggleFromOpen}
             onClickOutside={toggleFromOpen}
             readOnly
             timeIntervals={15}
@@ -279,7 +281,11 @@ const ReportKMTable = () => {
             <FaCalendarDays />
           </span>
         </div>
-        <div className={`${window.innerWidth < 530 ? 'mb-3 ms-2 d-flex': 'mb-3 ms-3 d-flex' }`}>
+        <div
+          className={`${
+            window.innerWidth < 530 ? 'mb-3 ms-2 d-flex' : 'mb-3 ms-3 d-flex'
+          }`}
+        >
           <label className=" me-2 m-auto">To Date:</label>
           <DatePicker
             open={toOpen}
@@ -289,7 +295,6 @@ const ReportKMTable = () => {
             dateFormat="MMMM d, yyyy h:mmaa"
             className="fs--1 report-input ms-3"
             maxDate={new Date()}
-            // onSelect={toggleToOpen}
             onInputClick={toggleToOpen}
             onClickOutside={toggleToOpen}
             readOnly
@@ -299,7 +304,7 @@ const ReportKMTable = () => {
             <FaCalendarDays />
           </span>
         </div>
-        <div className="mb-3 ms-2 d-flex">
+        <div className="mb-2 ms-2 d-flex">
           <label className="km-report-label">Select Vehicle</label>
           <Form.Select
             className="km-report-select-vehicle"
@@ -314,10 +319,19 @@ const ReportKMTable = () => {
           </Form.Select>
         </div>
         <div className="mb-3">
+          <Button
+            variant=""
+            className="fs--1 report-search-button"
+            onClick={() => {
+              handleSearch();
+            }}
+          >
+            Search
+          </Button>
           {resetDate && (
             <Button
               variant="danger"
-              onClick={handleReset}
+              onClick={handleReset} 
               className="ms-2 fs--1 p-1 ps-2 pe-2 km-report-clr-btn "
             >
               Clear
@@ -327,6 +341,11 @@ const ReportKMTable = () => {
       </div>
       {InvalidDate && (
         <div className="text-danger">Please enter a valid Date and Time.</div>
+      )}
+      {AllInput && (
+        <div className="text-danger fs--1 report-required-warning-text">
+          Please make sure to fill out all the required information.
+        </div>
       )}
       {noData && (
         <div className="no-data-div">
@@ -364,4 +383,4 @@ const ReportKMTable = () => {
   );
 };
 
-export default ReportKMTable;
+export default ReportRunningTable;

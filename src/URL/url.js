@@ -12,6 +12,10 @@ export const NotificationURL =
 
 export const KMReportURL =
   'https://sbmsadmin.elenageosys.com/record/km_report/';
-
+//Vehicle Data url
 export const VehicleDataURL = 'https://sbmsadmin.elenageosys.com/vehicle/';
+//socket connection URL
+export const socketURL = 'ws://192.168.0.122:8000/ws/';
+export const PushNotificationURL = 'http://192.168.0.122:8000/api/subscribe/';
+
 // https://sbmsadmin.elenageosys.com/

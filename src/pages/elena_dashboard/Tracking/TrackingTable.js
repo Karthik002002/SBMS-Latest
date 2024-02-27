@@ -42,7 +42,6 @@ const TrackingTable = ({
     const selectedVehicleIMEI = vehicleData.find(
       data => data.vehicleName === selectedVehicle
     );
-    console.log(selectedVehicleIMEI);
     setIMEIURL(selectedVehicleIMEI?.vehicle_id || null);
   }, [selectedVehicle]);
 
@@ -125,8 +124,10 @@ const TrackingTable = ({
               selected={FieldDateTime?.FromDateTime}
               selectsStart
               maxDate={new Date()}
+              className=""
               onChange={date => handleDateChange(date, 'FromDateTime')}
               timeIntervals={15}
+              style={{ width: '0 !important' }}
             />
           </div>
           <div className="to-date-tracking">
@@ -145,54 +146,54 @@ const TrackingTable = ({
               timeIntervals={15}
             />
           </div>
-         
-            {invalidDate && (
-              <span
-                style={{
-                  color: 'red',
-                  marginTop: '5px',
-                  fontSize: '13px',
-                  textAlign: 'center',
-                  display: 'block'
-                }}
-              >
-                Enter Valid Date & Time.
-              </span>
-            )}
-          </div>
-          <div>
-            <div className="tracking-enter-button-container">
-              <Button
-                variant=""
-                className="fs--1 history-tracking-button"
-                onClick={() => {
-                  setSearch(true);
-                }}
-              >
-                Search
-              </Button>
-              <div
-                className={`tracking-history-clr-btn${
-                  HistoryTrackingActive ? '-active' : ''
-                }`}
-              >
-                {HistoryTrackingActive && (
-                  <Button
-                    variant="danger"
-                    className="fs--1"
-                    onClick={() => {
-                      setHistoryTrackingActive(false);
-                      setHistoryTrackingURL(null);
-                      setDateTime({});
-                      setFieldDateTime({ FromDateTime: '', ToDateTime: '' });
-                      setIMEI(null);
-                    }}
-                  >
-                    Clear
-                  </Button>
-                )}
-              </div>
+
+          {invalidDate && (
+            <span
+              style={{
+                color: 'red',
+                marginTop: '5px',
+                fontSize: '13px',
+                textAlign: 'center',
+                display: 'block'
+              }}
+            >
+              Enter Valid Date & Time.
+            </span>
+          )}
+        </div>
+        <div>
+          <div className="tracking-enter-button-container">
+            <Button
+              variant=""
+              className="fs--1 history-tracking-button"
+              onClick={() => {
+                setSearch(true);
+              }}
+            >
+              Search
+            </Button>
+            <div
+              className={`tracking-history-clr-btn${
+                HistoryTrackingActive ? '-active' : ''
+              }`}
+            >
+              {HistoryTrackingActive && (
+                <Button
+                  variant="danger"
+                  className="fs--1 clear-tracking-btn"
+                  onClick={() => {
+                    setHistoryTrackingActive(false);
+                    setHistoryTrackingURL(null);
+                    setDateTime({});
+                    setFieldDateTime({ FromDateTime: '', ToDateTime: '' });
+                    setIMEI(null);
+                  }}
+                >
+                  Clear
+                </Button>
+              )}
             </div>
+          </div>
         </div>
       </div>
     </div>

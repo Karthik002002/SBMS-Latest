@@ -14,8 +14,14 @@ const MarkerComp = () => {
   const map = useMap();
 
   const [marker, setMarker] = useState([]);
-  const [position, setPosition] = useState(null);
-
+  // const [position, setPosition] = useState(null);
+  const [LiveMarker, setLiveMarker] = useState({
+    position: null,
+    statusText: null,
+    icon: null,
+    vehicleData: null
+  });
+  const { position,statusText, icon, vehicleData } = LiveMarker;
   const {
     markerData,
     ZoomLevel,
@@ -23,30 +29,71 @@ const MarkerComp = () => {
     HistoryTrackingActive,
     SocketLiveMarker
   } = useListFilterContext();
+
   useEffect(() => {
     if (SocketLiveMarker !== null) {
-      setPosition([SocketLiveMarker.lat, SocketLiveMarker.lon]);
-      console.log(SocketLiveMarker);
-      //   setPosition([SocketLiveMarker[2], SocketLiveMarker[3]]);
+      function getStatusAndIcon(speed, ignition) {
+        let statusText;
+        let icon;
+        if (speed === 0 && ignition === 0) {
+          statusText = 'Stopped;';
+          icon = StoppedPNG;
+        } else if (speed > 60 && ignition === 1) {
+          statusText = 'RashDriving';
+          icon = RashDrivingPNG;
+        } else if (speed > 0 && ignition === 1) {
+          statusText = 'Moving';
+          icon = RunningPNG;
+        } else if (speed === 0 && ignition === 1) {
+          statusText = 'Idle';
+          icon = IdlePNG;
+        } else if (speed > 0 && ignition === 0) {
+          statusText = 'Towed';
+          icon = TowedPNG;
+        }
+        return {
+          statusText: statusText,
+          icon: icon
+        };
+      }
+
+      const { speed, ignition, lat, lon, imei } = SocketLiveMarker;
+      const IMEIData = markerData.find(data => data.imei === imei);
+      console.log(IMEIData);
+      const numberedLat = Number(lat);
+      const numberedLon = Number(lon);
+      const position = [numberedLat, numberedLon];
+      const statusText = getStatusAndIcon(Number(speed), Number(ignition));
+      const iconHtml = `<img src="${statusText.icon}"  width="25" height="30" />`;
+      const customMarkerIcon = divIcon({
+        className: 'custom-marker-icon',
+        html: iconHtml,
+        iconSize: [25, 41],
+        iconAnchor: [21, 36],
+        popupAnchor: [1, -34]
+      });
+      const finalData = {
+        position: position,
+        statusText: statusText.statusText,
+        icon: customMarkerIcon,
+        vehicleData: IMEIData
+      };
+      setLiveMarker(finalData);
+      map.panTo([numberedLat, numberedLon], 17);
+      map.setView([numberedLat, numberedLon], 17);
     }
-  }, [SocketLiveMarker]);
+  }, [map, SocketLiveMarker]);
+
+  // useEffect(() => {
+  //   if (ZoomLevel !== null && TrackingVehicleCenter !== null) {
+  //     map.setZoom(ZoomLevel);
+  //     // map.panTo(TrackingVehicleCenter);
+  //   }
+  // }, [map, TrackingVehicleCenter]);
+
   useEffect(() => {
-    if (ZoomLevel !== null && TrackingVehicleCenter !== null) {
-      map.setZoom(ZoomLevel);
-      map.panTo(TrackingVehicleCenter);
-    }
-  }, [map, TrackingVehicleCenter]);
-  useEffect(() => {
-    if (SocketLiveMarker !== null) {
-      map.panTo([SocketLiveMarker.lat, SocketLiveMarker.lon]);
-    }
-  }, [SocketLiveMarker]);
-  let markers = [];
-  useEffect(() => {
-    console.log(marker);
-    markers = [];
+    const markers = [];
     function getStatusAndIcon(status, speed_status) {
-      // console.log(speed_status);
       let statusText;
 
       switch (status) {
@@ -141,6 +188,7 @@ const MarkerComp = () => {
   return (
     <div>
       {!HistoryTrackingActive &&
+        SocketLiveMarker === null &&
         marker.map((marker, index) => (
           <Marker
             key={index}
@@ -165,9 +213,23 @@ const MarkerComp = () => {
             </Popup>
           </Marker>
         ))}
-      {!HistoryTrackingActive && position !== null && (
+      {!HistoryTrackingActive && LiveMarker.position !== null && (
         <>
-          <Marker position={position}></Marker>
+          <Marker position={position} icon={icon}>
+            <Popup>
+              <div>
+                <p className="m-0 text-500">
+                  Vehicle Name: {vehicleData.vehicle_name}
+                </p>
+                <p className="m-0 text-500">
+                  Vehicle Reg: {vehicleData.vehicle_reg}
+                </p>
+                <p className="m-0 text-500">Driver: {vehicleData.driver}</p>
+                <p className="m-0 text-500">Driver Phone: {vehicleData.phone}</p>
+                <p className="m-0 text-500">Current Status:  {statusText}</p>
+              </div>
+            </Popup>
+          </Marker>
         </>
       )}
     </div>

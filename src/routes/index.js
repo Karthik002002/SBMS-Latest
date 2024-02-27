@@ -4,12 +4,16 @@ import MainLayout from '../layouts/CustomMainLayout';
 import ErrorLayout from '../layouts/ErrorLayout';
 import AdminDashboard from 'pages/elena_dashboard/AdminDashboard';
 import Monitoring from 'pages/elena_dashboard/Tracking/Tracking';
-import { FilterData, FilterProvider } from 'context/FilterContext';
+import { FilterData } from 'context/FilterContext';
 import ReportKMTracking from 'pages/report/reportView/KMTracking/ReportKM';
 import { PingData } from 'context/PingContext';
 import ReportLayout from 'layouts/ReportLayout';
 import { WebSocketProvider } from 'context/SocketContext';
 import ReportIdle from 'pages/report/reportView/Idle Report/IdleReport';
+import ReportMoving from 'pages/report/reportView/Running Report/ReportRunning';
+import ReportHistoryTracking from 'pages/report/reportView/HistoryTrackingReport/HistoryTracking';
+import ReportStopped from 'pages/report/reportView/Stopped/ReportStopped';
+import ReportConsolidated from 'pages/report/reportView/Consolidated Report/ConsolidatedReport';
 
 // const Landing = lazy(() => import('components/pages/landing/Landing'));
 const Error404 = lazy(() => import('components/errors/Error404'));
@@ -136,10 +140,42 @@ const FalconRoutes = () => {
                 }
               />
               <Route
-                path="/report/Idle"
+                path="/report/idle"
                 element={
                   <Suspense>
                     <ReportIdle />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/report/running"
+                element={
+                  <Suspense>
+                    <ReportMoving />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/report/history-tracking"
+                element={
+                  <Suspense>
+                    <ReportHistoryTracking />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/report/stopped"
+                element={
+                  <Suspense>
+                    <ReportStopped />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/report/consolidated"
+                element={
+                  <Suspense>
+                    <ReportConsolidated />
                   </Suspense>
                 }
               />

@@ -12,10 +12,10 @@ const TileLayerWithFilter = () => {
     if (map) {
       const filter = isDark
         ? [
-            'invert:98%',
-            'grayscale:69%',
+            'invert:85%',
+            'grayscale:39%',
             'bright:99%',
-            'contrast:111%',
+            'contrast:121%',
             'hue:203deg',
             'saturate:1000%'
           ]

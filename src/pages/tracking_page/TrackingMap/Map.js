@@ -9,7 +9,7 @@ const Map = () => {
   return (
     <div className="map-container">
       <MapContainer
-        zoom={5}
+        zoom={`${window.innerWidth < 530 ? 4   : 5}`}
         center={[22.026176805638872, 78.42122221495495]}
         style={{ height: '90vh', width: '100%' }}
         minZoom={3}

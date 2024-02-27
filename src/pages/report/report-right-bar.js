@@ -1,36 +1,52 @@
-import { faArrowAltCircleRight } from '@fortawesome/free-regular-svg-icons';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  IoArrowBackCircleOutline,
-  IoArrowForwardCircleOutline
-} from 'react-icons/io5';
+import { useListFilterContext } from 'context/FilterContext';
+import { useWebSocket } from 'context/SocketContext';
+import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
+import { BiSolidReport } from 'react-icons/bi';
 
 import { NavLink } from 'react-router-dom';
 
 const ReportBar = () => {
+  const socket = useWebSocket();
   const [mobNavBar, setMobNavBar] = useState(false);
+  const { IMEI, setIMEI } = useListFilterContext();
+  useEffect(() => {
+    if (IMEI !== null) {
+      socket.send(`stop:${IMEI}`);
+      setIMEI(null);
+    }
+  }, []);
 
   return (
     <div className={` ${mobNavBar ? 'report-bar active' : 'report-bar'}`}>
-      <div>
+      {/* <div>
         {mobNavBar ? (
-          <IoArrowBackCircleOutline
+          <div className="d-flex" style={{ width: 'max-content' }}>
+          <BiSolidReport
             size={18}
             onClick={() => setMobNavBar(false)}
-            className="track-burgermenu-active"
-          />
-        ) : (
-          <IoArrowForwardCircleOutline
-            size={18}
-            onClick={() => setMobNavBar(true)}
             className="track-burgermenu"
           />
+          <MdArrowBackIos 
+            onClick={() => setMobNavBar(false)}
+            className="track-burgermenu-arrow"
+          />
+        </div>
+        ) : (
+          <div className="d-flex" style={{ width: 'max-content' }}>
+            <BiSolidReport
+              size={18}
+              onClick={() => setMobNavBar(true)}
+              className="track-burgermenu"
+            />
+            <MdArrowForwardIos 
+              onClick={() => setMobNavBar(true)}
+              className="track-burgermenu-arrow"
+            />
+          </div>
         )}
 
-        {}
-      </div>
+      </div> */}
       <div
         className={`${
           mobNavBar ? 'mob-inactive-navbar-active' : 'mob-inactive-navbar'
@@ -44,11 +60,32 @@ const ReportBar = () => {
           KM Tracking Report
         </NavLink>
         <NavLink
-          to="/report/Idle"
+          to="/report/idle"
           className={`custom-dropdown-toggle`}
           activeClassName="active-link"
         >
           Idle Report
+        </NavLink>
+        <NavLink
+          to="/report/running"
+          className={`custom-dropdown-toggle`}
+          activeClassName="active-link"
+        >
+          Running Report
+        </NavLink>
+        <NavLink
+          to="/report/stopped"
+          className={`custom-dropdown-toggle`}
+          activeClassName="active-link"
+        >
+          Stopped Report
+        </NavLink>
+        <NavLink
+          to="/report/history-tracking"
+          className={`custom-dropdown-toggle`}
+          activeClassName="active-link"
+        >
+          History Tracking Report
         </NavLink>
       </div>
     </div>

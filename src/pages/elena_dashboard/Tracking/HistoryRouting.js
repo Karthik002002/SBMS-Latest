@@ -122,7 +122,7 @@ const HistoryRouting = React.memo(function HistoryRouting() {
               : ParkedPNG;
             const customIcon = L.icon({
               iconUrl: iconUrl,
-              iconSize: [35, 35], // Adjust size as needed
+              iconSize: [45, 37], // Adjust size as needed
               iconAnchor: [10, 15] // Adjust anchor point as needed
             });
             marker = L.marker(waypoint.latLng, {

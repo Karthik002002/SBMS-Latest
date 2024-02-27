@@ -13,7 +13,7 @@ const urlB64ToUint8Array = base64String => {
   }
   return outputArray;
 }; // saveSubscription saves the subscription to the backend
-
+let sendMessageInterval;
 self.addEventListener('activate', async () => {
   // This will be called only once when the service worker is activated.
   try {
@@ -23,15 +23,9 @@ self.addEventListener('activate', async () => {
     const options = { applicationServerKey, userVisibleOnly: true };
     const subscription = await self.registration.pushManager.subscribe(options);
     // const response = await saveSubscription(subscription);
-    let sendMessageInterval;
 
     // Listen for messages from the main application
-    self.addEventListener('message', event => {
-      if (event.data && event.data.confirmation) {
-        // If client confirms received message, resume sending
-        clearInterval(sendMessageInterval);
-      }
-    });
+
     // Start sending messages initially
     sendMessageInterval = setInterval(() => {
       self.clients.matchAll().then(clients => {
@@ -46,6 +40,12 @@ self.addEventListener('activate', async () => {
     // console.log(response);
   } catch (err) {
     console.log('Error', err);
+  }
+});
+self.addEventListener('message', event => {
+  if (event.data && event.data.confirmation) {
+    // If client confirms received message, resume sending
+    clearInterval(sendMessageInterval);
   }
 });
 

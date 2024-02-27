@@ -217,9 +217,9 @@ const AdminDashboard = () => {
       }
     };
 
-    // if (IMEI !== null) {
-    //   socket.send(`stop:${IMEI}`);
-    // }
+    if (IMEI !== null) {
+      socket.send(`stop:${IMEI}`);
+    }
     // if (socket) {
     //   socket.onmessage = event => {
     //     console.log('Message received from server:', event.data);

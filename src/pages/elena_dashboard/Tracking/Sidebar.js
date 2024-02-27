@@ -66,7 +66,9 @@ const Sidebar = ({ data }) => {
       setSocketImei(data);
     }
     setIMEI(data);
-    socket.send(`imei:${data}`);
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(`imei:${data}`);
+    }
   };
   useEffect(() => {
     return () => {

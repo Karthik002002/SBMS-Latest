@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useListFilterContext } from './FilterContext';
+import { socketURL } from '../URL/url';
 
 // Create a WebSocket context
 const WebSocketContext = createContext();
@@ -14,14 +15,13 @@ export const WebSocketProvider = ({ children }) => {
   const userData = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
   useEffect(() => {
     // Create and establish the WebSocket connection
-    const socketConnection = new WebSocket('ws://192.168.0.122:8000/ws/');
+    const socketConnection = new WebSocket(socketURL);
 
     // Connection opened
-    socketConnection.addEventListener('open', event => {
+    socketConnection?.addEventListener('open', event => {
       if (userData) {
         const { user_id } = userData;
-        console.log('WebSocket connection opened:', event);
-
+        console.log('WebSocket connection opened.');
         // Send a message to the server
         socketConnection.send(`user:${user_id}`);
       }
@@ -36,24 +36,21 @@ export const WebSocketProvider = ({ children }) => {
     }, 10 * 1000);
 
     // Listen for messages from the server
-    socketConnection.addEventListener('message', event => {
+    socketConnection?.addEventListener('message', event => {
       const recievedData = JSON.parse(event.data);
-
-      console.log(recievedData);
       if (recievedData.content.hasOwnProperty('imei')) {
         setSocketLiveMarker(recievedData.content);
       }
-      console.log(typeof event.data);
       // setSocketLiveMarker(requiredData);
     });
 
     // Listen for errors
-    socketConnection.addEventListener('error', event => {
+    socketConnection?.addEventListener('error', event => {
       console.error('WebSocket error:', event);
     });
 
     // Connection closed
-    socketConnection.addEventListener('close', event => {
+    socketConnection?.addEventListener('close', event => {
       console.log('WebSocket connection closed:', event);
     });
 

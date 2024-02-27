@@ -9,8 +9,8 @@ import ReportTablePagination from 'pages/report/report-tablepagination';
 import { FaCalendarDays } from 'react-icons/fa6';
 import useDatePicker from 'pages/report/DatePickerHandler';
 import { KMReportURL, VehicleDataURL } from '../../../../URL/url';
-
-const ReportIdleTable = () => {
+import styles from './reportmoving.module.css'
+const ReportKMTable = () => {
   const [vehicleData, setVehicleData] = useState([]);
   const [fromOpen, toggleFromOpen] = useDatePicker(false);
   const [toOpen, toggleToOpen] = useDatePicker(false);
@@ -24,6 +24,10 @@ const ReportIdleTable = () => {
   const [AllInput, setAllInput] = useState(false);
   const [InvalidDate, setInvalidDate] = useState(false);
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
+  const pageOptions = [
+    { Name: 'KM Tracking Report', link: '/report/KM-report' },
+    {Name: 'Idle Report', link : ''}
+  ];
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -244,7 +248,13 @@ const ReportIdleTable = () => {
   return (
     <>
       {window.innerWidth < 530 && (
-        <div className="report-header">Idle Report</div>
+        <>
+          <div className="report-header">KM Tracking Report</div>
+          <div>
+            <label>Select Page</label>
+            <select></select>
+          </div>
+        </>
       )}
       <div className={`${window.innerWidth < 530 ? 'mt-0 ms-1' : 'mt-4'}`}>
         <div className=" report-table-view mobile-view-report-table ">
@@ -279,7 +289,7 @@ const ReportIdleTable = () => {
               onChange={date => handleDateChange(date, 'ToDateTime')}
               showTimeSelect
               dateFormat="MMMM d, yyyy h:mmaa"
-              className="fs--1 report-input ms-3"
+              className={`fs--1 report-input ms-3`}
               maxDate={new Date()}
               onInputClick={toggleToOpen}
               onClickOutside={toggleToOpen}
@@ -374,4 +384,4 @@ const ReportIdleTable = () => {
   );
 };
 
-export default ReportIdleTable;
+export default ReportKMTable;

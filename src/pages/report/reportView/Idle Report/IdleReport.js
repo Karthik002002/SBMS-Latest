@@ -13,10 +13,10 @@ const ReportIdle = () => {
   return (
     <>
       <Row>
-        <Col xs={1} sm={2} md={2}>
+      <Col xs={0} sm={2} md={2}>
           <ReportBar />
         </Col>
-        <Col xs={11} sm={10} md={10}>
+        <Col xs={12} sm={10} md={10}>
           <ReportIdleTable />
           <div>
             <ReportFooter />
