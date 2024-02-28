@@ -9,7 +9,7 @@ import ReportTablePagination from 'pages/report/report-tablepagination';
 import { FaCalendarDays } from 'react-icons/fa6';
 import useDatePicker from 'pages/report/DatePickerHandler';
 import { KMReportURL, VehicleDataURL } from '../../../../URL/url';
-import styles from './reportmoving.module.css'
+import { Link, useNavigate } from 'react-router-dom';
 const ReportKMTable = () => {
   const [vehicleData, setVehicleData] = useState([]);
   const [fromOpen, toggleFromOpen] = useDatePicker(false);
@@ -23,10 +23,14 @@ const ReportKMTable = () => {
   const [noData, setNoData] = useState(false);
   const [AllInput, setAllInput] = useState(false);
   const [InvalidDate, setInvalidDate] = useState(false);
+  const Navigate = useNavigate();
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
   const pageOptions = [
-    { Name: 'KM Tracking Report', link: '/report/KM-report' },
-    {Name: 'Idle Report', link : ''}
+    { Name: 'KM Tracking Report', link: 'KM-report' },
+    { Name: 'Idle Report', link: 'idle' },
+    { Name: 'Running Report', link: 'running' },
+    { Name: 'Stopped Report', link: 'stopped' },
+    { Name: 'History Tracking Report', link: 'history-tracking' }
   ];
   useEffect(() => {
     const fetchData = async () => {
@@ -143,12 +147,16 @@ const ReportKMTable = () => {
       }
     }
   };
-
+  const handlePageSelection = e => {
+    const { value } = e.target;
+    Navigate(`/report/${value}`);
+  };
   const handleVehicleNameChange = e => {
     if (e.target.value !== 'Select') {
       const VehicleID = vehicleData.find(
-        data => data.vehicle_name === e.target.value
+        data => data.reg_no === e.target.value
       );
+      console.log(VehicleID);
       setDateTime({ ...DateTime, vehicleNo: VehicleID.id });
     } else {
       setDateTime({ ...DateTime, vehicleNo: null });
@@ -249,14 +257,28 @@ const ReportKMTable = () => {
     <>
       {window.innerWidth < 530 && (
         <>
-          <div className="report-header">KM Tracking Report</div>
-          <div>
-            <label>Select Page</label>
-            <select></select>
+          <div className="report-header">
+            KM Tracking Report
+            <div>
+              <label className="report-mobile-select-label">Page:</label>
+              <select
+                onChange={e => handlePageSelection(e)}
+                className="report-mobile-select"
+              >
+                <option value="'" key="1">
+                  Select
+                </option>
+                {pageOptions.map(page => (
+                  <option value={page.link} key={page.link}>
+                    {page.Name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </>
       )}
-      <div className={`${window.innerWidth < 530 ? 'mt-0 ms-1' : 'mt-4'}`}>
+      <div className={`${window.innerWidth < 530 ? 'mt-0 ms-1' : 'mt-2'}`}>
         <div className=" report-table-view mobile-view-report-table ">
           <div className="mb-3 d-flex">
             <label className="me-2 m-auto">From Date:</label>
@@ -310,7 +332,9 @@ const ReportKMTable = () => {
             >
               <option value={null}>Select</option>
               {vehicleData.map(data => (
-                <option value={data.vehicle_name}>{data.vehicle_name}</option>
+                <option value={data.reg_no} key={data.id}>
+                  {data.reg_no}
+                </option>
               ))}
             </Form.Select>
           </div>
@@ -340,7 +364,7 @@ const ReportKMTable = () => {
         )}
         {AllInput && (
           <div className="text-danger fs--1 report-required-warning-text">
-            Please make sure to fill out all the required information.
+            Fill out all required information.
           </div>
         )}
         {noData && (

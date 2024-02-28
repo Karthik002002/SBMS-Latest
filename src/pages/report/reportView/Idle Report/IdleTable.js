@@ -8,7 +8,8 @@ import { startOfDay, endOfDay, format, isBefore } from 'date-fns';
 import ReportTablePagination from 'pages/report/report-tablepagination';
 import { FaCalendarDays } from 'react-icons/fa6';
 import useDatePicker from 'pages/report/DatePickerHandler';
-import { KMReportURL, VehicleDataURL } from '../../../../URL/url';
+import { IdleReportURL, VehicleDataURL } from '../../../../URL/url';
+import { useNavigate } from 'react-router-dom';
 
 const ReportIdleTable = () => {
   const [vehicleData, setVehicleData] = useState([]);
@@ -23,7 +24,15 @@ const ReportIdleTable = () => {
   const [noData, setNoData] = useState(false);
   const [AllInput, setAllInput] = useState(false);
   const [InvalidDate, setInvalidDate] = useState(false);
+  const Navigate = useNavigate();
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
+  const pageOptions = [
+    { Name: 'KM Tracking Report', link: 'KM-report' },
+    { Name: 'Idle Report', link: 'idle' },
+    { Name: 'Running Report', link: 'running' },
+    { Name: 'Stopped Report', link: 'stopped' },
+    { Name: 'History Tracking Report', link: 'history-tracking' }
+  ];
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -77,7 +86,7 @@ const ReportIdleTable = () => {
         setIsLoading(true);
         setNoData(false);
         setInvalidDate(false);
-        query = `${KMReportURL}?from_date=${
+        query = `${IdleReportURL}?from_date=${
           DateTime.FromDateTime.split(' ')[0]
         }&to_date=${DateTime.ToDateTime.split(' ')[0]}&from_time=${
           DateTime.FromDateTime.split(' ')[1]
@@ -139,11 +148,14 @@ const ReportIdleTable = () => {
       }
     }
   };
-
+  const handlePageSelection = e => {
+    const { value } = e.target;
+    Navigate(`/report/${value}`);
+  };
   const handleVehicleNameChange = e => {
     if (e.target.value !== 'Select') {
       const VehicleID = vehicleData.find(
-        data => data.vehicle_name === e.target.value
+        data => data.reg_no === e.target.value
       );
       setDateTime({ ...DateTime, vehicleNo: VehicleID.id });
     } else {
@@ -244,9 +256,29 @@ const ReportIdleTable = () => {
   return (
     <>
       {window.innerWidth < 530 && (
-        <div className="report-header">Idle Report</div>
+        <>
+          <div className="report-header">
+            Idle Report
+            <div>
+              <label className="report-mobile-select-label">Page:</label>
+              <select
+                onChange={e => handlePageSelection(e)}
+                className="report-mobile-select"
+              >
+                <option value="'" key="1">
+                  Select
+                </option>
+                {pageOptions.map(page => (
+                  <option value={page.link} key={page.link}>
+                    {page.Name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </>
       )}
-      <div className={`${window.innerWidth < 530 ? 'mt-0 ms-1' : 'mt-4'}`}>
+      <div className={`${window.innerWidth < 530 ? 'mt-0 ms-1' : 'mt-2'}`}>
         <div className=" report-table-view mobile-view-report-table ">
           <div className="mb-3 d-flex">
             <label className="me-2 m-auto">From Date:</label>
@@ -279,7 +311,7 @@ const ReportIdleTable = () => {
               onChange={date => handleDateChange(date, 'ToDateTime')}
               showTimeSelect
               dateFormat="MMMM d, yyyy h:mmaa"
-              className="fs--1 report-input ms-3"
+              className={`fs--1 report-input ms-3`}
               maxDate={new Date()}
               onInputClick={toggleToOpen}
               onClickOutside={toggleToOpen}
@@ -300,7 +332,9 @@ const ReportIdleTable = () => {
             >
               <option value={null}>Select</option>
               {vehicleData.map(data => (
-                <option value={data.vehicle_name}>{data.vehicle_name}</option>
+                <option value={data.reg_no} key={data.id}>
+                  {data.reg_no}
+                </option>
               ))}
             </Form.Select>
           </div>

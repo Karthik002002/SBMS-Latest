@@ -25,19 +25,27 @@ const Tracking = () => {
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
 
   useEffect(() => {
-    if (InitialData) {
-      const tableFormattedData = InitialData.flatMap(company => {
-        return company.data.flatMap(dataObj => {
-          const { Company_name, company_id } = dataObj;
-          return dataObj.schools.flatMap(school => {
-            const { school_name, school_id } = school;
-            return school.vehicles.map(vehicle => ({
-              ...vehicle,
-              Company_name,
-              company_id,
+    if (InitialData.length !== 0) {
+      const tableFormattedData = InitialData.data.flatMap(company => {
+        const { user_id, user_name, user_type } = InitialData;
+        const { company_name } = company;
+        return company.schools.flatMap(school => {
+          const { school_name } = school;
+          return school.vehicles.flatMap(vehicle => {
+            const { last_records, ...vehicleData } = vehicle;
+            const lastRecord = last_records[0];
+            const { kilometers, ...lastRecWithoutKilometers } =
+              lastRecord || {};
+
+            return {
+              ...vehicleData,
+              company_name,
               school_name,
-              school_id
-            }));
+              user_id,
+              user_name,
+              user_type,
+              ...lastRecWithoutKilometers
+            };
           });
         });
       });
@@ -50,10 +58,13 @@ const Tracking = () => {
     if (!HistoryTrackingActive) {
       const fetchData = async () => {
         try {
-          const response = await fetch(DashboardURL, {
-            method: 'GET',
-            headers: { Authorization: `token ${userToken.token}` }
-          });
+          const response = await fetch(
+            `${DashboardURL}?user=${userToken.user_id}`,
+            {
+              method: 'GET',
+              headers: { Authorization: `token ${userToken.token}` }
+            }
+          );
           if (response.status == 200) {
             const data = await response.json();
             // const orderedBuoysData = [...data].sort((a, b) =>

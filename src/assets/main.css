@@ -726,7 +726,7 @@ button {
 }
 
 .history-tracking-button {
-  background: linear-gradient(12deg, #96f550, #67bb2a);
+  background: #32cd32 !important;
   color: white !important;
   height: 30px;
 }
@@ -783,7 +783,10 @@ button {
   width: 100% !important;
   font-family: inherit;
   font-weight: 600;
+  display: flex;
   font-size: 15px !important;
+  align-items: center;
+  justify-content: space-between;
 }
 .report-table-view {
   display: flex;
@@ -794,6 +797,20 @@ button {
 }
 .track-burgermenu-arrow {
   display: none;
+}
+.profile-dropdown-container {
+  display: flex;
+  color: #2c7be5;
+  justify-content: center;
+}
+.report-mobile-select {
+  border: 0.5px solid grey;
+  padding: 2px 2px 2px 0px;
+  border-radius: 5px;
+  width: 95px;
+}
+.report-mobile-select-label {
+  margin-right: 3px;
 }
 /* TABS END */
 
@@ -920,7 +937,7 @@ button {
   .report-bar {
     width: calc(16vw - 6px);
     height: calc(95vh - 3px) !important;
-}
+  }
 }
 @media only screen and (max-width: 1500px) {
   .Tracking-list-table {
@@ -1509,7 +1526,7 @@ button {
     align-content: flex-start;
   }
   .footer-report {
-    width: 85% !important;
+    width: 100% !important;
   }
 }
 
@@ -1683,15 +1700,15 @@ button {
     margin-bottom: 4px;
   }
   .tracking-table-button {
-    padding-left: calc(53vw - 0px) !important;  
+    padding-left: calc(53vw - 0px) !important;
   }
   .clear-tracking-btn {
     height: 20px;
     padding-top: 2px;
-}
-.history-tracking-button{
-  padding-top: 2px;
-}
+  }
+  .history-tracking-button {
+    padding-top: 2px;
+  }
 }
 
 @media (max-width: 500px) {

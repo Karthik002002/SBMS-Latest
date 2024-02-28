@@ -15,9 +15,7 @@ export const FilterData = ({ children }) => {
   });
   //for map and live tracking
   const [ActiveVehicle, setActiveVehicle] = useState(null);
-  const [TrackingVehicleCenter, setTrackingVehicleCenter] = useState([
-    13.422925089909123, 77.9857877043398
-  ]);
+  const [TrackingVehicleCenter, setTrackingVehicleCenter] = useState(null);
   const [ZoomLevel, setZoomLevel] = useState(null);
   const [TrackingFilterCompany, setTrackingFilterCompany] = useState(null);
 

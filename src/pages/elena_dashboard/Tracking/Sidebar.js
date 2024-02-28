@@ -22,7 +22,7 @@ const Sidebar = ({ data }) => {
     setIMEI,
     setHistoryTrackingActive
   } = useListFilterContext();
-  const socket = useWebSocket();
+  // const socket = useWebSocket();
   const VehicleData = [];
   const companyData = [];
   const schoolData = [];
@@ -58,25 +58,25 @@ const Sidebar = ({ data }) => {
     });
   });
 
-  const handleSocketIMEI = data => {
-    if (socketIMEI === null) {
-      setSocketImei(data);
-    } else if (socketIMEI !== null) {
-      socket.send(`stop:${socketIMEI}`);
-      setSocketImei(data);
-    }
-    setIMEI(data);
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.send(`imei:${data}`);
-    }
-  };
-  useEffect(() => {
-    return () => {
-      if (socketIMEI !== null) {
-        socket.send(`stop:${socketIMEI}`);
-      }
-    };
-  }, []);
+  // const handleSocketIMEI = data => {
+  //   if (socketIMEI === null) {
+  //     setSocketImei(data);
+  //   } else if (socketIMEI !== null) {
+  //     socket.send(`stop:${socketIMEI}`);
+  //     setSocketImei(data);
+  //   }
+  //   setIMEI(data);
+  //   if (socket.readyState === WebSocket.OPEN) {
+  //     socket.send(`imei:${data}`);
+  //   }
+  // };
+  // useEffect(() => {
+  //   return () => {
+  //     if (socketIMEI !== null) {
+  //       socket.send(`stop:${socketIMEI}`);
+  //     }
+  //   };
+  // }, []);
   useEffect(() => {
     if (ActiveCompany !== null && ActiveCompany !== 'null') {
       const filteredCompanyData = VehicleData.filter(
@@ -87,11 +87,11 @@ const Sidebar = ({ data }) => {
       setRecievedData(VehicleData);
     }
 
-    () => {
-      if (socketIMEI !== null) {
-        socket.send(`stop:${socketIMEI}`);
-      }
-    };
+    // () => {
+    //   if (socketIMEI !== null) {
+    //     socket.send(`stop:${socketIMEI}`);
+    //   }
+    // };
   }, [ActiveCompany, data]);
 
   const columns = [
@@ -108,11 +108,12 @@ const Sidebar = ({ data }) => {
       Cell: ({ row }) => (
         <div
           onClick={() => {
-            setTrackingVehicleCenter([row.original.lat, row.original.lon]);
+            if (row.original.lat && row.original.lon) {
+              setTrackingVehicleCenter([row.original.lat, row.original.lon]);
+            }
             setZoomLevel(17);
             setIMEI(row.original.imei);
             setHistoryTrackingActive(false);
-            handleSocketIMEI(row.original.imei);
           }}
           className="tracking-table-button"
         >

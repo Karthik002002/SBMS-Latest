@@ -16,7 +16,7 @@ const ReportIdle = () => {
       <Col xs={0} sm={2} md={2}>
           <ReportBar />
         </Col>
-        <Col xs={12} sm={10} md={10}>
+        <Col xs={12} sm={10} md={10}  className={`${window.innerWidth < 530? 'p-2':''}`}>
           <ReportIdleTable />
           <div>
             <ReportFooter />

@@ -9,8 +9,13 @@ import { useListFilterContext } from 'context/FilterContext';
 import { format, parseISO } from 'date-fns';
 
 const Customers = ({ data }) => {
-  const { Filter, companyFilter, setTrackingVehicleCenter, setZoomLevel } =
-    useListFilterContext();
+  const {
+    Filter,
+    companyFilter,
+    setTrackingVehicleCenter,
+    setZoomLevel,
+    setIMEI
+  } = useListFilterContext();
   const [InitialData, setInitialData] = useState(data);
   const [BackUpData, setBackupData] = useState(data);
   const CompanyData = [];
@@ -21,8 +26,8 @@ const Customers = ({ data }) => {
       SchoolData.push(data.school_name);
     }
 
-    if (!CompanyData.includes(data.Company_name)) {
-      CompanyData.push(data.Company_name);
+    if (!CompanyData.includes(data.company_name)) {
+      CompanyData.push(data.company_name);
     }
   });
 
@@ -43,9 +48,9 @@ const Customers = ({ data }) => {
   useEffect(() => {
     if (companyFilter !== null) {
       const companyFilteredData = BackUpData.filter(
-        data => data.Company_name === companyFilter
+        data => data.company_name === companyFilter
       );
-      // setInitialData(companyFilteredData);
+      setInitialData(companyFilteredData);
     } else if (companyFilter === null) {
       setInitialData(BackUpData);
     }
@@ -124,7 +129,7 @@ const Customers = ({ data }) => {
       // headerProps: { className: 'pe-7' }
     },
     {
-      accessor: 'vehicle_reg',
+      accessor: 'vehicle_regno',
       Header: 'Reg Num',
       headerProps: { className: 'text-center' },
       cellProps: { className: 'text-break text-center' },
@@ -145,14 +150,14 @@ const Customers = ({ data }) => {
       Cell: ({ value }) => (value === true ? 'True' : 'False' || '-')
     },
     {
-      accessor: 'driver',
+      accessor: 'driver_name',
       Header: 'Driver Name',
       headerProps: { className: 'text-center' },
       cellProps: { className: 'text-break text-center' },
       Cell: ({ value }) => value || '-'
     },
     {
-      accessor: 'phone',
+      accessor: 'driver_phone',
       Header: 'Phone No',
       headerProps: { className: 'text-center' },
       cellProps: { className: 'text-break text-center' },
@@ -174,6 +179,7 @@ const Customers = ({ data }) => {
         <Link to="/tracking">
           <div
             onClick={() => {
+              setIMEI(row.original.imei);
               setTrackingVehicleCenter([row.original.lat, row.original.lon]);
               setZoomLevel(17);
             }}

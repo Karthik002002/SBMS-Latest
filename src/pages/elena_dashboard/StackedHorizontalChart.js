@@ -50,7 +50,7 @@ const StackedHorizontalChart = ({ data }) => {
         statusCounts.total = company.company_status_counts.total;
         statusCounts.Comp_name = company.Company_name;
         statusCounts.running += company.company_status_counts.running;
-        statusCounts.ideal += company.company_status_counts.idle;
+        statusCounts.idle += company.company_status_counts.idle;
         statusCounts.stop += company.company_status_counts.stop;
         statusCounts.parked += company.company_status_counts.parked;
         statusCounts.towed += company.company_status_counts.towed;
@@ -86,7 +86,7 @@ const StackedHorizontalChart = ({ data }) => {
         };
         count += company.company_status_counts.total;
         statusCounts.total = company.company_status_counts.total;
-        statusCounts.Comp_name = company.Company_name;
+        statusCounts.Comp_name = company.company_name;
         statusCounts.running += company.company_status_counts.running;
         statusCounts.idle += company.company_status_counts.idle;
         statusCounts.stop += company.company_status_counts.stop;
@@ -152,7 +152,7 @@ const StackedHorizontalChart = ({ data }) => {
       let CompanyFormattedData = [];
       let count = 0;
       const FilteredCompany = data.filter(
-        company => company.Company_name === companyFilter
+        company => company.company_name === companyFilter
       );
       CompanyFormattedData = FilteredCompany.flatMap(company => {
         return company.schools.map(school => {
@@ -170,7 +170,7 @@ const StackedHorizontalChart = ({ data }) => {
           };
           count += school.total_vehicles;
           statusCounts.total = school.total_vehicles;
-          statusCounts.Comp_name = school.school_name;
+          statusCounts.Comp_name = company.company_name;
           statusCounts.running += school.status_counts.running;
           statusCounts.idle += school.status_counts.idle;
           statusCounts.stop += school.status_counts.stop;

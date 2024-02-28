@@ -14,7 +14,6 @@ import Notification from 'components/notification/Notification';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { MarkAllSeenURL, NotificationURL } from '../../../URL/url';
-import { useWebSocket } from 'context/SocketContext';
 
 const NotificationDropdown = () => {
   // State
@@ -23,7 +22,7 @@ const NotificationDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [NotificationCount, setNotificationCount] = useState('');
   const [isAllRead, setIsAllRead] = useState(true);
-  const socket = useWebSocket();
+
   const [AllViewActive, setAllViewActive] = useState(false);
   const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
 

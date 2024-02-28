@@ -109,9 +109,9 @@ const TrackingTable = ({
             }}
             className="tracking-vehicle-select"
           >
-            <option>Select</option>
+            <option value={" "} key={' '}>Select</option>
             {FilteredVehicleData.map(data => (
-              <option value={data.vehicleName}>{data.vehicleName}</option>
+              <option value={data.vehicleName} key={data.vehicle_id}>{data.vehicleName}</option>
             ))}
           </Form.Select>
         </div>

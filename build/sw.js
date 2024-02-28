@@ -13,21 +13,7 @@ const urlB64ToUint8Array = base64String => {
   }
   return outputArray;
 }; // saveSubscription saves the subscription to the backend
-const saveSubscription = async subscription => {
-  // const userToken = JSON.parse(window.sessionStorage.getItem('loggedInUser'));
-  console.log('sw called');
-  const SERVER_URL = 'https://sbmsadmin.elenageosys.com/webpush/';
-  // const SERVER_URL = "https://elenageosys.com/webpush/";
-  const response = await fetch(SERVER_URL, {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Token 18effb7e51a8e3cdfaa858c1acc236b5e44e5829`
-    },
-    body: JSON.stringify(subscription)
-  });
-  return response.json();
-};
+let sendMessageInterval;
 self.addEventListener('activate', async () => {
   // This will be called only once when the service worker is activated.
   try {
@@ -36,11 +22,30 @@ self.addEventListener('activate', async () => {
     );
     const options = { applicationServerKey, userVisibleOnly: true };
     const subscription = await self.registration.pushManager.subscribe(options);
-    const response = await saveSubscription(subscription);
+    // const response = await saveSubscription(subscription);
+
+    // Listen for messages from the main application
+
+    // Start sending messages initially
+    sendMessageInterval = setInterval(() => {
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+          client.postMessage({
+            subscriptionMessage: JSON.stringify(subscription)
+          });
+        });
+      });
+    }, 10000);
     console.log(JSON.stringify(subscription));
-    console.log(response);
+    // console.log(response);
   } catch (err) {
     console.log('Error', err);
+  }
+});
+self.addEventListener('message', event => {
+  if (event.data && event.data.confirmation) {
+    // If client confirms received message, resume sending
+    clearInterval(sendMessageInterval);
   }
 });
 

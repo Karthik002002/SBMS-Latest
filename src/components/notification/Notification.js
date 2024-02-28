@@ -88,7 +88,7 @@ const Notification = ({ notification, flush, MarkAsRead }) => {
 
 Notification.propTypes = {
   avatar: PropTypes.shape(Avatar.propTypes),
-  time: PropTypes.string.isRequired,
+  // time: PropTypes.string.isRequired,
   className: PropTypes.string,
   is_seen: PropTypes.bool,
   flush: PropTypes.bool,

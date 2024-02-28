@@ -24,14 +24,14 @@ function PushNotificationHandling() {
   const saveSubscription = async subscription => {
     console.log('Push API called');
     const sessionData = await getSessionData('loggedInUser');
-    const { user_id } = sessionData;
+    const { user_id, token } = sessionData;
     const parsedSubscription = JSON.parse(subscription);
     const FinalData = { ...parsedSubscription, user_id: user_id };
     const response = await fetch(PushNotificationURL, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token b50f27758bb2e6e4e6f399c327183fb182586454`
+        Authorization: `Token ${token}`
       },
       body: JSON.stringify(FinalData)
     });

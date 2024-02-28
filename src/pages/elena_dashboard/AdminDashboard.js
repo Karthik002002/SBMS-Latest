@@ -25,18 +25,31 @@ const AdminDashboard = () => {
   const dataFormatting = data => {
     setHistoryTrackingActive(false);
 
-    const tableFormattedData = data.flatMap(company => {
-      return company.data.flatMap(dataObj => {
-        const { Company_name, company_id } = dataObj;
-        return dataObj.schools.flatMap(school => {
-          const { school_name, school_id } = school;
-          return school.vehicles.map(vehicle => ({
-            ...vehicle,
-            Company_name,
-            company_id,
+    const tableFormattedData = data.data.flatMap(company => {
+      const { user_id, user_name, user_type } = data;
+      const { company_name } = company;
+      return company.schools.flatMap(school => {
+        const { school_name } = school;
+        return school.vehicles.flatMap(vehicle => {
+          const { last_records, ...vehicleData } = vehicle;
+          const lastRecord = last_records ? last_records[0] : null;
+          const { kilometers, ...lastRecWithoutKilometers } = lastRecord
+            ? lastRecord
+            : {};
+          const flattenedKilometers = {};
+          kilometers?.forEach(entry => {
+            flattenedKilometers[entry.date] = entry.kilometers;
+          });
+          return {
+            ...vehicleData,
+            company_name,
             school_name,
-            school_id
-          }));
+            user_id,
+            user_name,
+            user_type,
+            ...lastRecWithoutKilometers,
+            kilometers: flattenedKilometers
+          };
         });
       });
     });
@@ -55,12 +68,12 @@ const AdminDashboard = () => {
       };
 
       vehicles.forEach(vehicle => {
-        if (vehicle.speed_status) {
+        if (vehicle.last_records[0]?.speed_status) {
           statusCounts.rash_driving++;
           return;
         }
 
-        switch (vehicle.status) {
+        switch (vehicle.last_records[0]?.status) {
           case 0:
             statusCounts.running++;
             break;
@@ -90,32 +103,26 @@ const AdminDashboard = () => {
     };
 
     // Create formatted data with status counts for each school
-    const GraphFormattedData = data.flatMap(company => {
-      return company.data.flatMap(dataObj => {
-        const { Company_name, company_id } = dataObj;
-        return dataObj.schools.flatMap(school => {
-          const { school_name, school_id, vehicles } = school;
-          // Calculate status counts for vehicles in the school
-          const statusCounts = calculateStatusCounts(vehicles);
-          // Return formatted data including status counts
-          return {
-            Company_name,
-            company_id,
-            school_name,
-            school_id,
-            total_vehicles: statusCounts.total,
-            status_counts: {
-              running: statusCounts.running,
-              idle: statusCounts.idle,
-              stop: statusCounts.stop,
-              out_of_Network: statusCounts.out_of_network,
-              towed: statusCounts.towed,
-              parked: statusCounts.parked,
-              noData: statusCounts.nodata,
-              RashCount: statusCounts.rash_driving
-            }
-          };
-        });
+    const GraphFormattedData = data.data.flatMap(company => {
+      return company.schools.flatMap(school => {
+        const { company_name } = company;
+        const { school_name, vehicles } = school;
+        const statusCounts = calculateStatusCounts(vehicles);
+        return {
+          company_name,
+          school_name,
+          total_vehicles: statusCounts.total,
+          status_counts: {
+            running: statusCounts.running,
+            idle: statusCounts.idle,
+            stop: statusCounts.stop,
+            out_of_Network: statusCounts.out_of_network,
+            towed: statusCounts.towed,
+            parked: statusCounts.parked,
+            noData: statusCounts.nodata,
+            RashCount: statusCounts.rash_driving
+          }
+        };
       });
     });
 
@@ -149,40 +156,32 @@ const AdminDashboard = () => {
       return companyStatusCounts;
     };
 
-    const HorizontalFormattedData = data.flatMap(company => {
+    const HorizontalFormattedData = data.data.flatMap(company => {
+      const { company_name } = company;
+      let companyData = {
+        company_name,
+        schools: [] // Initialize an array to store school-wise data
+      };
       // Iterate through company data to collect school-wise data
-      return company.data.map(dataObj => {
-        const { Company_name, company_id } = dataObj;
-        let companyData = {
-          Company_name,
-          company_id,
-          schools: [] // Initialize an array to store school-wise data
-        };
-
+      company.schools.map(school => {
+        const { school_name, vehicles } = school;
         // Iterate through schools in the dataObj
-        dataObj.schools.forEach(school => {
-          const { school_name, school_id, vehicles } = school;
-          // Calculate status counts for vehicles in the school
-          const statusCounts = calculateStatusCounts(vehicles);
-          // Collect school-wise data
-          const schoolData = {
-            school_name,
-            school_id,
-            total_vehicles: statusCounts.total,
-            status_counts: {
-              running: statusCounts.running,
-              idle: statusCounts.idle,
-              stop: statusCounts.stop,
-              out_of_Network: statusCounts.out_of_network,
-              towed: statusCounts.towed,
-              parked: statusCounts.parked,
-              noData: statusCounts.nodata,
-              RashCount: statusCounts.rash_driving
-            }
-          };
-          // Push school-wise data to the array
-          companyData.schools.push(schoolData);
-        });
+        const statusCounts = calculateStatusCounts(vehicles);
+        const schoolData = {
+          school_name,
+          total_vehicles: statusCounts.total,
+          status_counts: {
+            running: statusCounts.running,
+            idle: statusCounts.idle,
+            stop: statusCounts.stop,
+            out_of_Network: statusCounts.out_of_network,
+            towed: statusCounts.towed,
+            parked: statusCounts.parked,
+            noData: statusCounts.nodata,
+            RashCount: statusCounts.rash_driving
+          }
+        };
+        companyData.schools.push(schoolData);
 
         // Calculate company-wise status counts
         const companyStatusCounts = calculateCompanyStatusCounts(
@@ -191,8 +190,8 @@ const AdminDashboard = () => {
         companyData.company_status_counts = companyStatusCounts;
 
         // Return the company-wise data
-        return companyData;
       });
+      return companyData;
     });
     setChartData({
       HorizontalFormattedData: HorizontalFormattedData,
@@ -206,10 +205,13 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(DashboardURL, {
-          method: 'GET',
-          headers: { Authorization: `token ${userToken.token}` }
-        });
+        const response = await fetch(
+          `${DashboardURL}?user=${userToken.user_id}`,
+          {
+            method: 'GET',
+            headers: { Authorization: `token ${userToken.token}` }
+          }
+        );
         const data = await response.json();
         dataFormatting(data);
       } catch (error) {
@@ -217,13 +219,8 @@ const AdminDashboard = () => {
       }
     };
 
-    if (IMEI !== null) {
-      socket.send(`stop:${IMEI}`);
-    }
-    // if (socket) {
-    //   socket.onmessage = event => {
-    //     console.log('Message received from server:', event.data);
-    //   };
+    // if (IMEI !== null) {
+    //   socket.send(`stop:${IMEI}`);
     // }
     const interval = setInterval(fetchData, 60 * 1000);
 

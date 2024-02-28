@@ -1,21 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useListFilterContext } from 'context/FilterContext';
-import { useWebSocket } from 'context/SocketContext';
-import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
-import { BiSolidReport } from 'react-icons/bi';
 
 import { NavLink } from 'react-router-dom';
 
 const ReportBar = () => {
-  const socket = useWebSocket();
   const [mobNavBar, setMobNavBar] = useState(false);
   const { IMEI, setIMEI } = useListFilterContext();
-  useEffect(() => {
-    if (IMEI !== null) {
-      socket.send(`stop:${IMEI}`);
-      setIMEI(null);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (IMEI !== null) {
+  //     socket.send(`stop:${IMEI}`);
+  //     setIMEI(null);
+  //   }
+  // }, []);
 
   return (
     <div className={` ${mobNavBar ? 'report-bar active' : 'report-bar'}`}>
@@ -67,11 +63,11 @@ const ReportBar = () => {
           Idle Report
         </NavLink>
         <NavLink
-          to="/report/running"
+          to="/report/overspeed"
           className={`custom-dropdown-toggle`}
           activeClassName="active-link"
         >
-          Running Report
+          OverSpeed Report
         </NavLink>
         <NavLink
           to="/report/stopped"

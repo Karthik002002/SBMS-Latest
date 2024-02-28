@@ -48,11 +48,11 @@ const ProfileDropdown = () => {
 
       <Dropdown.Menu className="dropdown-caret dropdown-menu-card  dropdown-menu-end">
         <div className="bg-white rounded-2 py-2 dark__bg-1000">
-          <h4 className="profile-dropdown-name">
+          <div className="profile-dropdown-container">
             <FaUser className="fs-0 me-1" />
-            {/* {loggedInUser.user.username} */}
-          </h4>
-          <Dropdown.Item as={Link} onClick={handleLogout}>
+            <h4 className="profile-dropdown-name">{loggedInUser.username}</h4>
+          </div>
+          <Dropdown.Item as={Link} onClick={handleLogout} className="profile-list-items">
             <CiLogout className="me-1" />
             Logout
           </Dropdown.Item>
